@@ -49,7 +49,7 @@ public class CustomerProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(AccountingDbHelper.TABLE_CUSTOMERS);
+        builder.setTables(AccountingDbHelper.TABLE_CUSTOMER);
 
         int uriType = mUriMatcher.match(uri);
         switch (uriType) {
@@ -82,7 +82,7 @@ public class CustomerProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case CUSTOMERS:
                 long id = mDbHelper.getWritableDatabase().insert(
-                        AccountingDbHelper.TABLE_CUSTOMERS, "", contentValues);
+                        AccountingDbHelper.TABLE_CUSTOMER, "", contentValues);
                 if (id < 0) {
                     throw new SQLException("Failed to add customer!");
                 }
