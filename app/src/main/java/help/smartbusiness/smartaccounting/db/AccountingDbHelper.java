@@ -37,7 +37,6 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + PURCHASE_COL_REMARKS + " text, "
             + "foreign key (" + PURCHASE_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
             + " )";
-    public static final String CALCULATED_PURCHASE_VIEW = "calculated_purchases";
 
 
     public static final String TABLE_PURCHASE_ITEMS = "purchase_items";
@@ -67,6 +66,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " END";
 
 
+    public static final String CALCULATED_PURCHASE_VIEW = "calculated_purchases";
     public static final String CPV_AMOUNT = "amount";
     public static final String CREATE_VIEW_PURCHASE = "create view " + CALCULATED_PURCHASE_VIEW
             + " AS "
