@@ -22,7 +22,7 @@ public class CustomerProvider extends ContentProvider {
     public static final int CUSTOMERS = 100;
     public static final int CUSTOMERS_ID = 110;
 
-    private static final String CUSTOMERS_BASE_PATH = "customers";
+    public static final String CUSTOMERS_BASE_PATH = "customers";
     public static final Uri CUSTOMER_CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/" + CUSTOMERS_BASE_PATH);
 
