@@ -67,10 +67,11 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " END";
 
 
+    public static final String CPV_AMOUNT = "amount";
     public static final String CREATE_VIEW_PURCHASE = "create view " + CALCULATED_PURCHASE_VIEW
             + " AS "
             + " SELECT " + TABLE_PURCHASE + ".*, "
-                + " sum (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS amount "
+                + " sum (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS " + CPV_AMOUNT
             + " FROM " + TABLE_PURCHASE + " LEFT OUTER JOIN " + TABLE_PURCHASE_ITEMS
             + " ON " + TABLE_PURCHASE + "." + ID + " = " + TABLE_PURCHASE_ITEMS + "." + PI_COL_PURCHASE_ID
             + " GROUP BY " + TABLE_PURCHASE_ITEMS + "." + PI_COL_PURCHASE_ID;
@@ -91,6 +92,26 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + "foreign key (" + CREDIT_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
             + " )";
 
+
+    public static final String CUSTOMER_DUE_VIEW = "customer_dues";
+    public static final String CREATE_VIEW_CUSTOMER_DUE = "create view " + CUSTOMER_DUE_VIEW
+            + " AS "
+            + " SELECT total_dues.name, total_dues.address, (total_dues.amount - total_credit.amount) AS due from ("
+                + " SELECT " + TABLE_CUSTOMER + ".*, "
+                    + " sum (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
+                + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
+                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+                + " GROUP BY " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+                + ") total_dues "
+            + " INNER JOIN ("
+                + " SELECT " + TABLE_CUSTOMER + ".*, "
+                    + " sum (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
+                + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + TABLE_CREDIT
+                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+                + " GROUP BY " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+                + ") total_credit "
+            + " ON total_dues." + ID + " = " + " total_credit." + ID;
+
     public AccountingDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -100,9 +121,11 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_CUSTOMERS);
         sqLiteDatabase.execSQL(CREATE_TABLE_PURCHASE);
         sqLiteDatabase.execSQL(CREATE_TABLE_PI);
+        sqLiteDatabase.execSQL(CREATE_TABLE_CREDIT);
+
         sqLiteDatabase.execSQL(CREATE_VIEW_PURCHASE);
         sqLiteDatabase.execSQL(CREATE_PI_AMOUNT_UPDATE_TRIGGER);
-        sqLiteDatabase.execSQL(CREATE_TABLE_CREDIT);
+        sqLiteDatabase.execSQL(CREATE_VIEW_CUSTOMER_DUE);
     }
 
     @Override
