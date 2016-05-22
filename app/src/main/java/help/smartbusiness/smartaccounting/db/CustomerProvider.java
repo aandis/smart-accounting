@@ -18,7 +18,7 @@ public class CustomerProvider extends ContentProvider {
 
     private AccountingDbHelper mDbHelper;
 
-    private static final String AUTHORITY = "help.smartbusiness.smartaccounting.db";
+    private static final String AUTHORITY = CustomerProvider.class.getPackage().getName();
     public static final int CUSTOMERS = 100;
     public static final int CUSTOMERS_ID = 110;
 
@@ -41,7 +41,8 @@ public class CustomerProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new AccountingDbHelper(getContext(), AccountingDbHelper.DATABASE_NAME, null, 1);
+        mDbHelper = new AccountingDbHelper(getContext(),
+                AccountingDbHelper.DATABASE_NAME, null, AccountingDbHelper.DATABASE_VERSION);
         return true;
     }
 
