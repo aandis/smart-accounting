@@ -50,7 +50,7 @@ public class CustomerProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(AccountingDbHelper.TABLE_CUSTOMER);
+        builder.setTables(AccountingDbHelper.CUSTOMER_DUE_VIEW);
 
         int uriType = mUriMatcher.match(uri);
         switch (uriType) {
