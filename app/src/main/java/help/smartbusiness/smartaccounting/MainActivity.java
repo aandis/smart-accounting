@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting;
 
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,7 +15,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
-import help.smartbusiness.smartaccounting.db.CustomerProvider;
+import help.smartbusiness.smartaccounting.db.AccountingProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
         });
         ListView listView = (ListView) findViewById(R.id.list);
         CursorLoader loader = new CursorLoader(this,
-                CustomerProvider.CUSTOMER_CONTENT_URI, null, null, null, null);
+                Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI + "/1/purchases/1/purchase_items"),
+                null, null, null, null);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
                 R.layout.list_layout,
                 loader.loadInBackground(),
@@ -61,9 +63,21 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             ContentValues values = new ContentValues();
-            values.put(AccountingDbHelper.CUSTOMERS_COL_NAME, "Sk nigam");
-            values.put(AccountingDbHelper.CUSTOMERS_COL_ADDRESS, "Zamania");
-            getContentResolver().insert(CustomerProvider.CUSTOMER_CONTENT_URI, values);
+            values.put(AccountingDbHelper.PI_COL_PURCHASE_ID, 1);
+            values.put(AccountingDbHelper.PI_COL_NAME, "Chad");
+            values.put(AccountingDbHelper.PI_COL_QUANTITY, 20);
+            values.put(AccountingDbHelper.PI_COL_RATE, 30);
+            values.put(AccountingDbHelper.PI_COL_AMOUNT, 600);
+            getContentResolver().insert(
+                    Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI + "/1/purchases/1/purchase_items"),
+                    values);
+
+//            ContentValues values = new ContentValues();
+//            values.put(AccountingDbHelper.CUSTOMERS_COL_NAME, "SK");
+//            values.put(AccountingDbHelper.CUSTOMERS_COL_ADDRESS, "Zamania");
+//            getContentResolver().insert(Uri.parse(CustomerProvider.CUSTOMER_CONTENT_URI),
+//                    values);
+
             return true;
         }
 

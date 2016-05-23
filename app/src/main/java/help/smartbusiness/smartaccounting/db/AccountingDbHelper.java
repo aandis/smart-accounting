@@ -60,21 +60,10 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + PI_COL_QUANTITY + ", " + PI_COL_RATE
             + " ON " + TABLE_PURCHASE_ITEMS + " FOR EACH ROW "
             + " BEGIN "
-                + " UPDATE " + TABLE_PURCHASE_ITEMS
-                + " SET " + PI_COL_AMOUNT + " = " + PI_COL_RATE + "*" + PI_COL_QUANTITY
-                + " WHERE " + ID + " = OLD." + ID + "; "
+            + " UPDATE " + TABLE_PURCHASE_ITEMS
+            + " SET " + PI_COL_AMOUNT + " = " + PI_COL_RATE + "*" + PI_COL_QUANTITY
+            + " WHERE " + ID + " = OLD." + ID + "; "
             + " END";
-
-
-    public static final String CALCULATED_PURCHASE_VIEW = "calculated_purchases";
-    public static final String CPV_AMOUNT = "amount";
-    public static final String CREATE_VIEW_PURCHASE = "create view " + CALCULATED_PURCHASE_VIEW
-            + " AS "
-            + " SELECT " + TABLE_PURCHASE + ".*, "
-                + " sum (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS " + CPV_AMOUNT
-            + " FROM " + TABLE_PURCHASE + " LEFT OUTER JOIN " + TABLE_PURCHASE_ITEMS
-            + " ON " + TABLE_PURCHASE + "." + ID + " = " + TABLE_PURCHASE_ITEMS + "." + PI_COL_PURCHASE_ID
-            + " GROUP BY " + TABLE_PURCHASE + "." + ID;
 
 
     public static final String TABLE_CREDIT = "credits";
@@ -93,24 +82,35 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " )";
 
 
+    public static final String CALCULATED_PURCHASE_VIEW = "calculated_purchases";
+    public static final String CPV_AMOUNT = "amount";
+    public static final String CREATE_VIEW_PURCHASE = "create view " + CALCULATED_PURCHASE_VIEW
+            + " AS "
+            + " SELECT " + TABLE_PURCHASE + ".*, "
+            + " sum (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS " + CPV_AMOUNT
+            + " FROM " + TABLE_PURCHASE + " LEFT OUTER JOIN " + TABLE_PURCHASE_ITEMS
+            + " ON " + TABLE_PURCHASE + "." + ID + " = " + TABLE_PURCHASE_ITEMS + "." + PI_COL_PURCHASE_ID
+            + " GROUP BY " + TABLE_PURCHASE + "." + ID;
+
+
     public static final String CUSTOMER_DUE_VIEW = "customer_dues";
     public static final String CDV_DUE = "due";
     public static final String CREATE_VIEW_CUSTOMER_DUE = "create view " + CUSTOMER_DUE_VIEW
             + " AS "
             + " SELECT total_dues.*, (total_dues.amount - total_credit.amount) AS " + CDV_DUE + " from ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                    + " sum (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
+                + " sum (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
                 + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
-                + ") total_dues "
+            + ") total_dues "
             + " INNER JOIN ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                    + " sum (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
+                + " sum (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
                 + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + TABLE_CREDIT
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
-                + ") total_credit "
+            + ") total_credit "
             + " ON total_dues." + ID + " = " + " total_credit." + ID;
 
     public AccountingDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -127,7 +127,12 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_VIEW_PURCHASE);
         sqLiteDatabase.execSQL(CREATE_PI_AMOUNT_UPDATE_TRIGGER);
         sqLiteDatabase.execSQL(CREATE_VIEW_CUSTOMER_DUE);
+    }
 
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     @Override
