@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting;
 
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{AccountingDbHelper.CUSTOMERS_COL_NAME},
                 new int[]{R.id.customer_name});
         listView.setAdapter(adapter);
+        startActivity(new Intent(this, CreatePurchase.class));
     }
 
     @Override
