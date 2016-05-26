@@ -96,6 +96,20 @@
 
         </LinearLayout>
 
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/purchase_remarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/purchase.remarks"
+            app:met_floatingLabel="highlight" />
+
+        <Button
+            android:id="@+id/purchase_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/purchase.create" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,26 +13,36 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreatePurchase extends AppCompatActivity {
+public class CreatePurchase extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TAG = CreatePurchase.class.getName();
 
+    private MaterialEditText customerName, customerAddress, purchaseTotal, purchaseRemarks;
     private TextView purchaseDate;
     private Map<Integer, MaterialEditText> totalsEditTexts;
-    private MaterialEditText purchaseTotal;
+    private Button createPurchaseButton;
+    private LinearLayout purchaseItemWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_purchase);
         totalsEditTexts = new HashMap<>();
+
+        customerName = (MaterialEditText) findViewById(R.id.customer_name);
+        customerAddress = (MaterialEditText) findViewById(R.id.customer_address);
         purchaseTotal = (MaterialEditText) findViewById(R.id.purchase_total);
+        createPurchaseButton = (Button) findViewById(R.id.purchase_create);
+        purchaseRemarks = (MaterialEditText) findViewById(R.id.purchase_remarks);
+
+        createPurchaseButton.setOnClickListener(this);
         setUpDatePicker();
         setUpDefaultPis();
         setUpAddMorePis();
@@ -48,7 +59,7 @@ public class CreatePurchase extends AppCompatActivity {
     }
 
     private void setUpAddMorePis() {
-        final LinearLayout purchaseItemWrapper = (LinearLayout)
+        purchaseItemWrapper = (LinearLayout)
                 findViewById(R.id.purchase_item_wrapper);
 
         Button addMorePi = (Button) findViewById(R.id.add_more_pi);
@@ -112,6 +123,70 @@ public class CreatePurchase extends AppCompatActivity {
                 purchaseItemRate, purchaseItemQuantity, purchaseItemAmount));
     }
 
+    private float parseNumber(String number) {
+        try {
+            return Float.parseFloat(number);
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+
+    private void updateTotal() {
+        float sum = 0;
+        for (MaterialEditText text : totalsEditTexts.values()) {
+            float total = parseNumber(text.getText().toString());
+            if (total < 0) {
+                // One of the edit text has an invalid number which shouldn't happen.
+                return;
+            }
+            sum += total;
+        }
+        purchaseTotal.setText(String.valueOf(sum));
+    }
+
+
+    /**
+     * Purchase create onClick listener.
+     *
+     * @param view The clicked button.
+     */
+    @Override
+    public void onClick(View view) {
+        Purchase purchase = getPurchaseObject();
+        if (purchase.isValid()) {
+            Log.d(TAG, "Yay");
+        } else {
+            notifyInvalidData();
+        }
+    }
+
+    private Purchase getPurchaseObject() {
+        Customer customer = new Customer(customerName.getText().toString(),
+                customerAddress.getText().toString());
+        Purchase purchase = new Purchase(customer,
+                purchaseDate.getText().toString(), purchaseRemarks.getText().toString(),
+                parseNumber(purchaseTotal.getText().toString()));
+
+        for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
+            LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
+            String name = ((MaterialEditText) purchaseItem
+                    .findViewById(R.id.purchase_item_name)).getText().toString();
+            float quantity = parseNumber(((MaterialEditText) purchaseItem
+                    .findViewById(R.id.purchase_item_quantity)).getText().toString());
+            float rate = parseNumber(((MaterialEditText) purchaseItem
+                    .findViewById(R.id.purchase_item_rate)).getText().toString());
+            float amount = parseNumber(((MaterialEditText) purchaseItem
+                    .findViewById(R.id.purchase_item_amount)).getText().toString());
+            PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
+            purchase.getPurchaseItems().add(item);
+        }
+        return purchase;
+    }
+
+    private void notifyInvalidData() {
+        Toast.makeText(this, "Invalid data", Toast.LENGTH_SHORT).show();
+    }
+
     private class CustomTextWatcher implements TextWatcher {
         private MaterialEditText mView;
         private MaterialEditText mOther;
@@ -146,27 +221,5 @@ public class CreatePurchase extends AppCompatActivity {
                 mAmount.getText().clear();
             }
         }
-    }
-
-
-    private float parseNumber(String number) {
-        try {
-            return Float.parseFloat(number);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
-    }
-
-    private void updateTotal() {
-        float sum = 0;
-        for (MaterialEditText text : totalsEditTexts.values()) {
-            float total = parseNumber(text.getText().toString());
-            if (total < 0) {
-                // One of the edit text has an invalid number which shouldn't happen.
-                return;
-            }
-            sum += total;
-        }
-        purchaseTotal.setText(String.valueOf(sum));
     }
 }
