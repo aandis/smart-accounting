@@ -6,10 +6,13 @@
     <string name="customer.address">Customer address</string>
 
     <string name="purchase.date">Date</string>
-    <string name="purchase.quantity">Quantity</string>
-    <string name="purchase.rate">Rate</string>
-    <string name="purchase.amount">Amount</string>
     <string name="purchase.date.image.description">Calendar</string>
+    <string name="purchase.total">Total</string>
 
+    <string name="purchase.item.name">Item</string>
+    <string name="purchase.item.quantity">Quantity</string>
+    <string name="purchase.item.rate">Rate</string>
+    <string name="purchase.item.amount">Amount</string>
     <string name="purchase.item.add.more">Add more item</string>
+    <string name="purchase.item.remove">Remove</string>
 </resources>
