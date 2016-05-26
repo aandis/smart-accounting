@@ -5,7 +5,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -155,9 +153,8 @@ public class CreatePurchase extends AppCompatActivity {
         try {
             return Float.parseFloat(number);
         } catch (NumberFormatException ex) {
-            Toast.makeText(getBaseContext(), "Number too long!", Toast.LENGTH_LONG).show();
+            return -1;
         }
-        return -1;
     }
 
     private void updateTotal() {
@@ -166,7 +163,6 @@ public class CreatePurchase extends AppCompatActivity {
             float total = parseNumber(text.getText().toString());
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
-                Log.d(TAG, "Something isn't right!");
                 return;
             }
             sum += total;

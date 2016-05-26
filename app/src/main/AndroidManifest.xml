@@ -24,7 +24,9 @@
             android:authorities="help.smartbusiness.smartaccounting.db"
             android:multiprocess="true" />
 
-        <activity android:name=".CreatePurchase" />
+        <activity
+            android:name=".CreatePurchase"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
