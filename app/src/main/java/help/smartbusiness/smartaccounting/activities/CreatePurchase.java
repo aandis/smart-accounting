@@ -5,7 +5,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -160,13 +159,13 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         Purchase purchase = getPurchaseObject();
         if (purchase.isValid()) {
-            if(!purchase.insert(this)) {
-                Log.d(TAG, "Couldn't insert!");
+            if (!purchase.insert(this)) {
+                notifyError("An error occured.");
             } else {
-                Log.d(TAG, "YAY!");
+                finish();
             }
         } else {
-            notifyInvalidData();
+            notifyError("Invalid data");
         }
     }
 
@@ -193,8 +192,8 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         return purchase;
     }
 
-    private void notifyInvalidData() {
-        Toast.makeText(this, "Invalid data", Toast.LENGTH_SHORT).show();
+    private void notifyError(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private class CustomTextWatcher implements TextWatcher {
