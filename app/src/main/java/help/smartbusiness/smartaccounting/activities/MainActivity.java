@@ -43,12 +43,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
         mListView = (ListView) findViewById(R.id.list);
         mListView.setOnItemClickListener(this);
-        mAdapter = new SimpleCursorAdapter(this, R.layout.list_layout,
-                null, new String[]{AccountingDbHelper.CUSTOMERS_COL_NAME,
-                AccountingDbHelper.CDV_DUE, AccountingDbHelper.CUSTOMERS_COL_ADDRESS},
-                new int[]{R.id.customer_name, R.id.customer_due_amount, R.id.customer_address}, 0);
+        mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         getSupportLoaderManager().initLoader(R.id.customer_loader, null, this);
+    }
+
+    private SimpleCursorAdapter getListViewAdapter() {
+        return new SimpleCursorAdapter(this,
+                R.layout.list_layout,
+                null,
+                new String[]{
+                        AccountingDbHelper.CUSTOMERS_COL_NAME,
+                        AccountingDbHelper.CDV_DUE,
+                        AccountingDbHelper.CUSTOMERS_COL_ADDRESS},
+                new int[]{R.id.customer_name,
+                        R.id.customer_due_amount,
+                        R.id.customer_address},
+                0);
     }
 
     @Override
