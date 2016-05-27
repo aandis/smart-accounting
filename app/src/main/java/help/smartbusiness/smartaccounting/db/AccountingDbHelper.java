@@ -87,7 +87,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String CREATE_VIEW_PURCHASE = "create view " + CALCULATED_PURCHASE_VIEW
             + " AS "
             + " SELECT " + TABLE_PURCHASE + ".*, "
-            + " sum (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS " + CPV_AMOUNT
+            + " total (" + TABLE_PURCHASE_ITEMS + "." + PI_COL_AMOUNT + ") AS " + CPV_AMOUNT
             + " FROM " + TABLE_PURCHASE + " LEFT OUTER JOIN " + TABLE_PURCHASE_ITEMS
             + " ON " + TABLE_PURCHASE + "." + ID + " = " + TABLE_PURCHASE_ITEMS + "." + PI_COL_PURCHASE_ID
             + " GROUP BY " + TABLE_PURCHASE + "." + ID;
@@ -99,14 +99,14 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " AS "
             + " SELECT total_dues.*, (total_dues.amount - total_credit.amount) AS " + CDV_DUE + " from ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " sum (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
+                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
                 + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
             + ") total_dues "
             + " INNER JOIN ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " sum (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
+                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
                 + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + TABLE_CREDIT
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
