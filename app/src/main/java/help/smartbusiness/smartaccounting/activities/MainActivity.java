@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,7 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
-    public static final String TAG = MainActivity.class.getName();
+    public static final String TAG = MainActivity.class.getCanonicalName();
     private ListView mListView;
     private SimpleCursorAdapter mAdapter;
 
@@ -42,9 +43,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
         mListView = (ListView) findViewById(R.id.list);
-        mListView.setOnItemClickListener(this);
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
         getSupportLoaderManager().initLoader(R.id.customer_loader, null, this);
     }
 
@@ -102,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Log.d(TAG, "called");
+        Cursor rowCursor = (Cursor) adapterView.getItemAtPosition(i);
+        long customerId = rowCursor.getLong(rowCursor.getColumnIndex(AccountingDbHelper.ID));
+        startActivity(new Intent(this, PurchaseItemListActivity.class)
+                .putExtra(PurchaseItemListActivity.CUSTOMER_ID, customerId));
     }
 }

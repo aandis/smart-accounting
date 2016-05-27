@@ -10,14 +10,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 /**
  * Created by gamerboy on 19/5/16.
  */
 public class AccountingProvider extends ContentProvider {
 
-    public static final String TAG = "CustomerProvider";
+    public static final String TAG = AccountingProvider.class.getCanonicalName();
 
     private AccountingDbHelper mDbHelper;
 
@@ -36,7 +35,8 @@ public class AccountingProvider extends ContentProvider {
     public static final int CUSTOMER_ID_TRANSACTIONS = 107;
 
     public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 108;
-    public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 109;
+    public static final int CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS = 109;
+    public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 110;
 
     public static final String CUSTOMERS_BASE_PATH = "customers";
     public static final String PURCHASES_BASE_PATH = "purchases";
@@ -70,6 +70,7 @@ public class AccountingProvider extends ContentProvider {
         mUriMatcher.addURI(AUTHORITY, "customers/#/transactions", CUSTOMER_ID_TRANSACTIONS);
 
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items", CUSTOMER_PURCHASE_PURCHASE_ITEMS);
+        mUriMatcher.addURI(AUTHORITY, "customers/#/purchases/purchase_items", CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS);
         mUriMatcher.addURI(AUTHORITY, "customers/#/purchases/#/purchase_items", CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS);
     }
 
@@ -136,11 +137,11 @@ public class AccountingProvider extends ContentProvider {
                 break;
 
             case CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS:
+                builder.appendWhere(AccountingDbHelper.PI_COL_PURCHASE_ID
+                        + "=" + uri.getPathSegments().get(3) + " AND ");
+            case CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS:
                 builder.appendWhere(AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID
-                        + "=" + uri.getPathSegments().get(1)
-                        + " AND "
-                        + AccountingDbHelper.PI_COL_PURCHASE_ID
-                        + "=" + uri.getPathSegments().get(3));
+                        + "=" + uri.getPathSegments().get(1));
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS:
                 builder.setTables(AccountingDbHelper.CALCULATED_PURCHASE_VIEW
                         + " INNER JOIN " + AccountingDbHelper.TABLE_PURCHASE_ITEMS
@@ -151,7 +152,6 @@ public class AccountingProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI");
         }
 
-        Log.d(TAG, sortOrder);
         Cursor cursor = builder.query(
                 mDbHelper.getReadableDatabase(),
                 projection, selection, selectionArgs,
