@@ -24,7 +24,7 @@
             android:authorities="help.smartbusiness.smartaccounting.db"
             android:multiprocess="true" />
 
-        <!-- Stop orientation to avoid losing data for now. -->
+        <!-- Stop orientation to avoid losing data for now. Implement onSaveInstance() later-->
         <activity
             android:name=".activities.CreatePurchase"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -10,6 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by gamerboy on 19/5/16.
@@ -150,6 +151,7 @@ public class AccountingProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI");
         }
 
+        Log.d(TAG, sortOrder);
         Cursor cursor = builder.query(
                 mDbHelper.getReadableDatabase(),
                 projection, selection, selectionArgs,

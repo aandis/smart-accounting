@@ -10,6 +10,7 @@
     <string name="purchase.total">Total</string>
     <string name="purchase.remarks">Remarks</string>
     <string name="purchase.create">Create</string>
+    <string name="purchase.create.label">Create a purchase</string>
 
     <string name="purchase.item.name">Item</string>
     <string name="purchase.item.quantity">Quantity</string>
@@ -17,4 +18,7 @@
     <string name="purchase.item.amount">Amount</string>
     <string name="purchase.item.add.more">Add more item</string>
     <string name="purchase.item.remove">Remove</string>
+
+    <string name="Rs">\u20B9</string>
+    <string name="rs">\u20A8</string>
 </resources>
