@@ -112,11 +112,14 @@ public class Purchase {
             values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
 
             try {
-                Uri newPurchase = context.getContentResolver().bulkInsert().insert(getInsertUri(), values);
+                Uri newPurchase = context.getContentResolver().insert(getInsertUri(), values);
                 setId(Long.parseLong(newPurchase.getLastPathSegment()));
                 for (PurchaseItem item : getPurchaseItems()) {
-                    item.insert(context);
+                    // TODO Use bulk insert or write own transaction.
+                    // TODO If one of the pi fails to be inserted, the whole transaction should rollback.
+                    item.insert(context, getCustomer().getId(), getId());
                 }
+                return true;
             } catch (SQLException ex) {
                 return false;
             }
