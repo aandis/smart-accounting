@@ -65,8 +65,9 @@ public class PurchaseItem {
         this.id = id;
     }
 
-    public boolean insert(Context context, long customerId, long purchaseId) {
+    protected boolean insert(Context context, long customerId, long purchaseId) {
         ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.PI_COL_PURCHASE_ID, purchaseId);
         values.put(AccountingDbHelper.PI_COL_NAME, getName());
         values.put(AccountingDbHelper.PI_COL_QUANTITY, getQuantity());
         values.put(AccountingDbHelper.PI_COL_RATE, getRate());
@@ -75,10 +76,10 @@ public class PurchaseItem {
             Uri newPi = context.getContentResolver().insert(
                     getInsertUri(customerId, purchaseId), values);
             setId(Long.parseLong(newPi.getLastPathSegment()));
-            return true;
         } catch (SQLException ex) {
             return false;
         }
+        return true;
     }
 
     private Uri getInsertUri(long customerId, long purchaseId) {

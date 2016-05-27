@@ -45,10 +45,10 @@ public class Customer {
             Uri newCustomer = context.getContentResolver().insert(
                     Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI), values);
             setId(Long.parseLong(newCustomer.getLastPathSegment()));
-            return true;
         } catch (SQLException ex) {
             return false;
         }
+        return true;
     }
 
     public long getId() {

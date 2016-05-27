@@ -16,6 +16,7 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
  * Created by gamerboy on 26/5/16.
  */
 public class Purchase {
+    public static final String TAG = Purchase.class.getName();
     private long id;
     private Customer customer;
     private String date;
@@ -105,9 +106,11 @@ public class Purchase {
      * @return True if everything was properly inserted else False
      */
     public boolean insert(Context context) {
-        // TODO: This method uses contentResolver.insert() which works on the ui thread. Move to background thread using AsynqueryHandler.
+        // TODO: This method uses contentResolver.insert() which works on the ui thread. Move to background thread using AsyncQueryHandler.
+        // TODO: Process this whole insert in a transaction!
         if (getCustomer().insert(context)) {
             ContentValues values = new ContentValues();
+            values.put(AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID, getCustomer().getId());
             values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
             values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
 
@@ -117,13 +120,17 @@ public class Purchase {
                 for (PurchaseItem item : getPurchaseItems()) {
                     // TODO Use bulk insert or write own transaction.
                     // TODO If one of the pi fails to be inserted, the whole transaction should rollback.
-                    item.insert(context, getCustomer().getId(), getId());
+                    if (!item.insert(context, getCustomer().getId(), getId())) {
+                        return false;
+                    }
                 }
-                return true;
             } catch (SQLException ex) {
                 return false;
             }
+            // Processed successfully.
+            return true;
         }
+        // Couldn't insert customer.
         return false;
     }
 

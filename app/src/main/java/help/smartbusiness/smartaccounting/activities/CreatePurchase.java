@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,11 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.util.HashMap;
 import java.util.Map;
 
-import help.smartbusiness.smartaccounting.models.Customer;
+import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
+import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;
-import help.smartbusiness.smartaccounting.R;
 
 public class CreatePurchase extends AppCompatActivity implements View.OnClickListener {
 
@@ -159,7 +160,11 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         Purchase purchase = getPurchaseObject();
         if (purchase.isValid()) {
-
+            if(!purchase.insert(this)) {
+                Log.d(TAG, "Couldn't insert!");
+            } else {
+                Log.d(TAG, "YAY!");
+            }
         } else {
             notifyInvalidData();
         }
