@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting;
+package help.smartbusiness.smartaccounting.activities;
 
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.activities.CreatePurchase;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 

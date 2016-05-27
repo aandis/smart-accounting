@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting;
+package help.smartbusiness.smartaccounting.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

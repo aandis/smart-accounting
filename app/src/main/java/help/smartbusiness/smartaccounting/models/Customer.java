@@ -1,4 +1,6 @@
-package help.smartbusiness.smartaccounting;
+package help.smartbusiness.smartaccounting.models;
+
+import android.content.Context;
 
 /**
  * Created by gamerboy on 26/5/16.
@@ -26,5 +28,9 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void insert(Context context) {
+
     }
 }

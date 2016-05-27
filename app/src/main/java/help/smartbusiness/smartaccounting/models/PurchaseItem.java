@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting;
+package help.smartbusiness.smartaccounting.models;
 
 /**
  * Created by gamerboy on 26/5/16.

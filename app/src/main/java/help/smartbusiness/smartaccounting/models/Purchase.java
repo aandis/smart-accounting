@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting;
+package help.smartbusiness.smartaccounting.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +67,7 @@ public class Purchase {
         List<String> notEmpty = new ArrayList<>(Arrays.asList(
                 customer.getName(), customer.getAddress(), date));
 
+        // All purchase item names.
         for (int i = 0; i < purchaseItems.size(); i++) {
             notEmpty.add(purchaseItems.get(i).getName());
         }
