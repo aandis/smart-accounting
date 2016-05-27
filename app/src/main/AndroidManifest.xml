@@ -24,9 +24,13 @@
             android:authorities="help.smartbusiness.smartaccounting.db"
             android:multiprocess="true" />
 
+        <!-- Stop orientation to avoid losing data for now. -->
         <activity
             android:name=".activities.CreatePurchase"
-            android:parentActivityName=".activities.MainActivity" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/purchase.create.label"
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
