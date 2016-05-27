@@ -1,13 +1,22 @@
 package help.smartbusiness.smartaccounting.models;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.SQLException;
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
+import help.smartbusiness.smartaccounting.db.AccountingProvider;
 
 /**
  * Created by gamerboy on 26/5/16.
  */
 public class Purchase {
+    private long id;
     private Customer customer;
     private String date;
     private String remarks;
@@ -88,4 +97,47 @@ public class Purchase {
         return true;
     }
 
+    /**
+     * Insert purchase and it's associated entities into the database.
+     * Inserts customer, purchase and purchase items into the database.
+     *
+     * @param context Context
+     * @return True if everything was properly inserted else False
+     */
+    public boolean insert(Context context) {
+        // TODO: This method uses contentResolver.insert() which works on the ui thread. Move to background thread using AsynqueryHandler.
+        if (getCustomer().insert(context)) {
+            ContentValues values = new ContentValues();
+            values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
+            values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
+
+            try {
+                Uri newPurchase = context.getContentResolver().bulkInsert().insert(getInsertUri(), values);
+                setId(Long.parseLong(newPurchase.getLastPathSegment()));
+                for (PurchaseItem item : getPurchaseItems()) {
+                    item.insert(context);
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Return the uri to be used to insert this purchase.
+     */
+    private Uri getInsertUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + getCustomer().getId()
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

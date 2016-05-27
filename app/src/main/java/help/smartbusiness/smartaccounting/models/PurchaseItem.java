@@ -1,9 +1,18 @@
 package help.smartbusiness.smartaccounting.models;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.SQLException;
+import android.net.Uri;
+
+import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
+import help.smartbusiness.smartaccounting.db.AccountingProvider;
+
 /**
  * Created by gamerboy on 26/5/16.
  */
 public class PurchaseItem {
+    private long id;
     private String name;
     private float quantity;
     private float rate;
@@ -46,5 +55,37 @@ public class PurchaseItem {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean insert(Context context, long customerId, long purchaseId) {
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.PI_COL_NAME, getName());
+        values.put(AccountingDbHelper.PI_COL_QUANTITY, getQuantity());
+        values.put(AccountingDbHelper.PI_COL_RATE, getRate());
+        values.put(AccountingDbHelper.PI_COL_AMOUNT, getAmount());
+        try {
+            Uri newPi = context.getContentResolver().insert(
+                    getInsertUri(customerId, purchaseId), values);
+            setId(Long.parseLong(newPi.getLastPathSegment()));
+            return true;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+
+    private Uri getInsertUri(long customerId, long purchaseId) {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + customerId
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                + "/" + purchaseId
+                + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH);
     }
 }

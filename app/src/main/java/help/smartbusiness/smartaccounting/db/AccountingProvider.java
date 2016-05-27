@@ -37,11 +37,11 @@ public class AccountingProvider extends ContentProvider {
     public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 108;
     public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 109;
 
-    private static final String CUSTOMERS_BASE_PATH = "customers";
-    private static final String PURCHASES_BASE_PATH = "purchases";
-    private static final String CREDITS_BASE_PATH = "credits";
-    private static final String TRANSACTION_BASE_PATH = "transactions";
-    private static final String PURCHASE_ITEMS_BASE_PATH = "purchase_items";
+    public static final String CUSTOMERS_BASE_PATH = "customers";
+    public static final String PURCHASES_BASE_PATH = "purchases";
+    public static final String CREDITS_BASE_PATH = "credits";
+    public static final String TRANSACTION_BASE_PATH = "transactions";
+    public static final String PURCHASE_ITEMS_BASE_PATH = "purchase_items";
 
     public static final String CUSTOMER_CONTENT_URI = "content://"
             + AUTHORITY + "/" + CUSTOMERS_BASE_PATH;
