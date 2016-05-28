@@ -17,14 +17,14 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/customer_name"
+            android:id="@+id/create_purchase_customer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/customer.name"
             app:met_floatingLabel="highlight" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/customer_address"
+            android:id="@+id/create_purchase_customer_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/customer.address"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/purchase_date"
+                android:id="@+id/create_purchase_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -61,7 +61,7 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/purchase_item"
+                android:id="@+id/create_purchase_purchase_item"
                 layout="@layout/purchase_item_input_layout" />
 
         </LinearLayout>
@@ -87,7 +87,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/purchase_total"
+                android:id="@+id/create_purchase_total"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -97,7 +97,7 @@
         </LinearLayout>
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/purchase_remarks"
+            android:id="@+id/create_purchase_remarks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

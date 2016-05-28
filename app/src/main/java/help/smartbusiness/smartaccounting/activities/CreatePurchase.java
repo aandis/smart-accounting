@@ -41,11 +41,11 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_create_purchase);
         totalsEditTexts = new HashMap<>();
 
-        customerName = (MaterialEditText) findViewById(R.id.customer_name);
-        customerAddress = (MaterialEditText) findViewById(R.id.customer_address);
-        purchaseTotal = (MaterialEditText) findViewById(R.id.purchase_total);
+        customerName = (MaterialEditText) findViewById(R.id.create_purchase_customer_name);
+        customerAddress = (MaterialEditText) findViewById(R.id.create_purchase_customer_address);
+        purchaseTotal = (MaterialEditText) findViewById(R.id.create_purchase_total);
         createPurchaseButton = (Button) findViewById(R.id.purchase_create);
-        purchaseRemarks = (MaterialEditText) findViewById(R.id.purchase_remarks);
+        purchaseRemarks = (MaterialEditText) findViewById(R.id.create_purchase_remarks);
 
         createPurchaseButton.setOnClickListener(this);
         setUpDatePicker();
@@ -54,7 +54,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setUpDatePicker() {
-        purchaseDate = (TextView) findViewById(R.id.purchase_date);
+        purchaseDate = (TextView) findViewById(R.id.create_purchase_date);
         purchaseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +82,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
                 setUpPurchaseItemEditTexts(layout);
                 purchaseItemWrapper.addView(layout);
 
-                ImageButton removePi = (ImageButton) layout.findViewById(R.id.purchase_item_remove);
+                ImageButton removePi = (ImageButton) layout.findViewById(R.id.input_purchase_item_remove);
                 removePi.setVisibility(View.VISIBLE);
                 removePi.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -99,7 +99,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setUpDefaultPis() {
-        LinearLayout defaultPurchaseItem = (LinearLayout) findViewById(R.id.purchase_item);
+        LinearLayout defaultPurchaseItem = (LinearLayout) findViewById(R.id.create_purchase_purchase_item);
         setUpPurchaseItemEditTexts(defaultPurchaseItem);
     }
 
@@ -116,11 +116,11 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
 
     private void setUpPurchaseItemEditTexts(View parent) {
         MaterialEditText purchaseItemQuantity = (MaterialEditText)
-                parent.findViewById(R.id.purchase_item_quantity);
+                parent.findViewById(R.id.input_purchase_item_quantity);
         MaterialEditText purchaseItemRate = (MaterialEditText)
-                parent.findViewById(R.id.purchase_item_rate);
+                parent.findViewById(R.id.input_purchase_item_rate);
         MaterialEditText purchaseItemAmount = (MaterialEditText)
-                parent.findViewById(R.id.purchase_item_amount);
+                parent.findViewById(R.id.input_purchase_item_amount);
         totalsEditTexts.put(parent.getId(), purchaseItemAmount);
         purchaseItemQuantity.addTextChangedListener(new CustomTextWatcher(
                 purchaseItemQuantity, purchaseItemRate, purchaseItemAmount));
@@ -179,13 +179,13 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
             String name = ((MaterialEditText) purchaseItem
-                    .findViewById(R.id.purchase_item_name)).getText().toString();
+                    .findViewById(R.id.input_purchase_item_name)).getText().toString();
             float quantity = parseNumber(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.purchase_item_quantity)).getText().toString());
+                    .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
             float rate = parseNumber(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.purchase_item_rate)).getText().toString());
+                    .findViewById(R.id.input_purchase_item_rate)).getText().toString());
             float amount = parseNumber(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.purchase_item_amount)).getText().toString());
+                    .findViewById(R.id.input_purchase_item_amount)).getText().toString());
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             purchase.getPurchaseItems().add(item);
         }

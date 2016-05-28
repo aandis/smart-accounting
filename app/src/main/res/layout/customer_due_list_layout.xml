@@ -19,13 +19,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/customer_name"
+                android:id="@+id/due_customer_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
-                android:id="@+id/customer_address"
+                android:id="@+id/due_customer_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

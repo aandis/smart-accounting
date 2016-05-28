@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         AccountingDbHelper.CUSTOMERS_COL_NAME,
                         AccountingDbHelper.CDV_DUE,
                         AccountingDbHelper.CUSTOMERS_COL_ADDRESS},
-                new int[]{R.id.customer_name,
+                new int[]{R.id.due_customer_name,
                         R.id.customer_due_amount,
-                        R.id.customer_address},
+                        R.id.due_customer_address},
                 0);
     }
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/purchase_item_name"
+            android:id="@+id/input_purchase_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="7"
@@ -19,7 +19,7 @@
             app:met_floatingLabel="highlight" />
 
         <ImageButton
-            android:id="@+id/purchase_item_remove"
+            android:id="@+id/input_purchase_item_remove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
@@ -35,7 +35,7 @@
         android:orientation="horizontal">
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/purchase_item_quantity"
+            android:id="@+id/input_purchase_item_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -45,7 +45,7 @@
             app:met_floatingLabel="highlight" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/purchase_item_rate"
+            android:id="@+id/input_purchase_item_rate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
@@ -55,7 +55,7 @@
             app:met_floatingLabel="highlight" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/purchase_item_amount"
+            android:id="@+id/input_purchase_item_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
