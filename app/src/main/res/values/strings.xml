@@ -5,12 +5,17 @@
     <string name="customer.name">Customer name</string>
     <string name="customer.address">Customer address</string>
 
-    <string name="purchase.date">Date</string>
-    <string name="purchase.date.image.description">Calendar</string>
-    <string name="purchase.total">Total</string>
-    <string name="purchase.remarks">Remarks</string>
+    <string name="date">Date</string>
+    <string name="date.image.description">Calendar</string>
+    <string name="total">Total</string>
+    <string name="remarks">Remarks</string>
+    <string name="amount">Amount</string>
+
     <string name="purchase.create">Create</string>
     <string name="purchase.create.label">Create a purchase</string>
+
+    <string name="credit.create">Create</string>
+    <string name="credit.create.label">Create a credit</string>
 
     <string name="purchase.item.name">Item</string>
     <string name="purchase.item.quantity">Quantity</string>

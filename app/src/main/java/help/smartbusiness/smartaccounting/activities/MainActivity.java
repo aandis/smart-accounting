@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
+                startActivity(new Intent(getApplicationContext(), CreateCreditActivity.class));
             }
         });
         mListView = (ListView) findViewById(R.id.customer_due_list);

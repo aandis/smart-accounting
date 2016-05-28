@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -20,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
@@ -128,18 +128,10 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
                 purchaseItemRate, purchaseItemQuantity, purchaseItemAmount));
     }
 
-    private float parseNumber(String number) {
-        try {
-            return Float.parseFloat(number);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
-    }
-
     private void updateTotal() {
         float sum = 0;
         for (MaterialEditText text : totalsEditTexts.values()) {
-            float total = parseNumber(text.getText().toString());
+            float total = Utils.parseNumber(text.getText().toString());
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
                 return;
@@ -160,12 +152,12 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         Purchase purchase = getPurchaseObject();
         if (purchase.isValid()) {
             if (!purchase.insert(this)) {
-                notifyError("An error occured.");
+                Utils.notifyError(this, "An error occured.");
             } else {
                 finish();
             }
         } else {
-            notifyError("Invalid data");
+            Utils.notifyError(this, "Invalid data");
         }
     }
 
@@ -174,26 +166,22 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
                 customerAddress.getText().toString());
         Purchase purchase = new Purchase(customer,
                 purchaseDate.getText().toString(), purchaseRemarks.getText().toString(),
-                parseNumber(purchaseTotal.getText().toString()));
+                Utils.parseNumber(purchaseTotal.getText().toString()));
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
             String name = ((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
-            float quantity = parseNumber(((MaterialEditText) purchaseItem
+            float quantity = Utils.parseNumber(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
-            float rate = parseNumber(((MaterialEditText) purchaseItem
+            float rate = Utils.parseNumber(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_rate)).getText().toString());
-            float amount = parseNumber(((MaterialEditText) purchaseItem
+            float amount = Utils.parseNumber(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_amount)).getText().toString());
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             purchase.getPurchaseItems().add(item);
         }
         return purchase;
-    }
-
-    private void notifyError(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private class CustomTextWatcher implements TextWatcher {
@@ -217,8 +205,8 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
             String viewStr = mView.getText().toString();
             String otherStr = mOther.getText().toString();
             if (viewStr.length() > 0 && otherStr.length() > 0) {
-                float viewVal = parseNumber(viewStr);
-                float otherVal = parseNumber(otherStr);
+                float viewVal = Utils.parseNumber(viewStr);
+                float otherVal = Utils.parseNumber(otherStr);
                 if (viewVal < 0 || otherVal < 0) {
                     mAmount.getText().clear();
                     return;

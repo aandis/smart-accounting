@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="3"
-                android:hint="@string/purchase.date"
+                android:hint="@string/date"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <ImageButton
@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:contentDescription="@string/purchase.date.image.description"
+                android:contentDescription="@string/date.image.description"
                 android:onClick="showDatePickerDialog"
                 android:src="@android:drawable/ic_menu_my_calendar" />
 
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="2"
-                android:hint="@string/purchase.total"
+                android:hint="@string/total"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:hint="@string/purchase.item.amount" />
+                android:hint="@string/amount" />
 
         </LinearLayout>
 
@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="@string/purchase.remarks"
+            android:hint="@string/remarks"
             app:met_floatingLabel="highlight" />
 
         <Button

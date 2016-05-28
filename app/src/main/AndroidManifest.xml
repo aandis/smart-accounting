@@ -34,6 +34,10 @@
         <activity
             android:name=".activities.TransactionListActivity"
             android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.CreateCreditActivity"
+            android:label="@string/credit.create.label"
+            android:parentActivityName=".activities.MainActivity" />
     </application>
 
 </manifest>
