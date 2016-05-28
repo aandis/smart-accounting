@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_main">
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/customer_due_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"

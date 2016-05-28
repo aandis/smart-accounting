@@ -74,7 +74,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
             public void onClick(View view) {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 final LinearLayout layout = (LinearLayout) inflater
-                        .inflate(R.layout.purchase_item_layout, purchaseItemWrapper, false);
+                        .inflate(R.layout.purchase_item_input_layout, purchaseItemWrapper, false);
 
                 // Set layout id to identify this view. This is used when this view
                 // is removed to update the total amount.

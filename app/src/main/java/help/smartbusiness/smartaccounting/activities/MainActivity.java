@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
             }
         });
-        mListView = (ListView) findViewById(R.id.list);
+        mListView = (ListView) findViewById(R.id.customer_due_list);
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private SimpleCursorAdapter getListViewAdapter() {
         return new SimpleCursorAdapter(this,
-                R.layout.list_layout,
+                R.layout.customer_due_list_layout,
                 null,
                 new String[]{
                         AccountingDbHelper.CUSTOMERS_COL_NAME,
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Log.d(TAG, "called");
         Cursor rowCursor = (Cursor) adapterView.getItemAtPosition(i);
         long customerId = rowCursor.getLong(rowCursor.getColumnIndex(AccountingDbHelper.ID));
-        startActivity(new Intent(this, PurchaseItemListActivity.class)
-                .putExtra(PurchaseItemListActivity.CUSTOMER_ID, customerId));
+        startActivity(new Intent(this, TransactionListActivity.class)
+                .putExtra(TransactionListActivity.CUSTOMER_ID, customerId));
     }
 }

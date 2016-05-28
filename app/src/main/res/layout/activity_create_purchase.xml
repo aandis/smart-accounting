@@ -62,7 +62,7 @@
 
             <include
                 android:id="@+id/purchase_item"
-                layout="@layout/purchase_item_layout" />
+                layout="@layout/purchase_item_input_layout" />
 
         </LinearLayout>
 

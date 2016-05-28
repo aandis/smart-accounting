@@ -35,8 +35,9 @@ public class AccountingProvider extends ContentProvider {
     public static final int CUSTOMER_ID_TRANSACTIONS = 107;
 
     public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 108;
-    public static final int CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS = 109;
-    public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 110;
+    public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 109;
+
+    public static final int PURCHASE_ID_PURCHASE_ITEMS = 110;
 
     public static final String CUSTOMERS_BASE_PATH = "customers";
     public static final String PURCHASES_BASE_PATH = "purchases";
@@ -46,6 +47,8 @@ public class AccountingProvider extends ContentProvider {
 
     public static final String CUSTOMER_CONTENT_URI = "content://"
             + AUTHORITY + "/" + CUSTOMERS_BASE_PATH;
+    public static final String PURCHASE_CONTENT_URI = "content://"
+            + AUTHORITY + "/" + PURCHASES_BASE_PATH;
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/vnd." + AccountingProvider.class.getPackage().getName()
@@ -70,8 +73,9 @@ public class AccountingProvider extends ContentProvider {
         mUriMatcher.addURI(AUTHORITY, "customers/#/transactions", CUSTOMER_ID_TRANSACTIONS);
 
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items", CUSTOMER_PURCHASE_PURCHASE_ITEMS);
-        mUriMatcher.addURI(AUTHORITY, "customers/#/purchases/purchase_items", CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS);
         mUriMatcher.addURI(AUTHORITY, "customers/#/purchases/#/purchase_items", CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS);
+
+        mUriMatcher.addURI(AUTHORITY, "purchases/#/purchase_items", PURCHASE_ID_PURCHASE_ITEMS);
     }
 
     @Override
@@ -138,15 +142,21 @@ public class AccountingProvider extends ContentProvider {
 
             case CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS:
                 builder.appendWhere(AccountingDbHelper.PI_COL_PURCHASE_ID
-                        + "=" + uri.getPathSegments().get(3) + " AND ");
-            case CUSTOMER_ID_PURCHASE_PURCHASE_ITEMS:
-                builder.appendWhere(AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID
+                        + "=" + uri.getPathSegments().get(3)
+                        + " AND "
+                        + AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID
                         + "=" + uri.getPathSegments().get(1));
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS:
                 builder.setTables(AccountingDbHelper.CALCULATED_PURCHASE_VIEW
                         + " INNER JOIN " + AccountingDbHelper.TABLE_PURCHASE_ITEMS
                         + " ON " + AccountingDbHelper.CALCULATED_PURCHASE_VIEW + "." + AccountingDbHelper.ID
                         + " = " + AccountingDbHelper.PI_COL_PURCHASE_ID);
+                break;
+
+            case PURCHASE_ID_PURCHASE_ITEMS:
+                builder.appendWhere(AccountingDbHelper.PI_COL_PURCHASE_ID
+                        + "=" + uri.getPathSegments().get(1));
+                builder.setTables(AccountingDbHelper.TABLE_PURCHASE_ITEMS);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI");
