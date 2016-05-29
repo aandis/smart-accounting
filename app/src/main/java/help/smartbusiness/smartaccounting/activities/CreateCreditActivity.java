@@ -65,7 +65,7 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         Credit credit = getCreditObject();
         if (credit.isValid()) {
             if (!credit.insert(this)) {
-                Utils.notifyError(this, "An error occured.");
+                Utils.notifyError(this, "An error occurred.");
             } else {
                 finish();
             }
@@ -93,5 +93,4 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         }
         return null;
     }
-
 }

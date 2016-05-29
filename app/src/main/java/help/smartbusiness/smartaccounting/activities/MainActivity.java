@@ -2,7 +2,6 @@ package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, DatabaseUtils.dumpCursorToString(data));
         mAdapter.changeCursor(data);
     }
 
@@ -105,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d(TAG, "called");
         Cursor rowCursor = (Cursor) adapterView.getItemAtPosition(i);
         long customerId = rowCursor.getLong(rowCursor.getColumnIndex(AccountingDbHelper.ID));
         startActivity(new Intent(this, TransactionListActivity.class)

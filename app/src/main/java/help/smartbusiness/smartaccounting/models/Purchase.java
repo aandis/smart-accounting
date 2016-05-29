@@ -111,6 +111,7 @@ public class Purchase {
             }
         }
 
+        // TODO Add this to pi validations.
         // Lazy float value validations.
         // Only validate totals. If they are correct, rate and quantity *should* be correct.
         for (int i = 0; i < purchaseItems.size(); i++) {

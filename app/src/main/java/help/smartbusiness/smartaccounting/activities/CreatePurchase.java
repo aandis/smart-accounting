@@ -155,7 +155,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         Purchase purchase = getPurchaseObject();
         if (purchase.isValid()) {
             if (!purchase.insert(this)) {
-                Utils.notifyError(this, "An error occured.");
+                Utils.notifyError(this, "An error occurred.");
             } else {
                 finish();
             }
