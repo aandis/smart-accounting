@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -34,6 +35,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     private Map<Integer, MaterialEditText> totalsEditTexts;
     private Button createPurchaseButton;
     private LinearLayout purchaseItemWrapper;
+    private RadioGroup purchaseTypeGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         purchaseTotal = (MaterialEditText) findViewById(R.id.create_purchase_total);
         createPurchaseButton = (Button) findViewById(R.id.purchase_create);
         purchaseRemarks = (MaterialEditText) findViewById(R.id.create_purchase_remarks);
+        purchaseTypeGroup = (RadioGroup) findViewById(R.id.create_purchase_type_group);
 
         createPurchaseButton.setOnClickListener(this);
         setUpDatePicker();
@@ -165,7 +168,9 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         Customer customer = new Customer(customerName.getText().toString(),
                 customerAddress.getText().toString());
         Purchase purchase = new Purchase(customer,
-                purchaseDate.getText().toString(), purchaseRemarks.getText().toString(),
+                purchaseDate.getText().toString(),
+                purchaseRemarks.getText().toString(),
+                getPurchaseType(),
                 Utils.parseNumber(purchaseTotal.getText().toString()));
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
@@ -182,6 +187,17 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
             purchase.getPurchaseItems().add(item);
         }
         return purchase;
+    }
+
+    private Purchase.PurchaseType getPurchaseType() {
+        int checkedId = purchaseTypeGroup.getCheckedRadioButtonId();
+        switch (checkedId) {
+            case R.id.create_purchase_type_buy:
+                return Purchase.PurchaseType.BUY;
+            case R.id.create_purchase_type_sell:
+                return Purchase.PurchaseType.SELL;
+        }
+        return null;
     }
 
     private class CustomTextWatcher implements TextWatcher {

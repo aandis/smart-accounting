@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -21,6 +22,7 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
     private TextView dateTextView;
     private Button createCreditButton;
     private MaterialEditText customerName, customerAddress, creditAmount, creditRemarks;
+    private RadioGroup creditTypeGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
                 showDatePickerDialog(view);
             }
         });
+        creditTypeGroup = (RadioGroup) findViewById(R.id.create_credit_type_group);
     }
 
     public void showDatePickerDialog(View v) {
@@ -77,6 +80,18 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         String date = dateTextView.getText().toString();
         float amount = Utils.parseNumber(creditAmount.getText().toString());
         String remarks = creditRemarks.getText().toString();
-        return new Credit(customer, date, amount, remarks);
+        return new Credit(customer, date, amount, getCreditType(), remarks);
     }
+
+    private Credit.CreditType getCreditType() {
+        int checkedId = creditTypeGroup.getCheckedRadioButtonId();
+        switch (checkedId) {
+            case R.id.create_credit_type_credit:
+                return Credit.CreditType.CREDIT;
+            case R.id.create_credit_type_debit:
+                return Credit.CreditType.DEBIT;
+        }
+        return null;
+    }
+
 }

@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CreateCreditActivity.class));
+                startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
             }
         });
         mListView = (ListView) findViewById(R.id.customer_due_list);
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(TAG, DatabaseUtils.dumpCursorToString(data));
         mAdapter.changeCursor(data);
     }
 

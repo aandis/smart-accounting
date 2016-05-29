@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class AccountingDbHelper extends SQLiteOpenHelper {
 
+    public static final String TAG = AccountingDbHelper.class.getCanonicalName();
     public static final String DATABASE_NAME = "accounting";
     public static final int DATABASE_VERSION = 1;
 
@@ -29,12 +30,16 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String PURCHASE_COL_CUSTOMER_ID = "c_id";
     public static final String PURCHASE_COL_DATE = "date";
     public static final String PURCHASE_COL_REMARKS = "remarks";
+    public static final String PURCHASE_COL_TYPE = "type";
+    public static final String PURCHASE_TYPE_SELL = "sell";
+    public static final String PURCHASE_TYPE_BUY = "buy";
     public static final String CREATE_TABLE_PURCHASE = "create table " + TABLE_PURCHASE
             + " ( "
             + ID + " integer primary key autoincrement, "
             + PURCHASE_COL_CUSTOMER_ID + " integer not null, "
             + PURCHASE_COL_DATE + " text not null, "
             + PURCHASE_COL_REMARKS + " text, "
+            + PURCHASE_COL_TYPE + " text NOT NULL CHECK (" + PURCHASE_COL_TYPE + " IN ('" + PURCHASE_TYPE_SELL + "','" + PURCHASE_TYPE_BUY +  "')), "
             + "foreign key (" + PURCHASE_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
             + " )";
 
@@ -71,6 +76,9 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String CREDIT_COL_AMOUNT = "amount";
     public static final String CREDIT_COL_DATE = "date";
     public static final String CREDIT_COL_REMARKS = "remarks";
+    public static final String CREDIT_COL_TYPE = "type";
+    public static final String CREDIT_TYPE_CREDIT = "credit";
+    public static final String CREDIT_TYPE_DEBIT = "debit";
     public static final String CREATE_TABLE_CREDIT = "create table " + TABLE_CREDIT
             + " ( "
             + ID + " integer primary key autoincrement, "
@@ -78,6 +86,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + CREDIT_COL_AMOUNT + " real not null, "
             + CREDIT_COL_DATE + " text not null, "
             + CREDIT_COL_REMARKS + " text, "
+            + CREDIT_COL_TYPE + " text NOT NULL CHECK (" + CREDIT_COL_TYPE + " IN ('" + CREDIT_TYPE_CREDIT + "','" + CREDIT_TYPE_DEBIT +  "')), "
             + "foreign key (" + CREDIT_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
             + " )";
 
@@ -99,18 +108,32 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " AS "
             + " SELECT total_dues.*, (total_dues.amount - total_credit.amount) AS " + CDV_DUE + " from ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS amount "
-                + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
+                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") "
+                + " + "
+                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT +") AS amount "
+                + " from " + TABLE_CUSTOMER
+                + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+                + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_SELL + "' "
+                + " LEFT OUTER JOIN " + TABLE_CREDIT
+                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+                + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_DEBIT + "' "
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
             + ") total_dues "
             + " INNER JOIN ("
                 + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS amount "
-                + " from " + TABLE_CUSTOMER + " LEFT OUTER JOIN " + TABLE_CREDIT
+                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") "
+                + " + "
+                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT +") AS amount "
+                + " from " + TABLE_CUSTOMER
+                + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
+                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+                + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_BUY + "' "
+                + " LEFT OUTER JOIN " + TABLE_CREDIT
                 + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+                + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_CREDIT + "' "
                 + " GROUP BY " + TABLE_CUSTOMER + "." + ID
-            + ") total_credit "
+                + ") total_credit "
             + " ON total_dues." + ID + " = " + " total_credit." + ID;
 
     public AccountingDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

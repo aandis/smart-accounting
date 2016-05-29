@@ -16,18 +16,35 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
  * Created by gamerboy on 26/5/16.
  */
 public class Purchase {
+
+    public enum PurchaseType {
+        SELL(AccountingDbHelper.PURCHASE_TYPE_SELL), BUY(AccountingDbHelper.PURCHASE_TYPE_BUY);
+
+        private String type;
+
+        private PurchaseType(String type) {
+            this.type = type;
+        }
+
+        public String getDbType() {
+            return type;
+        }
+    }
+
     public static final String TAG = Purchase.class.getName();
     private long id;
     private Customer customer;
     private String date;
     private String remarks;
+    private PurchaseType type;
     private float amount;
     private List<PurchaseItem> purchaseItems;
 
-    public Purchase(Customer customer, String date, String remarks, float amount) {
+    public Purchase(Customer customer, String date, String remarks, PurchaseType type, float amount) {
         this.customer = customer;
         this.date = date;
         this.remarks = remarks;
+        this.type = type;
         this.amount = amount;
         purchaseItems = new ArrayList<>();
     }
@@ -73,6 +90,12 @@ public class Purchase {
     }
 
     public boolean isValid() {
+
+        // Type validation.
+        if (getType() == null) {
+            return false;
+        }
+
         // Not empty validations.
         List<String> notEmpty = new ArrayList<>(Arrays.asList(
                 customer.getName(), customer.getAddress(), date));
@@ -113,6 +136,7 @@ public class Purchase {
             values.put(AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID, getCustomer().getId());
             values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
             values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
+            values.put(AccountingDbHelper.PURCHASE_COL_TYPE, getType().getDbType());
 
             try {
                 Uri newPurchase = context.getContentResolver().insert(getInsertUri(), values);
@@ -150,4 +174,14 @@ public class Purchase {
     public void setId(long id) {
         this.id = id;
     }
+
+
+    public PurchaseType getType() {
+        return type;
+    }
+
+    public void setType(PurchaseType type) {
+        this.type = type;
+    }
+
 }
