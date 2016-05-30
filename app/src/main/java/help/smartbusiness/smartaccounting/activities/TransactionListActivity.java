@@ -81,7 +81,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                 AccountingProvider.CUSTOMER_CONTENT_URI
                         + "/" + mCustomerId
                         + "/" + AccountingProvider.TRANSACTION_BASE_PATH),
-                null, null, null, AccountingDbHelper.PURCHASE_COL_DATE + " desc ");
+                null, null, null, AccountingDbHelper.PURCHASE_COL_DATE + " ASC ");
     }
 
     @Override
