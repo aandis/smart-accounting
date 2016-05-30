@@ -104,7 +104,7 @@ public class Credit {
 
         // Not empty validations.
         List<String> notEmpty = new ArrayList<>(Arrays.asList(
-                customer.getName(), customer.getAddress(), date));
+                getCustomer().getName(), getCustomer().getAddress(), date));
         for (String text : notEmpty) {
             if (text.isEmpty()) {
                 return false;
@@ -114,7 +114,8 @@ public class Credit {
     }
 
     public boolean insert(Context context) {
-        if (getCustomer().insert(context)) {
+        boolean customerInserted = getCustomer().isValidId() || getCustomer().insert(context);
+        if (customerInserted) {
             ContentValues values = new ContentValues();
             values.put(AccountingDbHelper.CREDIT_COL_CUSTOMER_ID, getCustomer().getId());
             values.put(AccountingDbHelper.CREDIT_COL_DATE, date);

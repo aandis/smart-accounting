@@ -36,8 +36,10 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.CreateCreditActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/credit.create.label"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

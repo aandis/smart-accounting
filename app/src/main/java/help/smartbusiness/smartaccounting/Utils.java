@@ -7,11 +7,19 @@ import android.widget.Toast;
  * Created by gamerboy on 28/5/16.
  */
 public class Utils {
-    public static float parseNumber(String number) {
+    public static float parseFloat(String number) {
         try {
             return Float.parseFloat(number);
         } catch (NumberFormatException ex) {
             return -1;
+        }
+    }
+
+    public static Long parseLong(String number) {
+        try {
+            return Long.parseLong(number);
+        } catch (NumberFormatException ex) {
+            return -1l;
         }
     }
 

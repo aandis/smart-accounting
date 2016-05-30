@@ -134,7 +134,7 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     private void updateTotal() {
         float sum = 0;
         for (MaterialEditText text : totalsEditTexts.values()) {
-            float total = Utils.parseNumber(text.getText().toString());
+            float total = Utils.parseFloat(text.getText().toString());
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
                 return;
@@ -171,17 +171,17 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
                 purchaseDate.getText().toString(),
                 purchaseRemarks.getText().toString(),
                 getPurchaseType(),
-                Utils.parseNumber(purchaseTotal.getText().toString()));
+                Utils.parseFloat(purchaseTotal.getText().toString()));
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
             String name = ((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
-            float quantity = Utils.parseNumber(((MaterialEditText) purchaseItem
+            float quantity = Utils.parseFloat(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
-            float rate = Utils.parseNumber(((MaterialEditText) purchaseItem
+            float rate = Utils.parseFloat(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_rate)).getText().toString());
-            float amount = Utils.parseNumber(((MaterialEditText) purchaseItem
+            float amount = Utils.parseFloat(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_amount)).getText().toString());
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             purchase.getPurchaseItems().add(item);
@@ -221,8 +221,8 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
             String viewStr = mView.getText().toString();
             String otherStr = mOther.getText().toString();
             if (viewStr.length() > 0 && otherStr.length() > 0) {
-                float viewVal = Utils.parseNumber(viewStr);
-                float otherVal = Utils.parseNumber(otherStr);
+                float viewVal = Utils.parseFloat(viewStr);
+                float otherVal = Utils.parseFloat(otherStr);
                 if (viewVal < 0 || otherVal < 0) {
                     mAmount.getText().clear();
                     return;

@@ -16,6 +16,12 @@ public class Customer {
     private String name;
     private String address;
 
+    public Customer(long id, String name, String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
+
     public Customer(String name, String address) {
         this.name = name;
         this.address = address;
@@ -57,5 +63,9 @@ public class Customer {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isValidId() {
+        return id > 0;
     }
 }
