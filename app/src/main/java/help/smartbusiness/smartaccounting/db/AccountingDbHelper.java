@@ -3,6 +3,7 @@ package help.smartbusiness.smartaccounting.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by gamerboy on 19/5/16.
@@ -102,38 +103,81 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + " GROUP BY " + TABLE_PURCHASE + "." + ID;
 
 
+    public static final String TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW = "total_customer_purchases_sold";
+    public static final String CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_SOLD = "create view " + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW
+            + " AS "
+            + " SELECT " + TABLE_CUSTOMER + ".*, "
+            + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS " + CPV_AMOUNT
+            + " FROM " + TABLE_CUSTOMER
+            + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
+            + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+            + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_SELL + "' "
+            + " GROUP BY " + TABLE_CUSTOMER + "." + ID;
+
+    public static final String TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW = "total_customer_purchases_bought";
+    public static final String CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_BOUGHT = "create view " + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW
+            + " AS "
+            + " SELECT " + TABLE_CUSTOMER + ".*, "
+            + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") AS " + CPV_AMOUNT
+            + " FROM " + TABLE_CUSTOMER
+            + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
+            + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
+            + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_BUY + "' "
+            + " GROUP BY " + TABLE_CUSTOMER + "." + ID;
+
+
+    public static final String TOTAL_CUSTOMER_CREDIT_VIEW = "total_customer_credits";
+    public static final String CREATE_VIEW_TOTAL_CUSTOMER_CREDITS = "create view " + TOTAL_CUSTOMER_CREDIT_VIEW
+            + " AS "
+            + " SELECT " + TABLE_CUSTOMER + ".*, "
+            + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS " + CREDIT_COL_AMOUNT
+            + " FROM " + TABLE_CUSTOMER
+            + " LEFT OUTER JOIN " + TABLE_CREDIT
+            + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+            + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_CREDIT + "' "
+            + " GROUP BY " + TABLE_CUSTOMER + "." + ID;
+
+    public static final String TOTAL_CUSTOMER_DEBIT_VIEW = "total_customer_debits";
+    public static final String CREATE_VIEW_TOTAL_CUSTOMER_DEBITS = "create view " + TOTAL_CUSTOMER_DEBIT_VIEW
+            + " AS "
+            + " SELECT " + TABLE_CUSTOMER + ".*, "
+            + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT + ") AS " + CREDIT_COL_AMOUNT
+            + " FROM " + TABLE_CUSTOMER
+            + " LEFT OUTER JOIN " + TABLE_CREDIT
+            + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
+            + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_DEBIT + "' "
+            + " GROUP BY " + TABLE_CUSTOMER + "." + ID;
+
     public static final String CUSTOMER_DUE_VIEW = "customer_dues";
     public static final String CDV_DUE = "due";
     public static final String CREATE_VIEW_CUSTOMER_DUE = "create view " + CUSTOMER_DUE_VIEW
             + " AS "
             + " SELECT total_dues.*, (total_dues.amount - total_credit.amount) AS " + CDV_DUE + " from ("
-                + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") "
+                + " SELECT " + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + ID + ", "
+                    + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + CUSTOMERS_COL_NAME + ", "
+                    + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + CUSTOMERS_COL_ADDRESS + ", "
+                + " total (" + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + CPV_AMOUNT + ") "
                 + " + "
-                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT +") AS amount "
-                + " from " + TABLE_CUSTOMER
-                + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
-                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
-                + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_SELL + "' "
-                + " LEFT OUTER JOIN " + TABLE_CREDIT
-                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
-                + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_DEBIT + "' "
-                + " GROUP BY " + TABLE_CUSTOMER + "." + ID
+                + " total (" + TOTAL_CUSTOMER_DEBIT_VIEW + "." + CREDIT_COL_AMOUNT + ") AS amount "
+                + " FROM " + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW
+                + " LEFT OUTER JOIN " + TOTAL_CUSTOMER_DEBIT_VIEW
+                + " ON " + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + ID
+                + " = " + TOTAL_CUSTOMER_DEBIT_VIEW + "." + ID
+                + " GROUP BY " + TOTAL_CUSTOMER_PURCHASES_SOLD_VIEW + "." + ID
             + ") total_dues "
             + " INNER JOIN ("
-                + " SELECT " + TABLE_CUSTOMER + ".*, "
-                + " total (" + CALCULATED_PURCHASE_VIEW + "." + CPV_AMOUNT + ") "
+                + " SELECT " + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + ID + ", "
+                    + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + CUSTOMERS_COL_NAME + ", "
+                    + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + CUSTOMERS_COL_ADDRESS + ", "
+                + " total (" + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + CPV_AMOUNT + ") "
                 + " + "
-                + " total (" + TABLE_CREDIT + "." + CREDIT_COL_AMOUNT +") AS amount "
-                + " from " + TABLE_CUSTOMER
-                + " LEFT OUTER JOIN " + CALCULATED_PURCHASE_VIEW
-                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_CUSTOMER_ID
-                + " AND " + CALCULATED_PURCHASE_VIEW + "." + PURCHASE_COL_TYPE + " = '" + PURCHASE_TYPE_BUY + "' "
-                + " LEFT OUTER JOIN " + TABLE_CREDIT
-                + " ON " + TABLE_CUSTOMER + "." + ID + " = " + TABLE_CREDIT + "." + CREDIT_COL_CUSTOMER_ID
-                + " AND " + TABLE_CREDIT + "." + CREDIT_COL_TYPE + " = '" + CREDIT_TYPE_CREDIT + "' "
-                + " GROUP BY " + TABLE_CUSTOMER + "." + ID
-                + ") total_credit "
+                + " total (" + TOTAL_CUSTOMER_CREDIT_VIEW + "." + CREDIT_COL_AMOUNT + ") AS amount "
+                + " FROM " + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW
+                + " LEFT OUTER JOIN " + TOTAL_CUSTOMER_CREDIT_VIEW
+                + " ON " + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + ID
+                + " = " + TOTAL_CUSTOMER_CREDIT_VIEW + "." + ID
+                + " GROUP BY " + TOTAL_CUSTOMER_PURCHASES_BOUGHT_VIEW + "." + ID
+            + ") total_credit "
             + " ON total_dues." + ID + " = " + " total_credit." + ID;
 
     public AccountingDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -147,9 +191,35 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_PI);
         sqLiteDatabase.execSQL(CREATE_TABLE_CREDIT);
 
-        sqLiteDatabase.execSQL(CREATE_VIEW_PURCHASE);
         sqLiteDatabase.execSQL(CREATE_PI_AMOUNT_UPDATE_TRIGGER);
+
+        sqLiteDatabase.execSQL(CREATE_VIEW_PURCHASE);
+
+        sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_BOUGHT);
+        sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_SOLD);
+        sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_CREDITS);
+        sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_DEBITS);
+
         sqLiteDatabase.execSQL(CREATE_VIEW_CUSTOMER_DUE);
+        printSql();
+    }
+
+    private void printSql() {
+        Log.d(TAG, CREATE_TABLE_CUSTOMERS);
+        Log.d(TAG, CREATE_TABLE_PURCHASE);
+        Log.d(TAG, CREATE_TABLE_PI);
+        Log.d(TAG, CREATE_TABLE_CREDIT);
+
+        Log.d(TAG, CREATE_PI_AMOUNT_UPDATE_TRIGGER);
+
+        Log.d(TAG, CREATE_VIEW_PURCHASE);
+
+        Log.d(TAG, CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_BOUGHT);
+        Log.d(TAG, CREATE_VIEW_TOTAL_CUSTOMER_PURCHASES_SOLD);
+        Log.d(TAG, CREATE_VIEW_TOTAL_CUSTOMER_CREDITS);
+        Log.d(TAG, CREATE_VIEW_TOTAL_CUSTOMER_DEBITS);
+
+        Log.d(TAG, CREATE_VIEW_CUSTOMER_DUE);
     }
 
     @Override
