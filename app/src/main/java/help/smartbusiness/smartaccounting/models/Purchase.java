@@ -98,7 +98,7 @@ public class Purchase {
 
         // Not empty validations.
         List<String> notEmpty = new ArrayList<>(Arrays.asList(
-                customer.getName(), customer.getAddress(), date));
+                getCustomer().getName(), getCustomer().getAddress(), date));
 
         // All purchase item names.
         for (int i = 0; i < purchaseItems.size(); i++) {
@@ -132,7 +132,8 @@ public class Purchase {
     public boolean insert(Context context) {
         // TODO: This method uses contentResolver.insert() which works on the ui thread. Move to background thread using AsyncQueryHandler.
         // TODO: Process this whole insert in a transaction!
-        if (getCustomer().insert(context)) {
+        boolean customerInserted = getCustomer().isValidId() || getCustomer().insert(context);
+        if (customerInserted) {
             ContentValues values = new ContentValues();
             values.put(AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID, getCustomer().getId());
             values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());

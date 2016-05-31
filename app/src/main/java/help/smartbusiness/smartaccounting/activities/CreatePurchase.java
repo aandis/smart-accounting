@@ -1,8 +1,8 @@
 package help.smartbusiness.smartaccounting.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
@@ -26,25 +27,24 @@ import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;
 
-public class CreatePurchase extends AppCompatActivity implements View.OnClickListener {
+public class CreatePurchase extends TransactionCreatorActivity implements View.OnClickListener {
 
-    public static final String TAG = CreatePurchase.class.getName();
+    public static final String TAG = CreatePurchase.class.getCanonicalName();
 
-    private MaterialEditText customerName, customerAddress, purchaseTotal, purchaseRemarks;
-    private TextView purchaseDate;
-    private Map<Integer, MaterialEditText> totalsEditTexts;
+    private TextView customerId, purchaseDate;
+    private MaterialAutoCompleteTextView customerName;
+    private MaterialEditText customerAddress, purchaseTotal, purchaseRemarks;
     private Button createPurchaseButton;
     private LinearLayout purchaseItemWrapper;
     private RadioGroup purchaseTypeGroup;
+    private Map<Integer, MaterialEditText> totalsEditTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_purchase);
+        setUpCustomerFields();
         totalsEditTexts = new HashMap<>();
-
-        customerName = (MaterialEditText) findViewById(R.id.create_purchase_customer_name);
-        customerAddress = (MaterialEditText) findViewById(R.id.create_purchase_customer_address);
         purchaseTotal = (MaterialEditText) findViewById(R.id.create_purchase_total);
         createPurchaseButton = (Button) findViewById(R.id.purchase_create);
         purchaseRemarks = (MaterialEditText) findViewById(R.id.create_purchase_remarks);
@@ -55,6 +55,19 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
         setUpDefaultPis();
         setUpAddMorePis();
     }
+
+    private void setUpCustomerFields() {
+        customerId = (TextView) findViewById(R.id.create_purchase_customer_id);
+        customerName = (MaterialAutoCompleteTextView) findViewById(R.id.create_purchase_customer_name);
+        customerAddress = (MaterialEditText) findViewById(R.id.create_purchase_customer_address);
+        Intent intent = getIntent();
+        if (intent.hasExtra(CUSTOMER_ID)) {
+            fillCustomerFields(intent);
+        } else {
+            initSuggestions("Switch to creating purchase for existing customer?", CreatePurchase.class);
+        }
+    }
+
 
     private void setUpDatePicker() {
         purchaseDate = (TextView) findViewById(R.id.create_purchase_date);
@@ -165,7 +178,8 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
     }
 
     private Purchase getPurchaseObject() {
-        Customer customer = new Customer(customerName.getText().toString(),
+        Customer customer = new Customer(Utils.parseLong(customerId.getText().toString()),
+                customerName.getText().toString(),
                 customerAddress.getText().toString());
         Purchase purchase = new Purchase(customer,
                 purchaseDate.getText().toString(),
@@ -198,6 +212,21 @@ public class CreatePurchase extends AppCompatActivity implements View.OnClickLis
                 return Purchase.PurchaseType.SELL;
         }
         return null;
+    }
+
+    @Override
+    public TextView getCustomerIdTextView() {
+        return customerId;
+    }
+
+    @Override
+    public MaterialAutoCompleteTextView getCustomerNameTextView() {
+        return customerName;
+    }
+
+    @Override
+    public MaterialEditText getCustomerAddressTextView() {
+        return customerAddress;
     }
 
     private class CustomTextWatcher implements TextWatcher {
