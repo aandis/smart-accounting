@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -33,19 +34,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setUpFabs();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CreateCreditActivity.class));
-            }
-        });
         mListView = (ListView) findViewById(R.id.customer_due_list);
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
         getSupportLoaderManager().initLoader(R.id.customer_loader, null, this);
+    }
+
+    private void setUpFabs() {
+        FloatingActionButton purchaseButton = (FloatingActionButton) findViewById(R.id.purchase_create_fab);
+        FloatingActionButton creditButton = (FloatingActionButton) findViewById(R.id.credit_create_fab);
+        purchaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
+            }
+        });
+        creditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CreateCreditActivity.class));
+            }
+        });
     }
 
     private SimpleCursorAdapter getListViewAdapter() {
@@ -78,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
+            startActivity(new Intent(getApplicationContext(), EmptyTest.class));
             return true;
         }
 
