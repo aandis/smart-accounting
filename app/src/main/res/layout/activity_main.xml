@@ -51,7 +51,7 @@
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_icon="@drawable/ic_euro_symbol_black_36dp"
-            fab:fab_size="mini"gigit
+            fab:fab_size="mini"
             fab:fab_title="Create Credit" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>

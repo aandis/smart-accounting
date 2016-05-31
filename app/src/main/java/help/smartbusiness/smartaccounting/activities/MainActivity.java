@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setUpFabs();
-
         mListView = (ListView) findViewById(R.id.customer_due_list);
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), EmptyTest.class));
             return true;
         }
 
