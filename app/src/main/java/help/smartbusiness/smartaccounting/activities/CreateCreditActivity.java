@@ -20,7 +20,7 @@ import help.smartbusiness.smartaccounting.models.Customer;
 
 public class CreateCreditActivity extends TransactionCreatorActivity implements View.OnClickListener {
 
-    private static final String TAG = CreateCreditActivity.class.getCanonicalName();
+    private static final String TAG = CreateCreditActivity.class.getSimpleName();
 
     private TextView customerId, dateTextView;
     private Button createCreditButton;
