@@ -45,12 +45,14 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                         AccountingDbHelper.ID,
                         AccountingDbHelper.PURCHASE_COL_DATE,
                         AccountingDbHelper.PURCHASE_COL_REMARKS,
-                        AccountingDbHelper.CPV_AMOUNT},
+                        AccountingDbHelper.CPV_AMOUNT,
+                        AccountingDbHelper.PURCHASE_COL_TYPE},
                 new int[]{
                         R.id.transaction_id,
                         R.id.transaction_date,
                         R.id.transaction_remarks,
-                        R.id.transaction_amount},
+                        R.id.transaction_amount,
+                        R.id.transaction_type},
                 R.layout.transaction_item_purchase_item_layout,
                 new String[]{
                         AccountingDbHelper.PI_COL_NAME,
@@ -65,12 +67,17 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
             @Override
             protected Cursor getChildrenCursor(Cursor cursor) {
                 // TODO Do this asynchronously with LoaderManager.
-                long transactionId = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID));
-                return getContentResolver().query(Uri.parse(
-                                AccountingProvider.PURCHASE_CONTENT_URI
-                                        + "/" + transactionId
-                                        + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
-                        null, null, null, null);
+                String type = cursor.getString(cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
+                if (type.equals(AccountingDbHelper.PURCHASE_TYPE_BUY) ||
+                        type.equals(AccountingDbHelper.PURCHASE_TYPE_SELL)) {
+                    long transactionId = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID));
+                    return getContentResolver().query(Uri.parse(
+                                    AccountingProvider.PURCHASE_CONTENT_URI
+                                            + "/" + transactionId
+                                            + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
+                            null, null, null, null);
+                }
+                return null;
             }
         };
     }
