@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -43,18 +44,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void setUpFabs() {
+        final FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.create_fab_menu);
         FloatingActionButton purchaseButton = (FloatingActionButton) findViewById(R.id.purchase_create_fab);
         FloatingActionButton creditButton = (FloatingActionButton) findViewById(R.id.credit_create_fab);
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CreatePurchase.class));
+                menu.toggle();
             }
         });
         creditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CreateCreditActivity.class));
+                menu.toggle();
             }
         });
     }
