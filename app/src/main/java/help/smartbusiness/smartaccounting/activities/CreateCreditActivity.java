@@ -55,7 +55,8 @@ public class CreateCreditActivity extends TransactionCreatorActivity implements 
         if (intent.hasExtra(CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            initSuggestions("Switch to creating credit for existing customer?", CreateCreditActivity.class);
+            initSuggestions(getString(R.string.credit_create_existing_confirmation),
+                    CreateCreditActivity.class);
         }
     }
 

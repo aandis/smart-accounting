@@ -64,7 +64,8 @@ public class CreatePurchase extends TransactionCreatorActivity implements View.O
         if (intent.hasExtra(CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            initSuggestions("Switch to creating purchase for existing customer?", CreatePurchase.class);
+            initSuggestions(getString(R.string.purchase_create_existing_confirmation),
+                    CreatePurchase.class);
         }
     }
 
