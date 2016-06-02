@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/create_purchase_type_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/type"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+        <RadioButton
+            android:id="@+id/create_purchase_type_sell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/purchase.type.sold" />
+
+        <RadioButton
+            android:id="@+id/create_purchase_type_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/purchase.type.bought" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/create_purchase_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="3"
+            android:hint="@string/date"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+        <ImageButton
+            android:id="@+id/date_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/date.image.description"
+            android:onClick="showDatePickerDialog"
+            android:src="@android:drawable/ic_menu_my_calendar" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/purchase_item_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/create_purchase_purchase_item"
+            layout="@layout/purchase_item_input_layout" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_more_pi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/purchase.item.add.more"
+        android:theme="@style/Widget.AppCompat.Button.Colored" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2"
+            android:hint="@string/total"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/create_purchase_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:hint="@string/amount" />
+
+    </LinearLayout>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/create_purchase_remarks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="@string/remarks"
+        app:met_floatingLabel="highlight" />
+
+    <Button
+        android:id="@+id/purchase_create"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/purchase.create" />
+
+
+</LinearLayout>
