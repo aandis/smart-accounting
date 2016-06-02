@@ -64,7 +64,7 @@ public class CreateCreditActivity extends TransactionCreatorActivity implements 
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 super.onDateSet(view, year, month, day);
-                dateTextView.setText(String.format("%d-%d-%d", day, month, year));
+                dateTextView.setText(String.format("%d-%d-%d", day, month + 1, year));
             }
         };
         newFragment.show(getSupportFragmentManager(), "datePicker");

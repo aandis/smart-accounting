@@ -124,7 +124,7 @@ public class CreatePurchase extends TransactionCreatorActivity implements View.O
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 super.onDateSet(view, year, month, day);
-                purchaseDate.setText(String.format("%d-%d-%d", day, month, year));
+                purchaseDate.setText(String.format("%d-%d-%d", day, month + 1, year));
             }
         };
         newFragment.show(getSupportFragmentManager(), "datePicker");
