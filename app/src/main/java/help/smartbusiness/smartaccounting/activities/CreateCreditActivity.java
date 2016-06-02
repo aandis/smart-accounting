@@ -3,6 +3,7 @@ package help.smartbusiness.smartaccounting.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,7 +19,7 @@ import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
 import help.smartbusiness.smartaccounting.models.Customer;
 
-public class CreateCreditActivity extends TransactionCreatorActivity implements View.OnClickListener {
+public class CreateCreditActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = CreateCreditActivity.class.getSimpleName();
 
@@ -52,12 +53,26 @@ public class CreateCreditActivity extends TransactionCreatorActivity implements 
         customerName = (MaterialAutoCompleteTextView) findViewById(R.id.create_credit_customer_name);
         customerAddress = (MaterialEditText) findViewById(R.id.create_credit_customer_address);
         Intent intent = getIntent();
-        if (intent.hasExtra(CUSTOMER_ID)) {
+        if (intent.hasExtra(CustomerNameSuggester.CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            initSuggestions(getString(R.string.credit_create_existing_confirmation),
+            CustomerNameSuggester suggester = new CustomerNameSuggester(this) {
+                @Override
+                public MaterialAutoCompleteTextView getCustomerNameTextView() {
+                    return customerName;
+                }
+            };
+            suggester.initSuggestions(getString(R.string.credit_create_existing_confirmation),
                     CreateCreditActivity.class);
         }
+    }
+
+    public void fillCustomerFields(Intent intent) {
+        customerId.setText(String.valueOf(intent.getLongExtra(CustomerNameSuggester.CUSTOMER_ID, -1l)));
+        customerName.setText(intent.getStringExtra(CustomerNameSuggester.CUSTOMER_NAME));
+        customerName.setEnabled(false);
+        customerAddress.setText(intent.getStringExtra(CustomerNameSuggester.CUSTOMER_ADDRESS));
+        customerAddress.setEnabled(false);
     }
 
     public void showDatePickerDialog(View v) {
@@ -109,21 +124,6 @@ public class CreateCreditActivity extends TransactionCreatorActivity implements 
                 return Credit.CreditType.DEBIT;
         }
         return null;
-    }
-
-    @Override
-    public TextView getCustomerIdTextView() {
-        return customerId;
-    }
-
-    @Override
-    public MaterialAutoCompleteTextView getCustomerNameTextView() {
-        return customerName;
-    }
-
-    @Override
-    public MaterialEditText getCustomerAddressTextView() {
-        return customerAddress;
     }
 
 }

@@ -35,27 +35,26 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
         customerName = (MaterialAutoCompleteTextView) findViewById(R.id.create_purchase_customer_name);
         customerAddress = (MaterialEditText) findViewById(R.id.create_purchase_customer_address);
         Intent intent = getIntent();
-        if (intent.hasExtra(CUSTOMER_ID)) {
+        if (intent.hasExtra(CustomerNameSuggester.CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            initSuggestions(getString(R.string.purchase_create_existing_confirmation),
+            CustomerNameSuggester suggester = new CustomerNameSuggester(this) {
+                @Override
+                public MaterialAutoCompleteTextView getCustomerNameTextView() {
+                    return customerName;
+                }
+            };
+            suggester.initSuggestions(getString(R.string.purchase_create_existing_confirmation),
                     CreatePurchase.class);
         }
     }
 
-    @Override
-    public TextView getCustomerIdTextView() {
-        return customerId;
-    }
-
-    @Override
-    public MaterialAutoCompleteTextView getCustomerNameTextView() {
-        return customerName;
-    }
-
-    @Override
-    public MaterialEditText getCustomerAddressTextView() {
-        return customerAddress;
+    public void fillCustomerFields(Intent intent) {
+        customerId.setText(String.valueOf(intent.getLongExtra(CustomerNameSuggester.CUSTOMER_ID, -1l)));
+        customerName.setText(intent.getStringExtra(CustomerNameSuggester.CUSTOMER_NAME));
+        customerName.setEnabled(false);
+        customerAddress.setText(intent.getStringExtra(CustomerNameSuggester.CUSTOMER_ADDRESS));
+        customerAddress.setEnabled(false);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package help.smartbusiness.smartaccounting.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,10 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -23,34 +22,32 @@ import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
  * Adds autocompletion feature to customer name field and appropriate handling of
  * creating transaction for existing customer.
  */
-public abstract class TransactionCreatorActivity extends AppCompatActivity {
+public abstract class CustomerNameSuggester {
+
+    // TODO refactor into a Suggester class.
+
+    private Context mContext;
+
+    public CustomerNameSuggester(Context context) {
+        this.mContext = context;
+    }
 
     public static final String CUSTOMER_ID = "_id";
     public static final String CUSTOMER_NAME = "customer_name";
     public static final String CUSTOMER_ADDRESS = "customer_address";
 
-    public abstract TextView getCustomerIdTextView();
-
     public abstract MaterialAutoCompleteTextView getCustomerNameTextView();
 
-    public abstract MaterialEditText getCustomerAddressTextView();
-
-    public void fillCustomerFields(Intent intent) {
-        getCustomerIdTextView().setText(String.valueOf(intent.getLongExtra(CUSTOMER_ID, -1l)));
-        getCustomerNameTextView().setText(intent.getStringExtra(CUSTOMER_NAME));
-        getCustomerNameTextView().setEnabled(false);
-        getCustomerAddressTextView().setText(intent.getStringExtra(CUSTOMER_ADDRESS));
-        getCustomerAddressTextView().setEnabled(false);
-    }
-
     public void initSuggestions(final String alertMessage, final Class<?> launchClass) {
+        final AppCompatActivity activity = (AppCompatActivity) mContext;
         final SimpleCursorAdapter adapter = getSuggestionAdapter();
         getCustomerNameTextView().setAdapter(adapter);
         getCustomerNameTextView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, final int i, long l) {
                 YesNoDialog dialogFragment = YesNoDialog.newInstance("", alertMessage);
-                dialogFragment.show(getSupportFragmentManager(), YesNoDialog.TAG);
+                dialogFragment.show(activity.getSupportFragmentManager(),
+                        YesNoDialog.TAG);
                 dialogFragment.setCallback(new YesNoDialog.DialogClickListener() {
                     @Override
                     public void onYesClick() {
@@ -65,8 +62,8 @@ public abstract class TransactionCreatorActivity extends AppCompatActivity {
                         intent.putExtra(CUSTOMER_ID, existingCustomerId);
                         intent.putExtra(CUSTOMER_NAME, existingCustomerName);
                         intent.putExtra(CUSTOMER_ADDRESS, existingCustomerAddress);
-                        startActivity(intent);
-                        finish();
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
 
                     @Override
@@ -79,7 +76,7 @@ public abstract class TransactionCreatorActivity extends AppCompatActivity {
     }
 
     private SimpleCursorAdapter getSuggestionAdapter() {
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(mContext,
                 R.layout.support_simple_spinner_dropdown_item,
                 null,
                 new String[]{AccountingDbHelper.CUSTOMERS_COL_NAME},
@@ -94,7 +91,7 @@ public abstract class TransactionCreatorActivity extends AppCompatActivity {
             // TODO: Change this if this doesn't run on a background thread. See CursorAdapter.runQueryOnBackgroundThread()
             @Override
             public Cursor runQuery(CharSequence charSequence) {
-                return getContentResolver().query(Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI),
+                return mContext.getContentResolver().query(Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI),
                         null,
                         AccountingDbHelper.CUSTOMERS_COL_NAME + " LIKE '%" + charSequence + "%'",
                         null, null, null);
