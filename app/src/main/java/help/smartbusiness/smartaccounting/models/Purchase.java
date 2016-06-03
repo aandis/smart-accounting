@@ -55,7 +55,7 @@ public class Purchase {
         String remarks = cursor.getString(
                 cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_REMARKS));
         PurchaseType type = PurchaseType.valueOf(cursor.getString(
-                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)));
+                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)).toUpperCase());
         float amount = cursor.getFloat(cursor.getColumnIndex(
                 AccountingDbHelper.CPV_AMOUNT));
         return new Purchase(date, remarks, type, amount);
