@@ -58,7 +58,9 @@ public class Purchase {
                 cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)).toUpperCase());
         float amount = cursor.getFloat(cursor.getColumnIndex(
                 AccountingDbHelper.CPV_AMOUNT));
-        return new Purchase(date, remarks, type, amount);
+        Purchase p = new Purchase(date, remarks, type, amount);
+        p.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
+        return p;
     }
 
     public Customer getCustomer() {
