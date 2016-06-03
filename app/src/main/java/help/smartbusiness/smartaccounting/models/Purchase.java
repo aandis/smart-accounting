@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 
@@ -46,6 +47,18 @@ public class Purchase {
         this.type = type;
         this.amount = amount;
         purchaseItems = new ArrayList<>();
+    }
+
+    public static Purchase fromCursor(Cursor cursor) {
+        String date = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_DATE));
+        String remarks = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_REMARKS));
+        PurchaseType type = PurchaseType.valueOf(cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)));
+        float amount = cursor.getFloat(cursor.getColumnIndex(
+                AccountingDbHelper.CPV_AMOUNT));
+        return new Purchase(date, remarks, type, amount);
     }
 
     public Customer getCustomer() {

@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.models.Purchase;
+import help.smartbusiness.smartaccounting.models.PurchaseItem;
 
 public class EditPurchaseActivity extends PurchaseEditorActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
@@ -48,6 +48,7 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
 
     /**
      * Edit save onClick listener
+     *
      * @param view The clicked button.
      */
     @Override
@@ -80,17 +81,14 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
         if (!purchaseCursor.moveToNext()) {
             return;
         }
-        purchaseDate.setText(purchaseCursor.getString(
-                purchaseCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_DATE)));
-        String purchaseType = purchaseCursor.getString(
-                purchaseCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
-        if (purchaseType.equals(AccountingDbHelper.PURCHASE_TYPE_SELL)) {
+        Purchase purchase = Purchase.fromCursor(purchaseCursor);
+        purchaseDate.setText(purchase.getDate());
+        if (purchase.getType().equals(Purchase.PurchaseType.SELL)) {
             purchaseTypeGroup.check(R.id.create_purchase_type_sell);
-        } else if (purchaseType.equals(AccountingDbHelper.PURCHASE_TYPE_BUY)) {
+        } else if (purchase.getType().equals(Purchase.PurchaseType.BUY)) {
             purchaseTypeGroup.check(R.id.create_purchase_type_buy);
         }
-        purchaseRemarks.setText(purchaseCursor.getString(
-                purchaseCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_REMARKS)));
+        purchaseRemarks.setText(purchase.getRemarks());
 
         // Fill purchase item fields.
         fillPurchaseItemFields(purchaseCursor, defaultPurchaseItem);
@@ -101,17 +99,15 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
     }
 
     private void fillPurchaseItemFields(Cursor purchaseItemCursor, LinearLayout purchaseItemLayout) {
+        PurchaseItem item = PurchaseItem.fromCursor(purchaseItemCursor);
         MaterialEditText purchaseItemName = ((MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_name));
         MaterialEditText purchaseItemQuantity = (MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_quantity);
         MaterialEditText purchaseItemRate = (MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_rate);
-        purchaseItemName.setText(purchaseItemCursor.getString(
-                purchaseItemCursor.getColumnIndex(AccountingDbHelper.PI_COL_NAME)));
-        purchaseItemQuantity.setText(purchaseItemCursor.getString(
-                purchaseItemCursor.getColumnIndex(AccountingDbHelper.PI_COL_QUANTITY)));
-        purchaseItemRate.setText(purchaseItemCursor.getString(
-                purchaseItemCursor.getColumnIndex(AccountingDbHelper.PI_COL_RATE)));
+        purchaseItemName.setText(item.getName());
+        purchaseItemQuantity.setText(String.valueOf(item.getQuantity()));
+        purchaseItemRate.setText(String.valueOf(item.getRate()));
     }
 }

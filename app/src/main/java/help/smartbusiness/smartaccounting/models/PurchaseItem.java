@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 
@@ -23,6 +24,14 @@ public class PurchaseItem {
         this.quantity = quantity;
         this.rate = rate;
         this.amount = amount;
+    }
+
+    public static PurchaseItem fromCursor(Cursor cursor) {
+        String name = cursor.getString(cursor.getColumnIndex(AccountingDbHelper.PI_COL_NAME));
+        float quantity = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_QUANTITY));
+        float rate = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_RATE));
+        float amount = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_AMOUNT));
+        return new PurchaseItem(name, quantity, rate, amount);
     }
 
     public String getName() {
