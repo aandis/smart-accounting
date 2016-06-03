@@ -40,8 +40,7 @@ public class Purchase {
     private float amount;
     private List<PurchaseItem> purchaseItems;
 
-    public Purchase(Customer customer, String date, String remarks, PurchaseType type, float amount) {
-        this.customer = customer;
+    public Purchase(String date, String remarks, PurchaseType type, float amount) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;

@@ -85,7 +85,9 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
         Customer customer = new Customer(Utils.parseLong(customerId.getText().toString()),
                 customerName.getText().toString(),
                 customerAddress.getText().toString());
-        return super.getPurchaseObject(customer);
+        Purchase purchase = super.getPurchaseObject();
+        purchase.setCustomer(customer);
+        return purchase;
     }
 
 }

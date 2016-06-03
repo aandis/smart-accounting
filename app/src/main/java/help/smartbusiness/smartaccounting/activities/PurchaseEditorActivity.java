@@ -21,7 +21,6 @@ import java.util.Map;
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
-import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;
 
@@ -144,9 +143,8 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
         purchaseTotal.setText(String.valueOf(sum));
     }
 
-    public Purchase getPurchaseObject(Customer customer) {
-        Purchase purchase = new Purchase(customer,
-                purchaseDate.getText().toString(),
+    public Purchase getPurchaseObject() {
+        Purchase purchase = new Purchase(purchaseDate.getText().toString(),
                 purchaseRemarks.getText().toString(),
                 getPurchaseType(),
                 Utils.parseFloat(purchaseTotal.getText().toString()));

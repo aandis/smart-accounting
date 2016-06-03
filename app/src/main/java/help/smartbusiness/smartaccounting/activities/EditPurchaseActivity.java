@@ -52,7 +52,7 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
      */
     @Override
     public void onClick(View view) {
-        Purchase purchase = getPurchaseObject(null);
+        Purchase purchase = getPurchaseObject();
     }
 
     @Override
