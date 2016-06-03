@@ -19,6 +19,7 @@ import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
+import help.smartbusiness.smartaccounting.models.Purchase;
 
 public class TransactionListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemLongClickListener {
 
@@ -77,10 +78,10 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                 String type = cursor.getString(cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
                 if (type.equals(AccountingDbHelper.PURCHASE_TYPE_BUY) ||
                         type.equals(AccountingDbHelper.PURCHASE_TYPE_SELL)) {
-                    long transactionId = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID));
+                    Purchase purchase = Purchase.fromCursor(cursor);
                     return getContentResolver().query(Uri.parse(
                                     AccountingProvider.PURCHASE_CONTENT_URI
-                                            + "/" + transactionId
+                                            + "/" + purchase.getId()
                                             + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
                             null, null, null, null);
                 }
@@ -109,14 +110,15 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, final View view, final int position, long l) {
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+        final int groupPosition = getGroupPosition(position, l);
         CharSequence actions[] = new CharSequence[]{"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Cursor transactionCursor = mAdapter.getGroup(position);
+                Cursor transactionCursor = mAdapter.getGroup(groupPosition);
                 final long transactionId = transactionCursor.getLong(
                         transactionCursor.getColumnIndex(AccountingDbHelper.ID));
                 final String transactionType = transactionCursor.getString(
@@ -145,6 +147,11 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         });
         builder.show();
         return true;
+    }
+
+    private int getGroupPosition(int flatPos, long id) {
+        long packedPos = mListView.getExpandableListPosition(flatPos);
+        return ExpandableListView.getPackedPositionGroup(packedPos);
     }
 
     private void startEditActivity(long transactionId, String transactionType) {
