@@ -111,9 +111,18 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-        final int groupPosition = getGroupPosition(position, l);
-        CharSequence actions[] = new CharSequence[]{"Edit", "Delete"};
+        final int groupPosition = getGroupPosition(position);
+        showActionsDialog(groupPosition);
+        return true;
+    }
 
+    private int getGroupPosition(int flatPos) {
+        long packedPos = mListView.getExpandableListPosition(flatPos);
+        return ExpandableListView.getPackedPositionGroup(packedPos);
+    }
+
+    private void showActionsDialog(final int groupPosition) {
+        CharSequence[] actions = getResources().getStringArray(R.array.transaction_edit_options);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
@@ -123,7 +132,6 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                         transactionCursor.getColumnIndex(AccountingDbHelper.ID));
                 final String transactionType = transactionCursor.getString(
                         transactionCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
-
                 switch (i) {
                     case 0:
                         startEditActivity(transactionId, transactionType);
@@ -144,14 +152,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                         break;
                 }
             }
-        });
-        builder.show();
-        return true;
-    }
-
-    private int getGroupPosition(int flatPos, long id) {
-        long packedPos = mListView.getExpandableListPosition(flatPos);
-        return ExpandableListView.getPackedPositionGroup(packedPos);
+        }).show();
     }
 
     private void startEditActivity(long transactionId, String transactionType) {
