@@ -201,7 +201,6 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_DEBITS);
 
         sqLiteDatabase.execSQL(CREATE_VIEW_CUSTOMER_DUE);
-        printSql();
     }
 
     private void printSql() {

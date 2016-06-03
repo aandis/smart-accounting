@@ -31,6 +31,8 @@
     <string name="purchase.item.add.more">Add more item</string>
     <string name="purchase.item.remove">Remove</string>
 
+    <string name="transaction.edit.save">Save</string>
+
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
 </resources>

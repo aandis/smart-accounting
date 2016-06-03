@@ -30,12 +30,12 @@ import help.smartbusiness.smartaccounting.models.PurchaseItem;
  */
 public abstract class PurchaseEditorActivity extends AppCompatActivity {
 
-    private TextView purchaseDate;
-    private MaterialEditText purchaseTotal, purchaseRemarks;
-    private Button createPurchaseButton;
-    private LinearLayout purchaseItemWrapper;
-    private RadioGroup purchaseTypeGroup;
-    private Map<Integer, MaterialEditText> totalsEditTexts;
+    public TextView purchaseDate;
+    public MaterialEditText purchaseTotal, purchaseRemarks;
+    public Button createPurchaseButton;
+    public LinearLayout purchaseItemWrapper, defaultPurchaseItem;
+    public RadioGroup purchaseTypeGroup;
+    public Map<Integer, MaterialEditText> totalsEditTexts;
 
     public void setUpPurchaseFields() {
         totalsEditTexts = new HashMap<>();
@@ -70,34 +70,39 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
         addMorePi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                final LinearLayout layout = (LinearLayout) inflater
-                        .inflate(R.layout.purchase_item_input_layout, purchaseItemWrapper, false);
-
-                // Set layout id to identify this view. This is used when this view
-                // is removed to update the total amount.
-                layout.setId(View.generateViewId());
-                setUpPurchaseItemEditTexts(layout);
-                purchaseItemWrapper.addView(layout);
-
-                ImageButton removePi = (ImageButton) layout.findViewById(R.id.input_purchase_item_remove);
-                removePi.setVisibility(View.VISIBLE);
-                removePi.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Remove this view from the list of edit texts
-                        // and recalculate total amount.
-                        totalsEditTexts.remove(layout.getId());
-                        purchaseItemWrapper.removeView(layout);
-                        updateTotal();
-                    }
-                });
+                addPi();
             }
         });
     }
 
+    public LinearLayout addPi() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final LinearLayout layout = (LinearLayout) inflater
+                .inflate(R.layout.purchase_item_input_layout, purchaseItemWrapper, false);
+
+        // Set layout id to identify this view. This is used when this view
+        // is removed to update the total amount.
+        layout.setId(View.generateViewId());
+        setUpPurchaseItemEditTexts(layout);
+        purchaseItemWrapper.addView(layout);
+
+        ImageButton removePi = (ImageButton) layout.findViewById(R.id.input_purchase_item_remove);
+        removePi.setVisibility(View.VISIBLE);
+        removePi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Remove this view from the list of edit texts
+                // and recalculate total amount.
+                totalsEditTexts.remove(layout.getId());
+                purchaseItemWrapper.removeView(layout);
+                updateTotal();
+            }
+        });
+        return layout;
+    }
+
     private void setUpDefaultPis() {
-        LinearLayout defaultPurchaseItem = (LinearLayout) findViewById(R.id.create_purchase_purchase_item);
+        defaultPurchaseItem = (LinearLayout) findViewById(R.id.create_purchase_purchase_item);
         setUpPurchaseItemEditTexts(defaultPurchaseItem);
     }
 

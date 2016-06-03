@@ -2,5 +2,5 @@
 <resources>
     <item name="customer.loader" type="id" />
     <item name="transaction.loader" type="id" />
-    <item name="purchase.item.loader" type="id" />
+    <item name="purchases.purchase.item.loader" type="id" />
 </resources>

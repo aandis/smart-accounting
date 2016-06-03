@@ -1,20 +1,26 @@
 package help.smartbusiness.smartaccounting.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
+import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
 
-public class TransactionListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TransactionListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemLongClickListener {
 
     public static final String TAG = TransactionListActivity.class.getCanonicalName();
     public static final String CUSTOMER_ID = "id";
@@ -35,6 +41,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
+        mListView.setOnItemLongClickListener(this);
     }
 
     private SimpleCursorTreeAdapter getListViewAdapter() {
@@ -98,6 +105,56 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, final View view, final int position, long l) {
+        CharSequence actions[] = new CharSequence[]{"Edit", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Cursor transactionCursor = mAdapter.getGroup(position);
+                final long transactionId = transactionCursor.getLong(
+                        transactionCursor.getColumnIndex(AccountingDbHelper.ID));
+                final String transactionType = transactionCursor.getString(
+                        transactionCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
+
+                switch (i) {
+                    case 0:
+                        startEditActivity(transactionId, transactionType);
+                        break;
+                    case 1:
+                        YesNoDialog dialog = YesNoDialog.newInstance("", "Confirm delete?");
+                        dialog.setCallback(new YesNoDialog.DialogClickListener() {
+                            @Override
+                            public void onYesClick() {
+                                deleteTransaction(transactionId, transactionType);
+                            }
+
+                            @Override
+                            public void onNoClick() {
+                            }
+                        });
+                        dialog.show(getSupportFragmentManager(), YesNoDialog.TAG);
+                        break;
+                }
+            }
+        });
+        builder.show();
+        return true;
+    }
+
+    private void startEditActivity(long transactionId, String transactionType) {
+        Intent editPurchaseIntent = new Intent(this, EditPurchaseActivity.class);
+        editPurchaseIntent.putExtra(EditPurchaseActivity.CUSTOMER_ID, mCustomerId);
+        editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
+        startActivity(editPurchaseIntent);
+    }
+
+    private void deleteTransaction(long transactionId, String transactiontype) {
 
     }
 }

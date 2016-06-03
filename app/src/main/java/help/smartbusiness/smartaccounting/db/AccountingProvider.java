@@ -59,6 +59,7 @@ public class AccountingProvider extends ContentProvider {
 
     private static final UriMatcher mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    // TODO Improve uri structure!
     static {
         mUriMatcher.addURI(AUTHORITY, "customers", CUSTOMERS);
         mUriMatcher.addURI(AUTHORITY, "customers/#", CUSTOMERS_ID);
