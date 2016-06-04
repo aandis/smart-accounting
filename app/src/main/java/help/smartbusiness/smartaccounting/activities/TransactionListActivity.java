@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -20,6 +21,7 @@ import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
 import help.smartbusiness.smartaccounting.models.Purchase;
+import help.smartbusiness.smartaccounting.models.Transaction;
 
 public class TransactionListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemLongClickListener {
 
@@ -117,16 +119,13 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
     }
 
     private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
-        private long transactionId;
-        private String transactionType;
+
+        private Transaction transaction;
 
         public TransactionOptions(int flatAdapterPosition) {
             int groupPosition = getGroupPosition(flatAdapterPosition);
             Cursor transactionCursor = mAdapter.getGroup(groupPosition);
-            this.transactionId = transactionCursor.getLong(
-                    transactionCursor.getColumnIndex(AccountingDbHelper.ID));
-            this.transactionType = transactionCursor.getString(
-                    transactionCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
+            this.transaction = Transaction.fromCursor(transactionCursor);
         }
 
         private int getGroupPosition(int flatPos) {
@@ -149,7 +148,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onClick(DialogInterface dialogInterface, int i) {
             switch (i) {
                 case 0:
-                    startEditActivity(transactionId, transactionType);
+                    startEditActivity(transaction.getId(), transaction.getTransactionType());
                     break;
                 case 1:
                     YesNoDialog dialog = YesNoDialog.newInstance("", "Confirm delete?");
@@ -164,7 +163,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
          */
         @Override
         public void onYesClick() {
-            deleteTransaction(transactionId, transactionType);
+            deleteTransaction(transaction.getId(), transaction.getTransactionType());
         }
 
         /**
@@ -174,14 +173,18 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onNoClick() {
         }
 
-        private void startEditActivity(long transactionId, String transactionType) {
+        private void startEditActivity(long transactionId, Class transactionType) {
             Intent editPurchaseIntent = new Intent(TransactionListActivity.this, EditPurchaseActivity.class);
             editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
             startActivity(editPurchaseIntent);
         }
 
-        private void deleteTransaction(long transactionId, String transactiontype) {
-            
+        private void deleteTransaction(long transactionId, Class transactionType) {
+            if(transactionType.equals(Purchase.class)) {
+                Log.d(TAG, "P");
+            } else {
+                Log.d(TAG, "C");
+            }
         }
 
     }

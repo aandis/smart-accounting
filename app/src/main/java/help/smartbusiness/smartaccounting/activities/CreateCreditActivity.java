@@ -108,7 +108,9 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         String date = dateTextView.getText().toString();
         float amount = Utils.parseFloat(creditAmount.getText().toString());
         String remarks = creditRemarks.getText().toString();
-        return new Credit(customer, date, amount, getCreditType(), remarks);
+        Credit credit = new Credit(date, remarks, getCreditType(), amount);
+        credit.setCustomer(customer);
+        return credit;
     }
 
     private Credit.CreditType getCreditType() {

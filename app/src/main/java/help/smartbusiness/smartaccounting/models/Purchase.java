@@ -19,7 +19,7 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
 /**
  * Created by gamerboy on 26/5/16.
  */
-public class Purchase {
+public class Purchase extends Transaction {
 
     public enum PurchaseType {
         SELL(AccountingDbHelper.PURCHASE_TYPE_SELL), BUY(AccountingDbHelper.PURCHASE_TYPE_BUY);
@@ -238,6 +238,10 @@ public class Purchase {
 
     public void setType(PurchaseType type) {
         this.type = type;
+    }
+
+    public Class getTransactionType() {
+        return Purchase.class;
     }
 
 }

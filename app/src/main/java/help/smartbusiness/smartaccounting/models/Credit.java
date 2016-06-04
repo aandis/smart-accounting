@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 
@@ -15,7 +16,7 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
 /**
  * Created by gamerboy on 28/5/16.
  */
-public class Credit {
+public class Credit extends Transaction {
 
     public enum CreditType {
 
@@ -39,12 +40,25 @@ public class Credit {
     private CreditType type;
     private float amount;
 
-    public Credit(Customer customer, String date, float amount, CreditType type, String remarks) {
-        this.customer = customer;
+    public Credit(String date, String remarks, CreditType type, float amount) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;
         this.amount = amount;
+    }
+
+    public static Credit fromCursor(Cursor cursor) {
+        String date = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_DATE));
+        String remarks = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_REMARKS));
+        CreditType type = CreditType.valueOf(cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_TYPE)).toUpperCase());
+        float amount = cursor.getFloat(cursor.getColumnIndex(
+                AccountingDbHelper.CREDIT_COL_AMOUNT));
+        Credit c = new Credit(date, remarks, type, amount);
+        c.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
+        return c;
     }
 
     public long getId() {
@@ -53,6 +67,11 @@ public class Credit {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public Class getTransactionType() {
+        return Credit.class;
     }
 
     public Customer getCustomer() {
