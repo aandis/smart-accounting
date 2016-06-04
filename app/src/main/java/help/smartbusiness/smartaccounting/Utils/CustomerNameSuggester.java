@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting.activities;
+package help.smartbusiness.smartaccounting.Utils;
 
 import android.content.Context;
 import android.content.Intent;
