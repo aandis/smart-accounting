@@ -21,14 +21,14 @@
 
         <RadioButton
             android:id="@+id/create_purchase_type_sell"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/purchase.type.sold" />
 
         <RadioButton
             android:id="@+id/create_purchase_type_buy"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/purchase.type.bought" />
