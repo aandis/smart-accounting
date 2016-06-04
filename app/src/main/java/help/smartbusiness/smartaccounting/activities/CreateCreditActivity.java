@@ -2,12 +2,8 @@ package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -16,37 +12,23 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
-import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
 import help.smartbusiness.smartaccounting.models.Customer;
 
-public class CreateCreditActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateCreditActivity extends CreditEditorActivity implements View.OnClickListener {
 
     private static final String TAG = CreateCreditActivity.class.getSimpleName();
 
-    private TextView customerId, dateTextView;
-    private Button createCreditButton;
+    private TextView customerId;
     private MaterialAutoCompleteTextView customerName;
-    private MaterialEditText customerAddress, creditAmount, creditRemarks;
-    private RadioGroup creditTypeGroup;
+    private MaterialEditText customerAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_credit);
         setUpCustomerFields();
-        creditAmount = (MaterialEditText) findViewById(R.id.create_credit_amount);
-        creditRemarks = (MaterialEditText) findViewById(R.id.create_credit_remarks);
-        createCreditButton = (Button) findViewById(R.id.credit_create);
-        createCreditButton.setOnClickListener(this);
-        dateTextView = (TextView) findViewById(R.id.create_credit_date);
-        dateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDatePickerDialog(view);
-            }
-        });
-        creditTypeGroup = (RadioGroup) findViewById(R.id.create_credit_type_group);
+        setUpCreditFields();
     }
 
     private void setUpCustomerFields() {
@@ -71,15 +53,9 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         customerAddress.setEnabled(false);
     }
 
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                super.onDateSet(view, year, month, day);
-                dateTextView.setText(String.format("%d-%d-%d", day, month + 1, year));
-            }
-        };
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+    @Override
+    public void setSubmitButtonAction(Button button) {
+        button.setOnClickListener(this);
     }
 
     /**
@@ -101,27 +77,13 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private Credit getCreditObject() {
+    public Credit getCreditObject() {
         Customer customer = new Customer(Utils.parseLong(customerId.getText().toString()),
                 customerName.getText().toString(),
                 customerAddress.getText().toString());
-        String date = dateTextView.getText().toString();
-        float amount = Utils.parseFloat(creditAmount.getText().toString());
-        String remarks = creditRemarks.getText().toString();
-        Credit credit = new Credit(date, remarks, getCreditType(), amount);
+        Credit credit = super.getCreditObject();
         credit.setCustomer(customer);
         return credit;
-    }
-
-    private Credit.CreditType getCreditType() {
-        int checkedId = creditTypeGroup.getCheckedRadioButtonId();
-        switch (checkedId) {
-            case R.id.create_credit_type_credit:
-                return Credit.CreditType.CREDIT;
-            case R.id.create_credit_type_debit:
-                return Credit.CreditType.DEBIT;
-        }
-        return null;
     }
 
 }
