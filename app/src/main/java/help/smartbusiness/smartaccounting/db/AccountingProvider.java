@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -26,18 +27,20 @@ public class AccountingProvider extends ContentProvider {
     public static final int CUSTOMERS_ID = 101;
 
     public static final int CUSTOMER_PURCHASES = 102;
-    public static final int CUSTOMER_ID_PURCHASES = 103;
+    public static final int CUSTOMER_PURCHASES_ID = 104;
+    public static final int CUSTOMER_ID_PURCHASES = 105;
 
-    public static final int CUSTOMER_CREDITS = 104;
-    public static final int CUSTOMER_ID_CREDITS = 105;
+    public static final int CUSTOMER_CREDITS = 106;
+    public static final int CUSTOMER_CREDITS_ID = 107;
+    public static final int CUSTOMER_ID_CREDITS = 108;
 
-    public static final int CUSTOMER_TRANSACTIONS = 106;
-    public static final int CUSTOMER_ID_TRANSACTIONS = 107;
+    public static final int CUSTOMER_TRANSACTIONS = 109;
+    public static final int CUSTOMER_ID_TRANSACTIONS = 110;
 
-    public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 108;
-    public static final int CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS = 109;
+    public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 111;
+    public static final int CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS = 112;
+    public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID = 113;
 
-    public static final int PURCHASE_ID_PURCHASE_ITEMS = 110;
 
     public static final String CUSTOMERS_BASE_PATH = "customers";
     public static final String PURCHASES_BASE_PATH = "purchases";
@@ -49,6 +52,7 @@ public class AccountingProvider extends ContentProvider {
             + AUTHORITY + "/" + CUSTOMERS_BASE_PATH;
     public static final String PURCHASE_CONTENT_URI = "content://"
             + AUTHORITY + "/" + PURCHASES_BASE_PATH;
+
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
             + "/vnd." + AccountingProvider.class.getPackage().getName()
@@ -65,18 +69,20 @@ public class AccountingProvider extends ContentProvider {
         mUriMatcher.addURI(AUTHORITY, "customers/#", CUSTOMERS_ID);
 
         mUriMatcher.addURI(AUTHORITY, "customers/purchases", CUSTOMER_PURCHASES);
+        mUriMatcher.addURI(AUTHORITY, "customers/purchases/#", CUSTOMER_PURCHASES_ID);
         mUriMatcher.addURI(AUTHORITY, "customers/#/purchases", CUSTOMER_ID_PURCHASES);
 
         mUriMatcher.addURI(AUTHORITY, "customers/credits", CUSTOMER_CREDITS);
+        mUriMatcher.addURI(AUTHORITY, "customers/credits/#", CUSTOMER_CREDITS_ID);
         mUriMatcher.addURI(AUTHORITY, "customers/#/credits", CUSTOMER_ID_CREDITS);
 
         mUriMatcher.addURI(AUTHORITY, "customers/transactions", CUSTOMER_TRANSACTIONS);
         mUriMatcher.addURI(AUTHORITY, "customers/#/transactions", CUSTOMER_ID_TRANSACTIONS);
 
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items", CUSTOMER_PURCHASE_PURCHASE_ITEMS);
-        mUriMatcher.addURI(AUTHORITY, "customers/#/purchases/#/purchase_items", CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS);
+        mUriMatcher.addURI(AUTHORITY, "customers/purchases/#/purchase_items", CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS);
+        mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items/#", CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID);
 
-        mUriMatcher.addURI(AUTHORITY, "purchases/#/purchase_items", PURCHASE_ID_PURCHASE_ITEMS);
     }
 
     @Override
@@ -143,12 +149,9 @@ public class AccountingProvider extends ContentProvider {
                 builder.setTables("(" + union + ")");
                 break;
 
-            case CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS:
+            case CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS:
                 builder.appendWhere(AccountingDbHelper.PI_COL_PURCHASE_ID
-                        + "=" + uri.getPathSegments().get(3)
-                        + " AND "
-                        + AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID
-                        + "=" + uri.getPathSegments().get(1));
+                        + "=" + uri.getPathSegments().get(2));
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS:
                 builder.setTables(AccountingDbHelper.CALCULATED_PURCHASE_VIEW
                         + " INNER JOIN " + AccountingDbHelper.TABLE_PURCHASE_ITEMS
@@ -156,11 +159,6 @@ public class AccountingProvider extends ContentProvider {
                         + " = " + AccountingDbHelper.PI_COL_PURCHASE_ID);
                 break;
 
-            case PURCHASE_ID_PURCHASE_ITEMS:
-                builder.appendWhere(AccountingDbHelper.PI_COL_PURCHASE_ID
-                        + "=" + uri.getPathSegments().get(1));
-                builder.setTables(AccountingDbHelper.TABLE_PURCHASE_ITEMS);
-                break;
             default:
                 throw new IllegalArgumentException("Unknown URI");
         }
@@ -169,7 +167,7 @@ public class AccountingProvider extends ContentProvider {
                 mDbHelper.getReadableDatabase(),
                 projection, selection, selectionArgs,
                 null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse(CUSTOMER_CONTENT_URI));
         return cursor;
     }
 
@@ -210,7 +208,7 @@ public class AccountingProvider extends ContentProvider {
                 change = ContentUris.withAppendedId(uri, id);
                 getContext().getContentResolver().notifyChange(change, null);
                 return change;
-            case CUSTOMER_ID_PURCHASE_ID_PURCHASE_ITEMS:
+            case CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS:
                 id = mDbHelper.getWritableDatabase().insert(
                         AccountingDbHelper.TABLE_PURCHASE_ITEMS, "", contentValues);
                 if (id < 0) {
@@ -224,12 +222,22 @@ public class AccountingProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(@NonNull Uri uri, String s, String[] strings) {
         return 0;
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
+        switch (mUriMatcher.match(uri)) {
+            case CUSTOMER_PURCHASES_ID:
+                getContext().getContentResolver().notifyChange(uri, null);
+                return mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE,
+                        contentValues, s, strings);
+            case CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID:
+                getContext().getContentResolver().notifyChange(uri, null);
+                return mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
+                        contentValues, s, strings);
+        }
         return 0;
     }
 }

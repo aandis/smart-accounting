@@ -151,6 +151,8 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
+            long id = Utils.parseLong(((TextView) purchaseItem
+                    .findViewById(R.id.input_purchase_item_id)).getText().toString());
             String name = ((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
             float quantity = Utils.parseFloat(((MaterialEditText) purchaseItem
@@ -160,6 +162,7 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
             float amount = Utils.parseFloat(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_amount)).getText().toString());
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
+            item.setId(id);
             purchase.getPurchaseItems().add(item);
         }
         return purchase;

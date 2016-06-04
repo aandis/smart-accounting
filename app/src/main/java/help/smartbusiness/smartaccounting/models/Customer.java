@@ -65,6 +65,16 @@ public class Customer {
         this.id = id;
     }
 
+    public boolean isValid() {
+        if (getName() == null || getName().isEmpty()) {
+            return false;
+        }
+        if (getAddress() == null || getAddress().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean isValidId() {
         return id > 0;
     }

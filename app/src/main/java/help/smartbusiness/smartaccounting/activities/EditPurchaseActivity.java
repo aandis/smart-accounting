@@ -9,10 +9,12 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;
@@ -21,20 +23,17 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
 
     public static final String TAG = EditPurchaseActivity.class.getSimpleName();
 
-    // TODO - Shouldn't have to pass customer id. Improve uri structure.
-    public static final String CUSTOMER_ID = "c_id";
     public static final String PURCHASE_ID = "p_id";
 
-    private long mPurchaseId, mCustomerId;
+    private long mPurchaseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_purchase);
         setUpPurchaseFields();
-        mCustomerId = getIntent().getLongExtra(CUSTOMER_ID, -1);
         mPurchaseId = getIntent().getLongExtra(PURCHASE_ID, -1);
-        if (mCustomerId == -1 || mPurchaseId == -1) {
+        if (mPurchaseId == -1) {
             finish();
         }
         getSupportLoaderManager().initLoader(R.id.purchases_purchase_item_loader, null, this);
@@ -54,12 +53,21 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
     @Override
     public void onClick(View view) {
         Purchase purchase = getPurchaseObject();
+        purchase.setId(mPurchaseId);
+        if (purchase.isValid(false, true)) { // Only validate purchase and associate pis and not the associated customer.
+            if (!purchase.update(this)) {
+                Utils.notifyError(this, "An error occurred.");
+            } else {
+                finish();
+            }
+        } else {
+            Utils.notifyError(this, "Invalid data");
+        }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
-                + "/" + mCustomerId
                 + "/" + AccountingProvider.PURCHASES_BASE_PATH
                 + "/" + mPurchaseId
                 + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
@@ -100,12 +108,16 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
 
     private void fillPurchaseItemFields(Cursor purchaseItemCursor, LinearLayout purchaseItemLayout) {
         PurchaseItem item = PurchaseItem.fromCursor(purchaseItemCursor);
+        TextView purchaseItemId = ((TextView) purchaseItemLayout
+                .findViewById(R.id.input_purchase_item_id));
         MaterialEditText purchaseItemName = ((MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_name));
         MaterialEditText purchaseItemQuantity = (MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_quantity);
         MaterialEditText purchaseItemRate = (MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_rate);
+
+        purchaseItemId.setText(String.valueOf(item.getId()));
         purchaseItemName.setText(item.getName());
         purchaseItemQuantity.setText(String.valueOf(item.getQuantity()));
         purchaseItemRate.setText(String.valueOf(item.getRate()));

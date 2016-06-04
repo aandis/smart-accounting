@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.net.Uri;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -103,35 +102,26 @@ public class Purchase {
         this.purchaseItems = purchaseItems;
     }
 
-    public boolean isValid() {
+    public boolean isValid(boolean validateCustomer, boolean validatePi) {
+        if (validateCustomer) {
+            if (getCustomer() == null || !getCustomer().isValid()) {
+                return false;
+            }
+        }
+        if (validatePi) {
+            for (PurchaseItem item : purchaseItems) {
+                if (!item.isValid()) {
+                    return false;
+                }
+            }
+        }
 
         // Type validation.
         if (getType() == null) {
             return false;
         }
-
-        // Not empty validations.
-        List<String> notEmpty = new ArrayList<>(Arrays.asList(
-                getCustomer().getName(), getCustomer().getAddress(), date));
-
-        // All purchase item names.
-        for (int i = 0; i < purchaseItems.size(); i++) {
-            notEmpty.add(purchaseItems.get(i).getName());
-        }
-
-        for (String text : notEmpty) {
-            if (text.isEmpty()) {
-                return false;
-            }
-        }
-
-        // TODO Add this to pi validations.
-        // Lazy float value validations.
-        // Only validate totals. If they are correct, rate and quantity *should* be correct.
-        for (int i = 0; i < purchaseItems.size(); i++) {
-            if (purchaseItems.get(i).getAmount() < 0) {
-                return false;
-            }
+        if (getDate().isEmpty()) {
+            return false;
         }
         return true;
     }
@@ -160,7 +150,7 @@ public class Purchase {
                 for (PurchaseItem item : getPurchaseItems()) {
                     // TODO Use bulk insert or write own transaction.
                     // TODO If one of the pi fails to be inserted, the whole transaction should rollback.
-                    if (!item.insert(context, getCustomer().getId(), getId())) {
+                    if (!item.insert(context, getId())) {
                         return false;
                     }
                 }
@@ -172,6 +162,34 @@ public class Purchase {
         }
         // Couldn't insert customer.
         return false;
+    }
+
+    public boolean update(Context context) {
+        // TODO Use transaction!
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
+        values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
+        values.put(AccountingDbHelper.PURCHASE_COL_TYPE, getType().getDbType());
+        try {
+            int rowsUpdated = context.getContentResolver().update(getUpdateUri(),
+                    values, AccountingDbHelper.ID + " = " + getId(), null);
+            if (rowsUpdated > 0) {
+                for (PurchaseItem item : getPurchaseItems()) {
+                    if (!item.update(context)) {
+                        return false;
+                    }
+                }
+            }
+        } catch (NullPointerException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    private Uri getUpdateUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                + "/" + getId());
     }
 
     /**

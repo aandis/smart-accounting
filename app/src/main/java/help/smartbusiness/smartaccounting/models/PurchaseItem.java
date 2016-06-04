@@ -31,7 +31,9 @@ public class PurchaseItem {
         float quantity = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_QUANTITY));
         float rate = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_RATE));
         float amount = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_AMOUNT));
-        return new PurchaseItem(name, quantity, rate, amount);
+        PurchaseItem pi = new PurchaseItem(name, quantity, rate, amount);
+        pi.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
+        return pi;
     }
 
     public String getName() {
@@ -74,7 +76,7 @@ public class PurchaseItem {
         this.id = id;
     }
 
-    protected boolean insert(Context context, long customerId, long purchaseId) {
+    protected boolean insert(Context context, long purchaseId) {
         ContentValues values = new ContentValues();
         values.put(AccountingDbHelper.PI_COL_PURCHASE_ID, purchaseId);
         values.put(AccountingDbHelper.PI_COL_NAME, getName());
@@ -83,7 +85,7 @@ public class PurchaseItem {
         values.put(AccountingDbHelper.PI_COL_AMOUNT, getAmount());
         try {
             Uri newPi = context.getContentResolver().insert(
-                    getInsertUri(customerId, purchaseId), values);
+                    getInsertUri(purchaseId), values);
             setId(Long.parseLong(newPi.getLastPathSegment()));
         } catch (SQLException ex) {
             return false;
@@ -91,11 +93,46 @@ public class PurchaseItem {
         return true;
     }
 
-    private Uri getInsertUri(long customerId, long purchaseId) {
+    private Uri getInsertUri(long purchaseId) {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
-                + "/" + customerId
                 + "/" + AccountingProvider.PURCHASES_BASE_PATH
                 + "/" + purchaseId
                 + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH);
+    }
+
+    private Uri getUpdateUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH
+                + "/" + getId());
+    }
+
+    public boolean isValid() {
+        if (getName() == null || getName().isEmpty()) {
+            return false;
+        }
+        if (getQuantity() <= 0 || getRate() <= 0 || getAmount() <= 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean update(Context context) {
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.PI_COL_NAME, getName());
+        values.put(AccountingDbHelper.PI_COL_QUANTITY, getQuantity());
+        values.put(AccountingDbHelper.PI_COL_RATE, getRate());
+        values.put(AccountingDbHelper.PI_COL_AMOUNT, getAmount());
+        try {
+            int rowsUpdated = context.getContentResolver().update(
+                    getUpdateUri(), values,
+                    AccountingDbHelper.ID + " = " + getId(), null);
+            if (rowsUpdated > 0) {
+                return true;
+            }
+        } catch (NullPointerException ex) {
+            return false;
+        }
+        return false;
     }
 }

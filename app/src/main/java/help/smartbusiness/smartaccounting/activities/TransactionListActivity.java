@@ -79,10 +79,10 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                 if (type.equals(AccountingDbHelper.PURCHASE_TYPE_BUY) ||
                         type.equals(AccountingDbHelper.PURCHASE_TYPE_SELL)) {
                     Purchase purchase = Purchase.fromCursor(cursor);
-                    return getContentResolver().query(Uri.parse(
-                                    AccountingProvider.PURCHASE_CONTENT_URI
-                                            + "/" + purchase.getId()
-                                            + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
+                    return getContentResolver().query(Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                                    + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                                    + "/" + purchase.getId()
+                                    + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH),
                             null, null, null, null);
                 }
                 return null;
@@ -122,7 +122,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
     }
 
     private void showActionsDialog(final int groupPosition) {
-        CharSequence[] actions = getResources().getStringArray(R.array.transaction_edit_options);
+        CharSequence[] actions = new CharSequence[]{"Edit", "Delete"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
@@ -157,7 +157,6 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
     private void startEditActivity(long transactionId, String transactionType) {
         Intent editPurchaseIntent = new Intent(this, EditPurchaseActivity.class);
-        editPurchaseIntent.putExtra(EditPurchaseActivity.CUSTOMER_ID, mCustomerId);
         editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
         startActivity(editPurchaseIntent);
     }
