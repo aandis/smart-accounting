@@ -227,16 +227,23 @@ public class AccountingProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
+        int rows;
         switch (mUriMatcher.match(uri)) {
             case CUSTOMER_PURCHASES_ID:
-                getContext().getContentResolver().notifyChange(uri, null);
-                return mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE,
+                rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE,
                         contentValues, s, strings);
+                break;
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID:
-                getContext().getContentResolver().notifyChange(uri, null);
-                return mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
+                rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
                         contentValues, s, strings);
+                break;
+            default:
+                rows = 0;
         }
-        return 0;
+        if (rows > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rows;
     }
+
 }
