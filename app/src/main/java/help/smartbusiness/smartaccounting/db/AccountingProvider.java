@@ -21,7 +21,7 @@ public class AccountingProvider extends ContentProvider {
 
     private AccountingDbHelper mDbHelper;
 
-    private static final String AUTHORITY = AccountingProvider.class.getPackage().getName();
+    public static final String AUTHORITY = AccountingProvider.class.getPackage().getName();
 
     public static final int CUSTOMERS = 100;
     public static final int CUSTOMERS_ID = 101;
@@ -222,7 +222,19 @@ public class AccountingProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String s, String[] strings) {
-        return 0;
+        int deleted;
+        switch (mUriMatcher.match(uri)) {
+            case CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS:
+                deleted = mDbHelper.getWritableDatabase().delete(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
+                        s, strings);
+                break;
+            default:
+                deleted = 0;
+        }
+        if (deleted > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return deleted;
     }
 
     @Override

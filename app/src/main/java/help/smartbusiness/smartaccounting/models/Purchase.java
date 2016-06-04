@@ -1,10 +1,14 @@
 package help.smartbusiness.smartaccounting.models;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
+import android.os.RemoteException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,22 +169,40 @@ public class Purchase {
     }
 
     public boolean update(Context context) {
-        // TODO Use transaction!
-        ContentValues values = new ContentValues();
-        values.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
-        values.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
-        values.put(AccountingDbHelper.PURCHASE_COL_TYPE, getType().getDbType());
+        // TODO make sure applyBatch() actually executes a in transaction.
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+
+        // Update purchase.
+        ContentValues purchaseValues = new ContentValues();
+        purchaseValues.put(AccountingDbHelper.PURCHASE_COL_DATE, getDate());
+        purchaseValues.put(AccountingDbHelper.PURCHASE_COL_REMARKS, getRemarks());
+        purchaseValues.put(AccountingDbHelper.PURCHASE_COL_TYPE, getType().getDbType());
+        operations.add(ContentProviderOperation.newUpdate(getUpdateUri())
+                .withValues(purchaseValues)
+                .withSelection(AccountingDbHelper.ID + " = " + getId(), null)
+                .withExpectedCount(1)
+                .build());
+
+        // Delete existing purchase items for this purchase.
+        operations.add(ContentProviderOperation
+                .newDelete(PurchaseItem.getMultiDeleteUri(getId()))
+                .withSelection(AccountingDbHelper.PI_COL_PURCHASE_ID
+                        + " = " + getId(), null)
+                .build());
+
+        // Add new purchase items.
+        for (PurchaseItem item : getPurchaseItems()) {
+            operations.add(ContentProviderOperation
+                    .newInsert(item.getInsertUri(getId()))
+                    .withValues(item.getInsertContentValues(getId()))
+                    .build());
+        }
+
         try {
-            int rowsUpdated = context.getContentResolver().update(getUpdateUri(),
-                    values, AccountingDbHelper.ID + " = " + getId(), null);
-            if (rowsUpdated > 0) {
-                for (PurchaseItem item : getPurchaseItems()) {
-                    if (!item.update(context)) {
-                        return false;
-                    }
-                }
-            }
-        } catch (NullPointerException ex) {
+            ContentProviderResult result[] = context.getContentResolver()
+                    .applyBatch(AccountingProvider.AUTHORITY, operations);
+        } catch (OperationApplicationException | RemoteException ignored) {
             return false;
         }
         return true;

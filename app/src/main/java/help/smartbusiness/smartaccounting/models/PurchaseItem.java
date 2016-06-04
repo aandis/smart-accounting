@@ -77,15 +77,9 @@ public class PurchaseItem {
     }
 
     protected boolean insert(Context context, long purchaseId) {
-        ContentValues values = new ContentValues();
-        values.put(AccountingDbHelper.PI_COL_PURCHASE_ID, purchaseId);
-        values.put(AccountingDbHelper.PI_COL_NAME, getName());
-        values.put(AccountingDbHelper.PI_COL_QUANTITY, getQuantity());
-        values.put(AccountingDbHelper.PI_COL_RATE, getRate());
-        values.put(AccountingDbHelper.PI_COL_AMOUNT, getAmount());
         try {
             Uri newPi = context.getContentResolver().insert(
-                    getInsertUri(purchaseId), values);
+                    getInsertUri(purchaseId), getInsertContentValues(purchaseId));
             setId(Long.parseLong(newPi.getLastPathSegment()));
         } catch (SQLException ex) {
             return false;
@@ -93,18 +87,35 @@ public class PurchaseItem {
         return true;
     }
 
-    private Uri getInsertUri(long purchaseId) {
+    protected ContentValues getInsertContentValues(long purchaseId) {
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.PI_COL_PURCHASE_ID, purchaseId);
+        values.put(AccountingDbHelper.PI_COL_NAME, getName());
+        values.put(AccountingDbHelper.PI_COL_QUANTITY, getQuantity());
+        values.put(AccountingDbHelper.PI_COL_RATE, getRate());
+        values.put(AccountingDbHelper.PI_COL_AMOUNT, getAmount());
+        return values;
+    }
+
+    public Uri getInsertUri(long purchaseId) {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
                 + "/" + AccountingProvider.PURCHASES_BASE_PATH
                 + "/" + purchaseId
                 + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH);
     }
 
-    private Uri getUpdateUri() {
+    public Uri getUpdateUri() {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
                 + "/" + AccountingProvider.PURCHASES_BASE_PATH
                 + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH
                 + "/" + getId());
+    }
+
+    public static Uri getMultiDeleteUri(long purchaseId) {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                + "/" + purchaseId
+                + "/" + AccountingProvider.PURCHASE_ITEMS_BASE_PATH);
     }
 
     public boolean isValid() {
