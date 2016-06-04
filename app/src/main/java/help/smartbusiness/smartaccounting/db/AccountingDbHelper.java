@@ -60,6 +60,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + PI_COL_RATE + " real not null, "
             + PI_COL_AMOUNT + " real not null, "
             + "foreign key (" + PI_COL_PURCHASE_ID + ") REFERENCES " + TABLE_PURCHASE + "(" + ID + ")"
+                + " ON DELETE CASCADE "
             + " )";
     public static final String CREATE_PI_AMOUNT_UPDATE_TRIGGER = "create trigger update_purchase_amount "
             + " after update of "
