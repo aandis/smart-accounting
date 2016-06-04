@@ -153,6 +153,10 @@ public class Credit extends Transaction {
         }
     }
 
+    public boolean delete(Context context) {
+        return false;
+    }
+
     public Uri getInsertUri() {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
                 + "/" + getCustomer().getId()

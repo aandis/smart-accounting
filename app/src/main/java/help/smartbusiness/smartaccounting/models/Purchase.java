@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,6 +207,24 @@ public class Purchase extends Transaction {
             return false;
         }
         return true;
+    }
+
+    public boolean delete(Context context) {
+        // TODO Do in Background thread.
+        int deleted = context.getContentResolver().delete(getDeleteUri(),
+                AccountingDbHelper.ID + "=" + getId(),
+                null);
+        if(deleted > 0) {
+            Log.d(TAG, deleted +"");
+            return true;
+        }
+        return false;
+    }
+
+    private Uri getDeleteUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.PURCHASES_BASE_PATH
+                + "/" + getId());
     }
 
     private Uri getUpdateUri() {

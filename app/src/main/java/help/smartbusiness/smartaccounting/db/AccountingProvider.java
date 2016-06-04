@@ -225,8 +225,12 @@ public class AccountingProvider extends ContentProvider {
         int deleted;
         switch (mUriMatcher.match(uri)) {
             case CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS:
-                deleted = mDbHelper.getWritableDatabase().delete(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
-                        s, strings);
+                deleted = mDbHelper.getWritableDatabase().delete(
+                        AccountingDbHelper.TABLE_PURCHASE_ITEMS, s, strings);
+                break;
+            case CUSTOMER_PURCHASES_ID:
+                deleted = mDbHelper.getWritableDatabase().delete(
+                        AccountingDbHelper.TABLE_PURCHASE, s, strings);
                 break;
             default:
                 deleted = 0;

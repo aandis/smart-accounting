@@ -1,5 +1,6 @@
 package help.smartbusiness.smartaccounting.models;
 
+import android.content.Context;
 import android.database.Cursor;
 
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -37,4 +38,6 @@ public abstract class Transaction {
     public abstract void setId(long id);
 
     public abstract Class getTransactionType();
+
+    public abstract boolean delete(Context context);
 }

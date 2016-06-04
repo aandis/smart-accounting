@@ -120,12 +120,12 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
     private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
 
-        private Transaction transaction;
+        private Transaction mTransaction;
 
         public TransactionOptions(int flatAdapterPosition) {
             int groupPosition = getGroupPosition(flatAdapterPosition);
             Cursor transactionCursor = mAdapter.getGroup(groupPosition);
-            this.transaction = Transaction.fromCursor(transactionCursor);
+            this.mTransaction = Transaction.fromCursor(transactionCursor);
         }
 
         private int getGroupPosition(int flatPos) {
@@ -148,7 +148,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onClick(DialogInterface dialogInterface, int i) {
             switch (i) {
                 case 0:
-                    startEditActivity(transaction.getId(), transaction.getTransactionType());
+                    startEditActivity();
                     break;
                 case 1:
                     YesNoDialog dialog = YesNoDialog.newInstance("", "Confirm delete?");
@@ -163,7 +163,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
          */
         @Override
         public void onYesClick() {
-            deleteTransaction(transaction.getId(), transaction.getTransactionType());
+            deleteTransaction();
         }
 
         /**
@@ -173,15 +173,20 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onNoClick() {
         }
 
-        private void startEditActivity(long transactionId, Class transactionType) {
+        private void startEditActivity() {
             Intent editPurchaseIntent = new Intent(TransactionListActivity.this, EditPurchaseActivity.class);
-            editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
+            editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, mTransaction.getId());
             startActivity(editPurchaseIntent);
         }
 
-        private void deleteTransaction(long transactionId, Class transactionType) {
-            if(transactionType.equals(Purchase.class)) {
+        private void deleteTransaction() {
+            if (mTransaction.getTransactionType().equals(Purchase.class)) {
                 Log.d(TAG, "P");
+                if (mTransaction.delete(TransactionListActivity.this)) {
+                    Log.d(TAG, "PD");
+                } else {
+                    Log.d(TAG, "PN");
+                }
             } else {
                 Log.d(TAG, "C");
             }
