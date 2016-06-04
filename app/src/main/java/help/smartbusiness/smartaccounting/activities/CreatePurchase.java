@@ -38,12 +38,7 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
         if (intent.hasExtra(CustomerNameSuggester.CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            CustomerNameSuggester suggester = new CustomerNameSuggester(this) {
-                @Override
-                public MaterialAutoCompleteTextView getCustomerNameTextView() {
-                    return customerName;
-                }
-            };
+            CustomerNameSuggester suggester = new CustomerNameSuggester(this, customerName);
             suggester.initSuggestions(getString(R.string.purchase_create_existing_confirmation),
                     CreatePurchase.class);
         }

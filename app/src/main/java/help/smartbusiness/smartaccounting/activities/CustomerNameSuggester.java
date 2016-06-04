@@ -22,27 +22,27 @@ import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
  * Adds autocompletion feature to customer name field and appropriate handling of
  * creating transaction for existing customer.
  */
-public abstract class CustomerNameSuggester {
+public class CustomerNameSuggester {
 
     // TODO refactor into a Suggester class.
 
     private Context mContext;
+    private MaterialAutoCompleteTextView mTextView;
 
-    public CustomerNameSuggester(Context context) {
+    public CustomerNameSuggester(Context context, MaterialAutoCompleteTextView textView) {
         this.mContext = context;
+        this.mTextView = textView;
     }
 
     public static final String CUSTOMER_ID = "_id";
     public static final String CUSTOMER_NAME = "customer_name";
     public static final String CUSTOMER_ADDRESS = "customer_address";
 
-    public abstract MaterialAutoCompleteTextView getCustomerNameTextView();
-
     public void initSuggestions(final String alertMessage, final Class<?> launchClass) {
         final AppCompatActivity activity = (AppCompatActivity) mContext;
         final SimpleCursorAdapter adapter = getSuggestionAdapter();
-        getCustomerNameTextView().setAdapter(adapter);
-        getCustomerNameTextView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mTextView.setAdapter(adapter);
+        mTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, final int i, long l) {
                 YesNoDialog dialogFragment = YesNoDialog.newInstance("", alertMessage);

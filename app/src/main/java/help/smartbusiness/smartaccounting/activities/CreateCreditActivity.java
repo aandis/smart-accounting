@@ -56,12 +56,7 @@ public class CreateCreditActivity extends AppCompatActivity implements View.OnCl
         if (intent.hasExtra(CustomerNameSuggester.CUSTOMER_ID)) {
             fillCustomerFields(intent);
         } else {
-            CustomerNameSuggester suggester = new CustomerNameSuggester(this) {
-                @Override
-                public MaterialAutoCompleteTextView getCustomerNameTextView() {
-                    return customerName;
-                }
-            };
+            CustomerNameSuggester suggester = new CustomerNameSuggester(this, customerName);
             suggester.initSuggestions(getString(R.string.credit_create_existing_confirmation),
                     CreateCreditActivity.class);
         }
