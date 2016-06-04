@@ -151,6 +151,7 @@ public class Credit extends Transaction {
     }
 
     public boolean update(Context context) {
+        // TODO on a background thread.
         ContentValues values = new ContentValues();
         values.put(AccountingDbHelper.CREDIT_COL_DATE, date);
         values.put(AccountingDbHelper.CREDIT_COL_AMOUNT, amount);
