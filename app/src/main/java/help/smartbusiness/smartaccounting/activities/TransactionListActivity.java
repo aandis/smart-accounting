@@ -111,8 +111,8 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-        final int groupPosition = getGroupPosition(position);
-        showActionsDialog(groupPosition);
+        TransactionOptions options = new TransactionOptions(position);
+        options.show();
         return true;
     }
 
@@ -121,47 +121,67 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         return ExpandableListView.getPackedPositionGroup(packedPos);
     }
 
-    private void showActionsDialog(final int groupPosition) {
-        CharSequence[] actions = new CharSequence[]{"Edit", "Delete"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(actions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Cursor transactionCursor = mAdapter.getGroup(groupPosition);
-                final long transactionId = transactionCursor.getLong(
-                        transactionCursor.getColumnIndex(AccountingDbHelper.ID));
-                final String transactionType = transactionCursor.getString(
-                        transactionCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
-                switch (i) {
-                    case 0:
-                        startEditActivity(transactionId, transactionType);
-                        break;
-                    case 1:
-                        YesNoDialog dialog = YesNoDialog.newInstance("", "Confirm delete?");
-                        dialog.setCallback(new YesNoDialog.DialogClickListener() {
-                            @Override
-                            public void onYesClick() {
-                                deleteTransaction(transactionId, transactionType);
-                            }
+    private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
+        private long transactionId;
+        private String transactionType;
 
-                            @Override
-                            public void onNoClick() {
-                            }
-                        });
-                        dialog.show(getSupportFragmentManager(), YesNoDialog.TAG);
-                        break;
-                }
+        public TransactionOptions(int flatAdapterPosition) {
+            int groupPosition = getGroupPosition(flatAdapterPosition);
+            Cursor transactionCursor = mAdapter.getGroup(groupPosition);
+            this.transactionId = transactionCursor.getLong(
+                    transactionCursor.getColumnIndex(AccountingDbHelper.ID));
+            this.transactionType = transactionCursor.getString(
+                    transactionCursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE));
+        }
+
+        private int getGroupPosition(int flatPos) {
+            long packedPos = mListView.getExpandableListPosition(flatPos);
+            return ExpandableListView.getPackedPositionGroup(packedPos);
+        }
+
+        public void show() {
+            CharSequence[] options = new CharSequence[]{"Edit", "Delete"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(TransactionListActivity.this);
+            builder.setItems(options, this).show();
+        }
+
+        /**
+         * Options dialog on click.
+         *
+         * @param dialogInterface Dialog.
+         * @param i               Clicked position.
+         */
+        public void onClick(DialogInterface dialogInterface, int i) {
+            switch (i) {
+                case 0:
+                    startEditActivity(transactionId, transactionType);
+                    break;
+                case 1:
+                    YesNoDialog dialog = YesNoDialog.newInstance("", "Confirm delete?");
+                    dialog.setCallback(this);
+                    dialog.show(getSupportFragmentManager(), YesNoDialog.TAG);
+                    break;
             }
-        }).show();
-    }
+        }
 
-    private void startEditActivity(long transactionId, String transactionType) {
-        Intent editPurchaseIntent = new Intent(this, EditPurchaseActivity.class);
-        editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
-        startActivity(editPurchaseIntent);
-    }
+        @Override
+        public void onYesClick() {
+            deleteTransaction(transactionId, transactionType);
+        }
 
-    private void deleteTransaction(long transactionId, String transactiontype) {
+        @Override
+        public void onNoClick() {
+        }
+
+        private void startEditActivity(long transactionId, String transactionType) {
+            Intent editPurchaseIntent = new Intent(TransactionListActivity.this, EditPurchaseActivity.class);
+            editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, transactionId);
+            startActivity(editPurchaseIntent);
+        }
+
+        private void deleteTransaction(long transactionId, String transactiontype) {
+
+        }
 
     }
 }
