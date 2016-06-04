@@ -167,7 +167,19 @@ public class Credit extends Transaction {
     }
 
     public boolean delete(Context context) {
+        // TODO Do in Background thread.
+        int deleted = context.getContentResolver().delete(getDeleteUri(),
+                AccountingDbHelper.ID + "=" + getId(), null);
+        if (deleted > 0) {
+            return true;
+        }
         return false;
+    }
+
+    private Uri getDeleteUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.CREDITS_BASE_PATH
+                + "/" + getId());
     }
 
     public Uri getInsertUri() {

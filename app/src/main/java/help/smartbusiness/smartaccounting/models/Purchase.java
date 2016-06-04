@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,10 +211,8 @@ public class Purchase extends Transaction {
     public boolean delete(Context context) {
         // TODO Do in Background thread.
         int deleted = context.getContentResolver().delete(getDeleteUri(),
-                AccountingDbHelper.ID + "=" + getId(),
-                null);
-        if(deleted > 0) {
-            Log.d(TAG, deleted +"");
+                AccountingDbHelper.ID + "=" + getId(), null);
+        if (deleted > 0) {
             return true;
         }
         return false;

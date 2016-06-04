@@ -10,7 +10,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -187,16 +186,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         }
 
         private void deleteTransaction() {
-            if (mTransaction.getTransactionType().equals(Purchase.class)) {
-                Log.d(TAG, "P");
-                if (mTransaction.delete(TransactionListActivity.this)) {
-                    Log.d(TAG, "PD");
-                } else {
-                    Log.d(TAG, "PN");
-                }
-            } else {
-                Log.d(TAG, "C");
-            }
+            mTransaction.delete(TransactionListActivity.this);
         }
 
     }
