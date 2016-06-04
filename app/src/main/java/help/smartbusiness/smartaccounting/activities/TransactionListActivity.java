@@ -164,11 +164,17 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
             }
         }
 
+        /**
+         * On delete confirmed.
+         */
         @Override
         public void onYesClick() {
             deleteTransaction(transactionId, transactionType);
         }
 
+        /**
+         * On delete cancelled.
+         */
         @Override
         public void onNoClick() {
         }
