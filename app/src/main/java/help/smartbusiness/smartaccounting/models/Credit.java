@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 
@@ -114,7 +110,12 @@ public class Credit extends Transaction {
         this.type = type;
     }
 
-    public boolean isValid() {
+    public boolean isValid(boolean validateCustomer) {
+        if (validateCustomer) {
+            if (getCustomer() == null || !getCustomer().isValid()) {
+                return false;
+            }
+        }
 
         // Type validation.
         if (getType() == null) {
@@ -122,14 +123,10 @@ public class Credit extends Transaction {
         }
 
         // Not empty validations.
-        List<String> notEmpty = new ArrayList<>(Arrays.asList(
-                getCustomer().getName(), getCustomer().getAddress(), date));
-        for (String text : notEmpty) {
-            if (text.isEmpty()) {
-                return false;
-            }
+        if (getDate().isEmpty()) {
+            return false;
         }
-        return amount >= 0;
+        return amount > 0;
     }
 
     public boolean insert(Context context) {
@@ -153,6 +150,21 @@ public class Credit extends Transaction {
         }
     }
 
+    public boolean update(Context context) {
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.CREDIT_COL_DATE, date);
+        values.put(AccountingDbHelper.CREDIT_COL_AMOUNT, amount);
+        values.put(AccountingDbHelper.CREDIT_COL_REMARKS, remarks);
+        values.put(AccountingDbHelper.CREDIT_COL_TYPE, getType().getDbType());
+        try {
+            context.getContentResolver().update(getUpdateUri(), values,
+                    AccountingDbHelper.ID + " = " + getId(), null);
+        } catch (NullPointerException ignored) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean delete(Context context) {
         return false;
     }
@@ -161,5 +173,11 @@ public class Credit extends Transaction {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
                 + "/" + getCustomer().getId()
                 + "/" + AccountingProvider.CREDITS_BASE_PATH);
+    }
+
+    private Uri getUpdateUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + AccountingProvider.CREDITS_BASE_PATH
+                + "/" + getId());
     }
 }

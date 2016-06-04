@@ -20,6 +20,7 @@ import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
+import help.smartbusiness.smartaccounting.models.Credit;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.Transaction;
 
@@ -174,9 +175,15 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         }
 
         private void startEditActivity() {
-            Intent editPurchaseIntent = new Intent(TransactionListActivity.this, EditPurchaseActivity.class);
-            editPurchaseIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, mTransaction.getId());
-            startActivity(editPurchaseIntent);
+            Intent editIntent = null;
+            if (mTransaction.getTransactionType().equals(Purchase.class)) {
+                editIntent = new Intent(TransactionListActivity.this, EditPurchaseActivity.class);
+                editIntent.putExtra(EditPurchaseActivity.PURCHASE_ID, mTransaction.getId());
+            } else if (mTransaction.getTransactionType().equals(Credit.class)) {
+                editIntent = new Intent(TransactionListActivity.this, EditCreditActivity.class);
+                editIntent.putExtra(EditCreditActivity.CREDIT_ID, mTransaction.getId());
+            }
+            startActivity(editIntent);
         }
 
         private void deleteTransaction() {

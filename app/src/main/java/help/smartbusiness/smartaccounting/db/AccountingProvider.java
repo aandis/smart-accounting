@@ -124,6 +124,12 @@ public class AccountingProvider extends ContentProvider {
                         + " = " + AccountingDbHelper.TABLE_CREDIT + "." + AccountingDbHelper.CREDIT_COL_CUSTOMER_ID);
                 break;
 
+            case CUSTOMER_CREDITS_ID:
+                builder.setTables(AccountingDbHelper.TABLE_CREDIT);
+                builder.appendWhere(
+                        AccountingDbHelper.ID + " = " + uri.getPathSegments().get(2));
+                break;
+
             case CUSTOMER_ID_TRANSACTIONS:
                 builder.appendWhere(AccountingDbHelper.CREDIT_COL_CUSTOMER_ID
                         + "=" + uri.getPathSegments().get(1));
@@ -232,6 +238,10 @@ public class AccountingProvider extends ContentProvider {
                 deleted = mDbHelper.getWritableDatabase().delete(
                         AccountingDbHelper.TABLE_PURCHASE, s, strings);
                 break;
+            case CUSTOMER_CREDITS_ID:
+                deleted = mDbHelper.getWritableDatabase().delete(
+                        AccountingDbHelper.TABLE_CREDIT, s, strings);
+                break;
             default:
                 deleted = 0;
         }
@@ -251,6 +261,10 @@ public class AccountingProvider extends ContentProvider {
                 break;
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID:
                 rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE_ITEMS,
+                        contentValues, s, strings);
+                break;
+            case CUSTOMER_CREDITS_ID:
+                rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_CREDIT,
                         contentValues, s, strings);
                 break;
             default:
