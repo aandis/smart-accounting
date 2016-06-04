@@ -116,11 +116,6 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         return true;
     }
 
-    private int getGroupPosition(int flatPos) {
-        long packedPos = mListView.getExpandableListPosition(flatPos);
-        return ExpandableListView.getPackedPositionGroup(packedPos);
-    }
-
     private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
         private long transactionId;
         private String transactionType;
@@ -186,7 +181,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         }
 
         private void deleteTransaction(long transactionId, String transactiontype) {
-
+            
         }
 
     }
