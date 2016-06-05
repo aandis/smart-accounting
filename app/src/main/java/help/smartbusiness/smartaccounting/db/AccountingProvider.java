@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by gamerboy on 19/5/16.
@@ -40,6 +41,7 @@ public class AccountingProvider extends ContentProvider {
     public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS = 111;
     public static final int CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS = 112;
     public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID = 113;
+    public static final int CUSTOMER_PURCHASE_PURCHASE_ITEMS_RAW = 114;
 
 
     public static final String CUSTOMERS_BASE_PATH = "customers";
@@ -47,6 +49,8 @@ public class AccountingProvider extends ContentProvider {
     public static final String CREDITS_BASE_PATH = "credits";
     public static final String TRANSACTION_BASE_PATH = "transactions";
     public static final String PURCHASE_ITEMS_BASE_PATH = "purchase_items";
+
+    public static final String RAW = "raw";
 
     public static final String CUSTOMER_CONTENT_URI = "content://"
             + AUTHORITY + "/" + CUSTOMERS_BASE_PATH;
@@ -81,6 +85,7 @@ public class AccountingProvider extends ContentProvider {
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items", CUSTOMER_PURCHASE_PURCHASE_ITEMS);
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/#/purchase_items", CUSTOMER_PURCHASE_ID_PURCHASE_ITEMS);
         mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items/#", CUSTOMER_PURCHASE_PURCHASE_ITEMS_ID);
+        mUriMatcher.addURI(AUTHORITY, "customers/purchases/purchase_items/raw", CUSTOMER_PURCHASE_PURCHASE_ITEMS_RAW);
 
     }
 
@@ -164,7 +169,12 @@ public class AccountingProvider extends ContentProvider {
                         + " = " + AccountingDbHelper.PI_COL_PURCHASE_ID);
                 break;
 
+            case CUSTOMER_PURCHASE_PURCHASE_ITEMS_RAW:
+                builder.setTables(AccountingDbHelper.TABLE_PURCHASE_ITEMS);
+                break;
+
             default:
+                Log.d(TAG, uri.toString());
                 throw new IllegalArgumentException("Unknown URI");
         }
 

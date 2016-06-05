@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Purchase;
@@ -118,6 +119,7 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
     }
 
     private void setUpPurchaseItemEditTexts(View parent) {
+        setUpPurchaseItemNameAutocompletion(parent);
         MaterialEditText purchaseItemQuantity = (MaterialEditText)
                 parent.findViewById(R.id.input_purchase_item_quantity);
         MaterialEditText purchaseItemRate = (MaterialEditText)
@@ -129,6 +131,14 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
                 purchaseItemQuantity, purchaseItemRate, purchaseItemAmount));
         purchaseItemRate.addTextChangedListener(new CustomTextWatcher(
                 purchaseItemRate, purchaseItemQuantity, purchaseItemAmount));
+    }
+
+    private void setUpPurchaseItemNameAutocompletion(View parent) {
+        MaterialAutoCompleteTextView purchaseItemName = (MaterialAutoCompleteTextView)
+                parent.findViewById(R.id.input_purchase_item_name);
+        PurchaseItemNameSuggester suggester =
+                new PurchaseItemNameSuggester(this, purchaseItemName);
+        suggester.initSuggestions();
     }
 
     private void updateTotal() {
