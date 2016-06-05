@@ -87,6 +87,7 @@ public class CustomerNameSuggester {
                 return cursor.getString(cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_NAME));
             }
         });
+        // TODO This currently queries customer due view for getting customer name which is very inefficient. Change to querying only customer table.
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
             // TODO: Change this if this doesn't run on a background thread. See CursorAdapter.runQueryOnBackgroundThread()
             @Override
