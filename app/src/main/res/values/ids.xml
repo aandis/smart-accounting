@@ -4,4 +4,5 @@
     <item name="transaction.loader" type="id" />
     <item name="purchases.purchase.item.loader" type="id" />
     <item name="credit.loader" type="id" />
+    <item name="search.loader" type="id" />
 </resources>
