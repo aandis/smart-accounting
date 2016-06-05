@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
@@ -110,7 +111,7 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
         PurchaseItem item = PurchaseItem.fromCursor(purchaseItemCursor);
         TextView purchaseItemId = ((TextView) purchaseItemLayout
                 .findViewById(R.id.input_purchase_item_id));
-        MaterialEditText purchaseItemName = ((MaterialEditText)
+        MaterialAutoCompleteTextView purchaseItemName = ((MaterialAutoCompleteTextView)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_name));
         MaterialEditText purchaseItemQuantity = (MaterialEditText)
                 purchaseItemLayout.findViewById(R.id.input_purchase_item_quantity);

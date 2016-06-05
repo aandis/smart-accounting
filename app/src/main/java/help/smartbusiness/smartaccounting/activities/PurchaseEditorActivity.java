@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
@@ -153,7 +154,7 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
             long id = Utils.parseLong(((TextView) purchaseItem
                     .findViewById(R.id.input_purchase_item_id)).getText().toString());
-            String name = ((MaterialEditText) purchaseItem
+            String name = ((MaterialAutoCompleteTextView) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
             float quantity = Utils.parseFloat(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
