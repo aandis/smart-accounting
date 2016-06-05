@@ -110,7 +110,7 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 super.onDateSet(view, year, month, day);
-                purchaseDate.setText(String.format("%d-%d-%d", day, month + 1, year));
+                purchaseDate.setText(String.format("%d-%d-%d", year, month + 1, day));
             }
         };
         newFragment.show(getSupportFragmentManager(), "datePicker");
