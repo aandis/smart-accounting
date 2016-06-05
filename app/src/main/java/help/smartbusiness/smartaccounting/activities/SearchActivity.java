@@ -82,8 +82,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                                 " WHEN " + AccountingDbHelper.CDV_DUE + " < 0 " + " THEN '" + AccountingDbHelper.AMOUNT_TYPE_DEBT + "' " +
                                 " END " + AccountingDbHelper.AMOUNT_TYPE
                 },
-                AccountingDbHelper.CUSTOMERS_COL_NAME + " LIKE '%" + query + "%'",
-                null, AccountingDbHelper.CDV_DUE + " desc ");
+                AccountingDbHelper.CUSTOMERS_COL_NAME + " LIKE ?",
+                new String[]{"%" + query + "%"},
+                AccountingDbHelper.CDV_DUE + " desc ");
     }
 
     @Override
