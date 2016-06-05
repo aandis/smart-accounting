@@ -19,6 +19,10 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String TABLE_CUSTOMER = "customers";
     public static final String CUSTOMERS_COL_NAME = "name";
     public static final String CUSTOMERS_COL_ADDRESS = "address";
+    // Following three fields only used in search results.
+    public static final String AMOUNT_TYPE = "amount_type";
+    public static final String AMOUNT_TYPE_DEBT = "debt";
+    public static final String AMOUNT_TYPE_DUE = "due";
     public static final String CREATE_TABLE_CUSTOMERS = "create table " + TABLE_CUSTOMER
             + " ( "
             + ID + " integer primary key autoincrement, "

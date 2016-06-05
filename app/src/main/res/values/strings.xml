@@ -4,6 +4,7 @@
     <string name="action_search">Search</string>
 
     <string name="search_hint">Search customer</string>
+    <string name="search.results">Search results</string>
 
     <string name="customer.name">Customer name</string>
     <string name="customer.address">Customer address</string>
@@ -38,4 +39,5 @@
 
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
+    <string name="search.results.empty.message">Nothing found</string>
 </resources>
