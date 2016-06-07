@@ -5,6 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import help.smartbusiness.smartaccounting.Utils.FileUtils;
+
 /**
  * Created by gamerboy on 19/5/16.
  */
@@ -240,4 +249,49 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP table IF EXISTS " + TABLE_CREDIT);
         onCreate(sqLiteDatabase);
     }
+
+    /**
+     * Copies the database file at the specified location
+     * over the current internal application database.
+     */
+    public void importDatabase(Context context, String newDbName) throws IOException {
+
+        // Close the SQLiteOpenHelper so it will
+        // commit the created empty database to internal storage.
+        close();
+        File newDb = new File(FileUtils.getFullPath(context, newDbName));
+        Log.d(TAG, "Importing from " + newDb);
+        if (newDb.exists()) {
+            File oldDb = context.getDatabasePath(DATABASE_NAME);
+            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+            // Access the copied database so SQLiteHelper
+            // will cache it and mark it as created.
+            getWritableDatabase().close();
+        } else {
+            throw new FileNotFoundException();
+        }
+    }
+
+    public void exportDatabase(Context context, String backupName) throws IOException {
+
+        // Open your local db as the input stream
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
+        FileInputStream fis = new FileInputStream(dbFile);
+
+        File backupFile = new File(FileUtils.getFullPath(context, backupName));
+        Log.d(TAG, "Exporting to " + backupFile);
+        // Open the empty db as the output stream
+        OutputStream output = new FileOutputStream(backupFile);
+        // transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer)) > 0) {
+            output.write(buffer, 0, length);
+        }
+        // Close the streams
+        output.flush();
+        output.close();
+        fis.close();
+    }
+
 }

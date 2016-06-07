@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.backup.DbOperation;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+        Log.d(TAG, DbOperation.importDb(getApplicationContext()) + "");
         getSupportLoaderManager().initLoader(R.id.customer_loader, null, this);
     }
 
