@@ -98,6 +98,7 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
         PugNotification.with(this)
                 .load()
                 .title("Backup completed!")
+                .autoCancel(true)
                 .message("Your data is now safely backed up.")
                 .smallIcon(R.drawable.pugnotification_ic_launcher)
                 .flags(Notification.DEFAULT_ALL)
