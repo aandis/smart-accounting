@@ -3,6 +3,10 @@ package help.smartbusiness.smartaccounting.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
@@ -13,7 +17,7 @@ import help.smartbusiness.smartaccounting.backup.DbOperation;
 /**
  * Created by gamerboy on 8/6/16.
  */
-public class ImportDbService extends IntentService {
+public class ImportDbService extends IntentService implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = ImportDbService.class.getSimpleName();
 
@@ -47,7 +51,7 @@ public class ImportDbService extends IntentService {
     }
 
     private boolean searchAndDownloadBackup() {
-        SynchronousDrive drive = new SynchronousDrive(this);
+        SynchronousDrive drive = new SynchronousDrive(this, this);
         String backUpId = null;
         backUpId = drive.searchLatest(DbOperation.BACKUP_NAME, DbOperation.MIME_TYPE);
         if (backUpId != null) {
@@ -71,5 +75,10 @@ public class ImportDbService extends IntentService {
      * parameters.
      */
     private void handleActionImport() {
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

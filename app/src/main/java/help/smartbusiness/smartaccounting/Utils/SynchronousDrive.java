@@ -1,7 +1,6 @@
 package help.smartbusiness.smartaccounting.Utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,17 +31,17 @@ import java.util.ArrayList;
 /**
  * Created by gamerboy on 8/6/16.
  */
-public class SynchronousDrive implements GoogleApiClient.OnConnectionFailedListener {
+public class SynchronousDrive {
 
     public static final String TAG = SynchronousDrive.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
 
-    public SynchronousDrive(Context context) {
+    public SynchronousDrive(Context context, GoogleApiClient.OnConnectionFailedListener listener) {
         this.mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Drive.API)
                 .addScope(Drive.SCOPE_APPFOLDER)
-                .addOnConnectionFailedListener(this)
+                .addOnConnectionFailedListener(listener)
                 .build();
     }
 
@@ -226,11 +225,6 @@ public class SynchronousDrive implements GoogleApiClient.OnConnectionFailedListe
             e.printStackTrace();
         }
         return false;
-    }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
     public void disconnect() {

@@ -3,7 +3,11 @@ package help.smartbusiness.smartaccounting.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
@@ -17,7 +21,7 @@ import help.smartbusiness.smartaccounting.backup.DbOperation;
  * <p/>
  * helper methods.
  */
-public class ExportDbService extends IntentService {
+public class ExportDbService extends IntentService implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = ExportDbService.class.getSimpleName();
 
@@ -52,7 +56,7 @@ public class ExportDbService extends IntentService {
     }
 
     private void exportDbToDrive() {
-        SynchronousDrive drive = new SynchronousDrive(this);
+        SynchronousDrive drive = new SynchronousDrive(this, this);
         File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
         String mime = DbOperation.MIME_TYPE;
         String driveId = null;
@@ -61,5 +65,10 @@ public class ExportDbService extends IntentService {
             Log.d(TAG, "Uploaded file with id " + driveId);
         }
         drive.disconnect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
