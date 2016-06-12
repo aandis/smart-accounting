@@ -12,8 +12,13 @@ import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 public final class DbOperation {
 
     public static final String BACKUP_NAME = "backup";
+    public static final String MIME_TYPE = "application/octet-stream";
 
-    public static boolean importDb(Context context) {
+    public DbOperation() {
+
+    }
+
+    public boolean importDbFromLocal(Context context) {
         AccountingDbHelper helper = new AccountingDbHelper(context,
                 AccountingDbHelper.DATABASE_NAME, null, AccountingDbHelper.DATABASE_VERSION);
         try {
@@ -25,7 +30,7 @@ public final class DbOperation {
         return true;
     }
 
-    public static boolean exportDb(Context context) {
+    public boolean exportDbToLocal(Context context) {
         AccountingDbHelper helper = new AccountingDbHelper(context,
                 AccountingDbHelper.DATABASE_NAME, null, AccountingDbHelper.DATABASE_VERSION);
         try {

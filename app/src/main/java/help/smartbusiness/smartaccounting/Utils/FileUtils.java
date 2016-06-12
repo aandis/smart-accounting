@@ -20,10 +20,8 @@ public class FileUtils {
      * <i> Note: <code>fromFile</code> and <code>toFile</code> will be closed by
      * this function.</i>
      *
-     * @param fromFile
-     *            - FileInputStream for the file to copy from.
-     * @param toFile
-     *            - FileInputStream for the file to copy to.
+     * @param fromFile - FileInputStream for the file to copy from.
+     * @param toFile   - FileInputStream for the file to copy to.
      */
     public static void copyFile(FileInputStream fromFile, FileOutputStream toFile) throws IOException {
         FileChannel fromChannel = null;
@@ -48,11 +46,13 @@ public class FileUtils {
     /**
      * Returns the full path of the file on app's data folder where the file should
      * be read from or written to.
-     * @param context Context
+     *
+     * @param context  Context
      * @param filename Filename
      * @return Full path.
      */
     public static String getFullPath(Context context, String filename) {
         return context.getFilesDir() + "/" + filename;
     }
+
 }
