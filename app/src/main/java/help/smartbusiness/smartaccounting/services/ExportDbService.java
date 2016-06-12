@@ -59,12 +59,15 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
         SynchronousDrive drive = new SynchronousDrive(this, this);
         File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
         String mime = DbOperation.MIME_TYPE;
-        String driveId = null;
-        driveId = drive.uploadFile(file, mime);
-        if (driveId != null) {
-            Log.d(TAG, "Uploaded file with id " + driveId);
+        String driveId;
+        try {
+            driveId = drive.uploadFile(file, mime);
+            if (driveId != null) {
+                Log.d(TAG, "Uploaded file with id " + driveId);
+            }
+        } finally {
+            drive.disconnect();
         }
-        drive.disconnect();
     }
 
     @Override

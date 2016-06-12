@@ -54,13 +54,13 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
         SynchronousDrive drive = new SynchronousDrive(this, this);
         String backUpId = null;
         backUpId = drive.searchLatest(DbOperation.BACKUP_NAME, DbOperation.MIME_TYPE);
-        if (backUpId != null) {
-            try {
+        try {
+            if (backUpId != null) {
                 File localBackupFile = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
                 return drive.downloadFile(backUpId, localBackupFile);
-            } finally {
-                drive.disconnect();
             }
+        } finally {
+            drive.disconnect();
         }
         return false;
     }
