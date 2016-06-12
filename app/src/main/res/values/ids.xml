@@ -5,4 +5,6 @@
     <item name="purchases.purchase.item.loader" type="id" />
     <item name="credit.loader" type="id" />
     <item name="search.loader" type="id" />
+
+    <item name="export.notify.id" type="id" />
 </resources>

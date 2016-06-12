@@ -25,6 +25,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
+import help.smartbusiness.smartaccounting.services.ExportDbService;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_export) {
+            ExportDbService.startExport(this);
             return true;
         }
 

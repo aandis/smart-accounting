@@ -15,6 +15,11 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activities.SearchActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
@@ -69,11 +74,6 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".activities.BackupActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

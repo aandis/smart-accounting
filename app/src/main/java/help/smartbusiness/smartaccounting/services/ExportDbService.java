@@ -1,6 +1,7 @@
 package help.smartbusiness.smartaccounting.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -11,8 +12,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
+import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
 import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
+import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
 /**
@@ -43,6 +47,7 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            updateNotificationProgress(0);
             exportDb();
         }
     }
@@ -51,7 +56,10 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
         DbOperation operation = new DbOperation();
         boolean exportedToLocal = operation.exportDbToLocal(this);
         if (exportedToLocal) {
+            updateNotificationProgress(1);
             exportDbToDrive();
+        } else {
+            notificateFailed();
         }
     }
 
@@ -64,14 +72,60 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
             driveId = drive.uploadFile(file, mime);
             if (driveId != null) {
                 Log.d(TAG, "Uploaded file with id " + driveId);
+                notificateSuccess();
+            } else {
+                notificateFailed();
             }
         } finally {
             drive.disconnect();
         }
     }
 
+    private void updateNotificationProgress(int progress) {
+        PugNotification.with(this)
+                .load()
+                .identifier(R.id.export_notify_id)
+                .ongoing(true)
+                .title("Backing up database.")
+                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
+                .progress()
+                .value(progress, 2, false)
+                .build();
+    }
+
+    private void notificateSuccess() {
+        cancelProgress();
+        PugNotification.with(this)
+                .load()
+                .title("Backup completed!")
+                .message("Your data is now safely backed up.")
+                .smallIcon(R.drawable.pugnotification_ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
+
+    private void notificateFailed() {
+        cancelProgress();
+        PugNotification.with(this)
+                .load()
+                .click(BackupActivity.class, null)
+                .title("Backup failed.")
+                .message("There was an error during backup.")
+                .bigTextStyle("There was an error while backing up your data. Please make sure you are connected to the internet and have sufficient storage space in your phone.")
+                .smallIcon(R.drawable.pugnotification_ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
+
+    private void cancelProgress() {
+        PugNotification.with(this)
+                .cancel(R.id.export_notify_id);
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d(TAG, "failed");
     }
 }

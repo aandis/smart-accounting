@@ -40,4 +40,5 @@
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
     <string name="search.results.empty.message">Nothing found</string>
+    <string name="action_export">Backup data</string>
 </resources>
