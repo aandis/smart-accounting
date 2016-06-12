@@ -21,6 +21,7 @@ public final class DbOperation {
     public boolean importDbFromLocal(Context context) {
         AccountingDbHelper helper = new AccountingDbHelper(context,
                 AccountingDbHelper.DATABASE_NAME, null, AccountingDbHelper.DATABASE_VERSION);
+        helper.getReadableDatabase();
         try {
             helper.importDatabase(context, BACKUP_NAME);
         } catch (IOException e) {
@@ -33,6 +34,7 @@ public final class DbOperation {
     public boolean exportDbToLocal(Context context) {
         AccountingDbHelper helper = new AccountingDbHelper(context,
                 AccountingDbHelper.DATABASE_NAME, null, AccountingDbHelper.DATABASE_VERSION);
+        helper.getReadableDatabase();
         try {
             helper.exportDatabase(context, BACKUP_NAME);
         } catch (IOException e) {
