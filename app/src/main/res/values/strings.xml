@@ -41,4 +41,11 @@
     <string name="rs">\u20A8</string>
     <string name="search.results.empty.message">Nothing found</string>
     <string name="action_export">Backup data</string>
+
+    <string name="notification.backup.backing">Backing up database.</string>
+    <string name="notification.backup.done">Backup completed!</string>
+    <string name="notification.backup.done.assure">Your data is now safely backed up.</string>
+    <string name="notification.backup.failed">Backup failed.</string>
+    <string name="notification.backup.failed.detail">There was an error during backup.</string>
+    <string name="notification.backup.failed.detail.full">There was an error while backing up your data. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
 </resources>
