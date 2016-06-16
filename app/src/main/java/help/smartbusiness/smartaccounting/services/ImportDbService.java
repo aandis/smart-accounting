@@ -51,7 +51,7 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
             boolean downloaded = searchAndDownloadBackup();
             if (downloaded) {
                 boolean imported = importBackupToDb();
-                if(imported) {
+                if (imported) {
                     notificateSuccess();
                 } else {
                     notificateFailed();

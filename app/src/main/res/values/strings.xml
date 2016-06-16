@@ -59,5 +59,6 @@
 
     <string name="import.start.message">Backup started. Please check notifications.</string>
     <string name="export.start.message">Download started. Please check notifications.</string>
+    <string name="drive.api.connected">All set up here.</string>
 
 </resources>
