@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -22,7 +20,6 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 10;
     private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +46,8 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        mStatusTextView.setText(R.string.drive_api_connected);
-        mStatusTextView.setVisibility(View.VISIBLE);
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -61,7 +58,6 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         setContentView(R.layout.activity_backup);
-        mStatusTextView = (TextView) findViewById(R.id.google_drive_setup_status);
         if (!result.hasResolution()) {
             // show the localized error dialog.
             GoogleApiAvailability.getInstance().getErrorDialog(this,
