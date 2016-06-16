@@ -46,11 +46,12 @@ public class SynchronousDrive {
     }
 
     private boolean connected() {
-        if (!mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
+            return true;
+        } else {
             ConnectionResult result = mGoogleApiClient.blockingConnect();
             return result.isSuccess();
         }
-        return false;
     }
 
     public String uploadFile(File file, String mimeType) {
