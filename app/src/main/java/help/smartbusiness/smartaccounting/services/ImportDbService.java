@@ -1,6 +1,7 @@
 package help.smartbusiness.smartaccounting.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,8 +11,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
+import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
 import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
+import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
 /**
@@ -43,9 +47,15 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            updateNotificationProgress(0); // 0/1
             boolean downloaded = searchAndDownloadBackup();
             if (downloaded) {
-                importBackupToDb();
+                boolean imported = importBackupToDb();
+                if(imported) {
+                    notificateSuccess();
+                } else {
+                    notificateFailed();
+                }
             }
         }
     }
@@ -70,15 +80,53 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
         return operation.importDbFromLocal(this);
     }
 
-    /**
-     * Handle action Import in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionImport() {
-    }
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    private void updateNotificationProgress(int progress) {
+        PugNotification.with(this)
+                .load()
+                .identifier(R.id.import_notify_id)
+                .ongoing(true)
+                .title(R.string.notification_import_importing)
+                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
+                .progress()
+                .value(progress, 1, false)
+                .build();
+    }
+
+    private void notificateSuccess() {
+        cancelProgress();
+        PugNotification.with(this)
+                .load()
+                .title(R.string.notification_import_done)
+                .autoCancel(true)
+                .message(R.string.notification_import_assure)
+                .smallIcon(R.drawable.pugnotification_ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
+
+    private void notificateFailed() {
+        cancelProgress();
+        PugNotification.with(this)
+                .load()
+                .click(BackupActivity.class, null)
+                .title(R.string.notification_import_failed)
+                .message(R.string.notification_import_failed_detail)
+                .bigTextStyle(R.string.notification_import_failed_detail_full)
+                .smallIcon(R.drawable.pugnotification_ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
+
+    private void cancelProgress() {
+        PugNotification.with(this)
+                .cancel(R.id.import_notify_id);
+    }
+
 }

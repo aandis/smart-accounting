@@ -48,4 +48,11 @@
     <string name="notification.backup.failed">Backup failed.</string>
     <string name="notification.backup.failed.detail">There was an error during backup.</string>
     <string name="notification.backup.failed.detail.full">There was an error while backing up your data. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
+
+    <string name="notification.import.importing">Downloading latest backup.</string>
+    <string name="notification.import.done">Download completed</string>
+    <string name="notification.import.assure">Your app is now up to date with your latest backup.</string>
+    <string name="notification.import.failed">Download failed.</string>
+    <string name="notification.import.failed.detail">There was an error during download.</string>
+    <string name="notification.import.failed.detail.full">There was an error while downloading backup. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
 </resources>

@@ -7,4 +7,5 @@
     <item name="search.loader" type="id" />
 
     <item name="export.notify.id" type="id" />
+    <item name="import.notify.id" type="id" />
 </resources>
