@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
+import android.widget.TextView;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
@@ -28,6 +29,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
     public static final String TAG = TransactionListActivity.class.getCanonicalName();
     public static final String CUSTOMER_ID = "id";
 
+    private TextView mTotalAmount;
     private ExpandableListView mListView;
     private SimpleCursorTreeAdapter mAdapter;
     private long mCustomerId;
@@ -40,10 +42,12 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         if (mCustomerId == -1) {
             finish();
         }
+        mTotalAmount = (TextView) findViewById(R.id.total_amount);
         mListView = (ExpandableListView) findViewById(R.id.transactions_list);
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
+        getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
         mListView.setOnItemLongClickListener(this);
     }
 
@@ -117,6 +121,29 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         options.show();
         return true;
     }
+
+    private LoaderManager.LoaderCallbacks<Cursor> mAmountLoaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new CursorLoader(TransactionListActivity.this, Uri.parse(
+                    AccountingProvider.CUSTOMER_CONTENT_URI
+                            + "/" + mCustomerId),
+                    new String[]{AccountingDbHelper.CDV_DUE}, null, null, null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            if (data != null && data.moveToNext()) {
+                mTotalAmount.setText(String.valueOf(data.getFloat(0)));
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
+    };
+
 
     private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
 
