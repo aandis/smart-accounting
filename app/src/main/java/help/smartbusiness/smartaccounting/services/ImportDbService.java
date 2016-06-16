@@ -40,7 +40,7 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
      * @see IntentService
      */
     public static void startImport(Context context) {
-        Intent intent = new Intent(context, ExportDbService.class);
+        Intent intent = new Intent(context, ImportDbService.class);
         context.startService(intent);
     }
 
@@ -56,6 +56,8 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
                 } else {
                     notificateFailed();
                 }
+            } else {
+                notificateFailed();
             }
         }
     }

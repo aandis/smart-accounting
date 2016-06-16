@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -26,6 +27,7 @@ import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.services.ExportDbService;
+import help.smartbusiness.smartaccounting.services.ImportDbService;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
@@ -103,6 +105,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_export) {
             ExportDbService.startExport(this);
+            Snackbar.make(mListView,
+                    R.string.export_start_message,
+                    Snackbar.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_import) {
+            ImportDbService.startImport(this);
+            Snackbar.make(mListView,
+                    R.string.import_start_message,
+                    Snackbar.LENGTH_LONG).show();
             return true;
         }
 

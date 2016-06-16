@@ -41,6 +41,7 @@
     <string name="rs">\u20A8</string>
     <string name="search.results.empty.message">Nothing found</string>
     <string name="action_export">Backup data</string>
+    <string name="action_import">Import data</string>
 
     <string name="notification.backup.backing">Backing up database.</string>
     <string name="notification.backup.done">Backup completed!</string>
@@ -55,4 +56,8 @@
     <string name="notification.import.failed">Download failed.</string>
     <string name="notification.import.failed.detail">There was an error during download.</string>
     <string name="notification.import.failed.detail.full">There was an error while downloading backup. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
+
+    <string name="import.start.message">Backup started. Please check notifications.</string>
+    <string name="export.start.message">Download started. Please check notifications.</string>
+
 </resources>
