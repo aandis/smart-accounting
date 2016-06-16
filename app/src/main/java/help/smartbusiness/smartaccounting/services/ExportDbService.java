@@ -47,7 +47,7 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            updateNotificationProgress(0);
+            updateNotificationProgress(0); // 0/2
             exportDb();
         }
     }
@@ -56,7 +56,7 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
         DbOperation operation = new DbOperation();
         boolean exportedToLocal = operation.exportDbToLocal(this);
         if (exportedToLocal) {
-            updateNotificationProgress(1);
+            updateNotificationProgress(1); // 1/2
             exportDbToDrive();
         } else {
             notificateFailed();
