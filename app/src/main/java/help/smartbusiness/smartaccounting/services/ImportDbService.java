@@ -16,6 +16,7 @@ import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
 import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
 import help.smartbusiness.smartaccounting.activities.BackupActivity;
+import help.smartbusiness.smartaccounting.activities.MainActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
 /**
@@ -110,6 +111,8 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
                 .flags(Notification.DEFAULT_ALL)
                 .simple()
                 .build();
+        startActivity(new Intent(this, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     private void notificateFailed() {
