@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,45 +15,62 @@ import com.google.android.gms.drive.Drive;
 
 import help.smartbusiness.smartaccounting.R;
 
-public class BackupActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class BackupActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
+    public static final String ACCOUNTING_PREFERENCES =
+            BackupActivity.class.getPackage().getName() + ".preferences";
+    public static final String GOOGLE_LOGGED_IN = "logged_in";
 
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 10;
+
     private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_APPFOLDER)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        if (getPreferences().getBoolean(GOOGLE_LOGGED_IN, false)) {
+            onLoggedIn();
+        } else {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_APPFOLDER)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        getPreferences().edit().putBoolean(GOOGLE_LOGGED_IN, true).apply();
+        onLoggedIn();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+    }
 
+    private void onLoggedIn() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -81,5 +99,10 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
                 }
                 break;
         }
+    }
+
+    private SharedPreferences getPreferences() {
+        return getSharedPreferences(
+                ACCOUNTING_PREFERENCES, MODE_PRIVATE);
     }
 }
