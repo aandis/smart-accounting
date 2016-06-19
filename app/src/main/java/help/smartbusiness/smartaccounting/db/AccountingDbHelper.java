@@ -1,6 +1,7 @@
 package help.smartbusiness.smartaccounting.db;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -294,6 +295,17 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         output.flush();
         output.close();
         fis.close();
+    }
+
+    public static boolean dbEmpty(Context context) {
+        // TODO Ugly. Works on ui thread and manages sqlitedb on it's own.
+        AccountingDbHelper helper = new AccountingDbHelper(
+                context, DATABASE_NAME, null, DATABASE_VERSION);
+        long count = DatabaseUtils.queryNumEntries(
+                helper.getReadableDatabase(),
+                AccountingDbHelper.TABLE_CUSTOMER);
+        helper.close();
+        return count == 0;
     }
 
 }
