@@ -100,6 +100,7 @@ public class AccountingProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        String groupBy = null;
 
         int uriType = mUriMatcher.match(uri);
         switch (uriType) {
@@ -171,6 +172,7 @@ public class AccountingProvider extends ContentProvider {
 
             case CUSTOMER_PURCHASE_PURCHASE_ITEMS_RAW:
                 builder.setTables(AccountingDbHelper.TABLE_PURCHASE_ITEMS);
+                groupBy = AccountingDbHelper.PI_COL_NAME;
                 break;
 
             default:
@@ -181,7 +183,7 @@ public class AccountingProvider extends ContentProvider {
         Cursor cursor = builder.query(
                 mDbHelper.getReadableDatabase(),
                 projection, selection, selectionArgs,
-                null, null, sortOrder);
+                groupBy, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), Uri.parse(CUSTOMER_CONTENT_URI));
         return cursor;
     }
