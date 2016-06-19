@@ -55,6 +55,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + PURCHASE_COL_REMARKS + " text, "
             + PURCHASE_COL_TYPE + " text NOT NULL CHECK (" + PURCHASE_COL_TYPE + " IN ('" + PURCHASE_TYPE_SELL + "','" + PURCHASE_TYPE_BUY +  "')), "
             + "foreign key (" + PURCHASE_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
+                + " ON DELETE CASCADE "
             + " )";
 
 
@@ -103,6 +104,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + CREDIT_COL_REMARKS + " text, "
             + CREDIT_COL_TYPE + " text NOT NULL CHECK (" + CREDIT_COL_TYPE + " IN ('" + CREDIT_TYPE_CREDIT + "','" + CREDIT_TYPE_DEBIT +  "')), "
             + "foreign key (" + CREDIT_COL_CUSTOMER_ID + ") REFERENCES " + TABLE_CUSTOMER + "(" + ID + ")"
+                + " ON DELETE CASCADE "
             + " )";
 
 
