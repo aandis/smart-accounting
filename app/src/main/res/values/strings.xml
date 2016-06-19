@@ -58,12 +58,17 @@
     <string name="notification.import.failed.detail.full">There was an error while downloading backup. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
 
     <string name="import.start.message">Backup started. Please check notifications.</string>
+    <string name="import.cancelled.message">Cannot import while you have existing data.</string>
+
     <string name="export.start.message">Download started. Please check notifications.</string>
+    <string name="export_cancelled_message">Nothing to backup. Backup cancelled.</string>
+
     <string name="drive.api.connected">All set up here.</string>
 
     <string name="transaction.edit.save">Save</string>
     <string name="transaction.delete.message">Balance is 0. Would you like to clear this account?</string>
     <string name="transaction.delete.confirm">Are you sure?</string>
     <string name="transaction.delete.confirm.message">This person\'s account will be deleted.</string>
+
 
 </resources>

@@ -104,16 +104,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_export) {
-            ExportDbService.startExport(this);
-            Snackbar.make(mListView,
-                    R.string.export_start_message,
-                    Snackbar.LENGTH_LONG).show();
+            if (AccountingDbHelper.dbEmpty(this)) {
+                Snackbar.make(mListView,
+                        R.string.export_cancelled_message,
+                        Snackbar.LENGTH_LONG).show();
+            } else {
+                ExportDbService.startExport(this);
+                Snackbar.make(mListView,
+                        R.string.export_start_message,
+                        Snackbar.LENGTH_LONG).show();
+            }
             return true;
         } else if (id == R.id.action_import) {
-            ImportDbService.startImport(this);
-            Snackbar.make(mListView,
-                    R.string.import_start_message,
-                    Snackbar.LENGTH_LONG).show();
+            if(AccountingDbHelper.dbEmpty(this)) {
+                ImportDbService.startImport(this);
+                Snackbar.make(mListView,
+                        R.string.import_start_message,
+                        Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(mListView,
+                        R.string.import_cancelled_message,
+                        Snackbar.LENGTH_LONG).show();
+            }
             return true;
         }
 
