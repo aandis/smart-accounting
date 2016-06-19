@@ -51,6 +51,8 @@
     <string name="notification.import.importing">Downloading latest backup.</string>
     <string name="notification.import.done">Download completed</string>
     <string name="notification.import.assure">Your app is now up to date with your latest backup.</string>
+    <string name="notification.import.nobackup">No Backup found.</string>
+    <string name="notification.import.nobackup.detail">Please make sure you are connected to the internet and have existing backup in this account.</string>
     <string name="notification.import.failed">Download failed.</string>
     <string name="notification.import.failed.detail">There was an error during download.</string>
     <string name="notification.import.failed.detail.full">There was an error while downloading backup. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>

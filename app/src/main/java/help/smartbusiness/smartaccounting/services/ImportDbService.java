@@ -71,6 +71,8 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
             if (backUpId != null) {
                 File localBackupFile = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
                 return drive.downloadFile(backUpId, localBackupFile);
+            } else {
+                notificateNoBackup();
             }
         } finally {
             drive.disconnect();
@@ -114,6 +116,20 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
         startActivity(new Intent(this, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
+
+    private void notificateNoBackup() {
+        cancelProgress();
+        PugNotification.with(this)
+                .load()
+                .title(R.string.notification_import_nobackup)
+                .autoCancel(true)
+                .message(R.string.notification_import_nobackup_detail)
+                .smallIcon(R.drawable.pugnotification_ic_launcher)
+                .flags(Notification.DEFAULT_ALL)
+                .simple()
+                .build();
+    }
+
 
     private void notificateFailed() {
         cancelProgress();
