@@ -2,6 +2,7 @@ package help.smartbusiness.smartaccounting.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 
@@ -15,11 +16,26 @@ public class Customer {
     private long id;
     private String name;
     private String address;
+    private float due;
 
     public Customer(long id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
+    }
+
+    public static Customer fromCursor(Cursor cursor) {
+        long id = cursor.getLong(
+                cursor.getColumnIndex(AccountingDbHelper.ID));
+        String name = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_NAME));
+        String address = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_ADDRESS));
+        float due = cursor.getFloat(
+                cursor.getColumnIndex(AccountingDbHelper.CDV_DUE));
+        Customer customer = new Customer(id, name, address);
+        customer.setDue(due);
+        return customer;
     }
 
     public Customer(String name, String address) {
@@ -78,4 +94,28 @@ public class Customer {
     public boolean isValidId() {
         return id > 0;
     }
+
+    public float getDue() {
+        return due;
+    }
+
+    public void setDue(float due) {
+        this.due = due;
+    }
+
+    public boolean delete(Context context) {
+        // TODO Do in Background thread.
+        int deleted = context.getContentResolver().delete(getDeleteUri(),
+                AccountingDbHelper.ID + "=" + getId(), null);
+        if (deleted > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private Uri getDeleteUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + getId());
+    }
+
 }
