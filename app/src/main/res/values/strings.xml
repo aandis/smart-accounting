@@ -35,8 +35,6 @@
     <string name="purchase.item.add.more">Add more item</string>
     <string name="purchase.item.remove">Remove</string>
 
-    <string name="transaction.edit.save">Save</string>
-
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
     <string name="search.results.empty.message">Nothing found</string>
@@ -60,5 +58,10 @@
     <string name="import.start.message">Backup started. Please check notifications.</string>
     <string name="export.start.message">Download started. Please check notifications.</string>
     <string name="drive.api.connected">All set up here.</string>
+
+    <string name="transaction.edit.save">Save</string>
+    <string name="transaction.delete.message">Balance is 0. Would you like to clear this account?</string>
+    <string name="transaction.delete.confirm">Are you sure?</string>
+    <string name="transaction.delete.confirm.message">This person\'s account will be deleted.</string>
 
 </resources>

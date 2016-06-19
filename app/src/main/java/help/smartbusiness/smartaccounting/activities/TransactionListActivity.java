@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -21,6 +23,7 @@ import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
 import help.smartbusiness.smartaccounting.models.Credit;
+import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.Transaction;
 
@@ -128,13 +131,18 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
             return new CursorLoader(TransactionListActivity.this, Uri.parse(
                     AccountingProvider.CUSTOMER_CONTENT_URI
                             + "/" + mCustomerId),
-                    new String[]{AccountingDbHelper.CDV_DUE}, null, null, null);
+                    null, null, null, null);
         }
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null && data.moveToNext()) {
-                mTotalAmount.setText(String.valueOf(data.getFloat(0)));
+                Customer customer = Customer.fromCursor(data);
+                mTotalAmount.setText(String.valueOf(customer.getDue()));
+                if (customer.getDue() == 0.0) {
+                    ClearTransaction clear = new ClearTransaction(customer);
+                    clear.init();
+                }
             }
         }
 
@@ -144,6 +152,61 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         }
     };
 
+    private class ClearTransaction implements YesNoDialog.DialogClickListener, Handler.Callback {
+
+        private Customer mCustomer;
+        private Handler handler = new Handler(this);
+
+        public ClearTransaction(Customer customer) {
+            this.mCustomer = customer;
+        }
+
+        public void init() {
+            handler.sendEmptyMessage(0);
+        }
+
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what == 0) {
+                showDialog();
+            }
+            return false;
+        }
+
+        public void showDialog() {
+            YesNoDialog dialog = YesNoDialog
+                    .newInstance("", getString(R.string.transaction_delete_message));
+            dialog.setCallback(this);
+            dialog.show(getSupportFragmentManager(), YesNoDialog.TAG);
+        }
+
+
+        @Override
+        public void onYesClick() {
+            YesNoDialog dialog = YesNoDialog.newInstance(
+                    getString(R.string.transaction_delete_confirm),
+                    getString(R.string.transaction_delete_confirm_message));
+            dialog.setCallback(new YesNoDialog.DialogClickListener() {
+                @Override
+                public void onYesClick() {
+                    mCustomer.delete(TransactionListActivity.this);
+                    mTotalAmount.setText(null);
+                }
+
+                @Override
+                public void onNoClick() {
+
+                }
+            });
+            dialog.show(getSupportFragmentManager(), YesNoDialog.TAG);
+        }
+
+        @Override
+        public void onNoClick() {
+
+        }
+
+    }
 
     private class TransactionOptions implements DialogInterface.OnClickListener, YesNoDialog.DialogClickListener {
 
