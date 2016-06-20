@@ -81,7 +81,6 @@
             android:label="@string/customer.edit"
             android:parentActivityName=".activities.TransactionListActivity" />
 
-
         <service
             android:name=".services.ExportDbService"
             android:exported="false" />
