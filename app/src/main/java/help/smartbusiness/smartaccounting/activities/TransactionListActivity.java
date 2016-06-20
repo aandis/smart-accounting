@@ -160,10 +160,10 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
     };
 
     private void setUpFabs(final Customer customer) {
-        final Intent createIntent = new Intent();
-        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_ID, customer.getId());
-        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_NAME, customer.getName());
-        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_ADDRESS, customer.getAddress());
+        final Intent intent = new Intent();
+        intent.putExtra(CustomerNameSuggester.CUSTOMER_ID, customer.getId());
+        intent.putExtra(CustomerNameSuggester.CUSTOMER_NAME, customer.getName());
+        intent.putExtra(CustomerNameSuggester.CUSTOMER_ADDRESS, customer.getAddress());
 
         final FloatingActionsMenu menu = (FloatingActionsMenu)
                 findViewById(R.id.transaction_create_fab_menu);
@@ -171,20 +171,30 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
                 menu.findViewById(R.id.transaction_purchase_create_fab);
         FloatingActionButton creditButton = (FloatingActionButton)
                 menu.findViewById(R.id.transaction_credit_create_fab);
+        FloatingActionButton editCustomerButton = (FloatingActionButton)
+                menu.findViewById(R.id.transaction_credit_edit_customer);
 
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createIntent.setClass(TransactionListActivity.this, CreatePurchase.class);
-                startActivity(createIntent);
+                intent.setClass(TransactionListActivity.this, CreatePurchase.class);
+                startActivity(intent);
                 menu.toggle();
             }
         });
         creditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createIntent.setClass(TransactionListActivity.this, CreateCreditActivity.class);
-                startActivity(createIntent);
+                intent.setClass(TransactionListActivity.this, CreateCreditActivity.class);
+                startActivity(intent);
+                menu.toggle();
+            }
+        });
+        editCustomerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(TransactionListActivity.this, EditCustomerActivity.class);
+                startActivity(intent);
                 menu.toggle();
             }
         });

@@ -85,6 +85,16 @@
             fab:fab_size="mini"
             fab:fab_title="Create Credit" />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/transaction_credit_edit_customer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_icon="@android:drawable/ic_menu_edit"
+            fab:fab_size="mini"
+            fab:fab_title="Edit Customer" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
