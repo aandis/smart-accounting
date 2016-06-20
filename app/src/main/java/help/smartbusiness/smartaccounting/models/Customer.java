@@ -51,6 +51,10 @@ public class Customer {
         this.name = name;
     }
 
+    public String getFirstName() {
+        return name.split("\\s+")[0];
+    }
+
     public String getAddress() {
         return address;
     }

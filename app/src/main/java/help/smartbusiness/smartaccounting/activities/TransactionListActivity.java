@@ -138,6 +138,7 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null && data.moveToNext()) {
                 Customer customer = Customer.fromCursor(data);
+                setTitle(customer.getFirstName()  + "'s account");
                 mTotalAmount.setText(String.valueOf(customer.getDue()));
                 if (customer.getDue() == 0.0) {
                     ClearTransaction clear = new ClearTransaction(customer);
