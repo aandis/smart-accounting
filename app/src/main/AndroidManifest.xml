@@ -15,7 +15,6 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activities.SearchActivity" />
-
         </activity>
 
         <provider
@@ -68,8 +67,9 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".activities.BackupActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".activities.BackupActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -85,6 +85,9 @@
             android:name=".services.ImportDbService"
             android:exported="false" >
         </service>
+
+        <activity android:name=".activities.EditCustomerActivity" >
+        </activity>
     </application>
 
 </manifest>

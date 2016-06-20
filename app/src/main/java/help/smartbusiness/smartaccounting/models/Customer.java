@@ -107,6 +107,21 @@ public class Customer {
         this.due = due;
     }
 
+    public boolean update(Context context) {
+        // TODO on a background thread.
+        ContentValues values = new ContentValues();
+        values.put(AccountingDbHelper.CUSTOMERS_COL_NAME, getName());
+        values.put(AccountingDbHelper.CUSTOMERS_COL_ADDRESS, getAddress());
+        try {
+            context.getContentResolver().update(getUpdateUri(), values,
+                    AccountingDbHelper.ID + " = " + getId(), null);
+        } catch (NullPointerException ignored) {
+            return false;
+        }
+        return true;
+    }
+
+
     public boolean delete(Context context) {
         // TODO Do in Background thread.
         int deleted = context.getContentResolver().delete(getDeleteUri(),
@@ -121,5 +136,11 @@ public class Customer {
         return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
                 + "/" + getId());
     }
+
+    private Uri getUpdateUri() {
+        return Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI
+                + "/" + getId());
+    }
+
 
 }

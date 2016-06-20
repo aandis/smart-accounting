@@ -271,6 +271,10 @@ public class AccountingProvider extends ContentProvider {
     public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
         int rows;
         switch (mUriMatcher.match(uri)) {
+            case CUSTOMERS_ID:
+                rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_CUSTOMER,
+                        contentValues, s, strings);
+                break;
             case CUSTOMER_PURCHASES_ID:
                 rows = mDbHelper.getWritableDatabase().update(AccountingDbHelper.TABLE_PURCHASE,
                         contentValues, s, strings);
