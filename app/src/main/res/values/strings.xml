@@ -69,6 +69,7 @@
     <string name="transaction.delete.message">Balance is 0. Would you like to clear this account?</string>
     <string name="transaction.delete.confirm">Are you sure?</string>
     <string name="transaction.delete.confirm.message">This person\'s account will be deleted.</string>
+    <string name="customer.edit">Edit customer</string>
 
 
 </resources>
