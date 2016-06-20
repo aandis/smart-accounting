@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="7"
             android:hint="@string/purchase.item.name"
+            android:imeOptions="actionNext"
             android:inputType="textCapSentences"
             app:met_floatingLabel="highlight" />
 
@@ -48,6 +49,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:hint="@string/purchase.item.quantity"
+            android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 
@@ -58,6 +60,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:hint="@string/purchase.item.rate"
+            android:imeOptions="actionNext"
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 

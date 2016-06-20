@@ -107,6 +107,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/remarks"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         app:met_floatingLabel="highlight" />
 
     <Button

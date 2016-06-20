@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/customer.name"
+                android:imeOptions="actionNext"
                 android:inputType="textCapSentences"
                 app:met_floatingLabel="highlight" />
 
@@ -40,6 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/customer.address"
+                android:imeOptions="actionNext"
+                android:inputType="text"
                 app:met_floatingLabel="highlight" />
         </LinearLayout>
 
