@@ -64,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/amount"
+        android:imeOptions="actionNext"
         android:inputType="numberDecimal" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
@@ -72,6 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/remarks"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         app:met_floatingLabel="highlight" />
 
     <Button
