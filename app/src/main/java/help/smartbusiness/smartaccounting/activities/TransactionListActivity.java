@@ -18,7 +18,11 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
@@ -44,14 +48,15 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         mCustomerId = getIntent().getLongExtra(CUSTOMER_ID, -1);
         if (mCustomerId == -1) {
             finish();
+        } else {
+            mTotalAmount = (TextView) findViewById(R.id.total_amount);
+            mListView = (ExpandableListView) findViewById(R.id.transactions_list);
+            mAdapter = getListViewAdapter();
+            mListView.setAdapter(mAdapter);
+            getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
+            getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
+            mListView.setOnItemLongClickListener(this);
         }
-        mTotalAmount = (TextView) findViewById(R.id.total_amount);
-        mListView = (ExpandableListView) findViewById(R.id.transactions_list);
-        mAdapter = getListViewAdapter();
-        mListView.setAdapter(mAdapter);
-        getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
-        getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
-        mListView.setOnItemLongClickListener(this);
     }
 
     private SimpleCursorTreeAdapter getListViewAdapter() {
@@ -138,8 +143,9 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null && data.moveToNext()) {
                 Customer customer = Customer.fromCursor(data);
-                setTitle(customer.getFirstName()  + "'s account");
+                setTitle(customer.getFirstName() + "'s account");
                 mTotalAmount.setText(String.valueOf(customer.getDue()));
+                setUpFabs(customer);
                 if (customer.getDue() == 0.0) {
                     ClearTransaction clear = new ClearTransaction(customer);
                     clear.init();
@@ -152,6 +158,38 @@ public class TransactionListActivity extends AppCompatActivity implements Loader
 
         }
     };
+
+    private void setUpFabs(final Customer customer) {
+        final Intent createIntent = new Intent();
+        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_ID, customer.getId());
+        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_NAME, customer.getName());
+        createIntent.putExtra(CustomerNameSuggester.CUSTOMER_ADDRESS, customer.getAddress());
+
+        final FloatingActionsMenu menu = (FloatingActionsMenu)
+                findViewById(R.id.transaction_create_fab_menu);
+        FloatingActionButton purchaseButton = (FloatingActionButton)
+                menu.findViewById(R.id.transaction_purchase_create_fab);
+        FloatingActionButton creditButton = (FloatingActionButton)
+                menu.findViewById(R.id.transaction_credit_create_fab);
+
+        purchaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createIntent.setClass(TransactionListActivity.this, CreatePurchase.class);
+                startActivity(createIntent);
+                menu.toggle();
+            }
+        });
+        creditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createIntent.setClass(TransactionListActivity.this, CreateCreditActivity.class);
+                startActivity(createIntent);
+                menu.toggle();
+            }
+        });
+        menu.setVisibility(View.VISIBLE);
+    }
 
     private class ClearTransaction implements YesNoDialog.DialogClickListener, Handler.Callback {
 
