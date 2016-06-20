@@ -42,7 +42,7 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
 
     @Override
     public void setSubmitButtonAction(Button button) {
-        button.setText(getString(R.string.transaction_edit_save));
+        button.setText(getString(R.string.save));
         button.setOnClickListener(this);
     }
 
