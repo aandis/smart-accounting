@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="7"
             android:hint="@string/purchase.item.name"
+            android:inputType="textCapSentences"
             app:met_floatingLabel="highlight" />
 
         <ImageButton
