@@ -52,12 +52,10 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                 new String[]{
                         AccountingDbHelper.CUSTOMERS_COL_NAME,
                         AccountingDbHelper.CDV_DUE,
-                        AccountingDbHelper.CUSTOMERS_COL_ADDRESS,
-                        AccountingDbHelper.AMOUNT_TYPE},
+                        AccountingDbHelper.CUSTOMERS_COL_ADDRESS},
                 new int[]{R.id.due_customer_name,
                         R.id.customer_due_amount,
-                        R.id.due_customer_address,
-                        R.id.customer_due_type},
+                        R.id.due_customer_address},
                 0);
     }
 
@@ -76,12 +74,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                         AccountingDbHelper.ID,
                         AccountingDbHelper.CUSTOMERS_COL_NAME,
                         AccountingDbHelper.CUSTOMERS_COL_ADDRESS,
-                        "abs(" + AccountingDbHelper.CDV_DUE + ") AS " + AccountingDbHelper.CDV_DUE,
-                        " CASE " +
-                                " WHEN " + AccountingDbHelper.CDV_DUE + " > 0 " + " THEN '" + AccountingDbHelper.AMOUNT_TYPE_DUE + "' " +
-                                " WHEN " + AccountingDbHelper.CDV_DUE + " < 0 " + " THEN '" + AccountingDbHelper.AMOUNT_TYPE_DEBT + "' " +
-                                " END " + AccountingDbHelper.AMOUNT_TYPE
-                },
+                        AccountingDbHelper.CDV_DUE},
                 AccountingDbHelper.CUSTOMERS_COL_NAME + " LIKE ?",
                 new String[]{"%" + query + "%"},
                 AccountingDbHelper.CDV_DUE + " desc ");
