@@ -135,7 +135,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(this, Uri.parse(AccountingProvider.CUSTOMER_CONTENT_URI),
-                null, null, null, AccountingDbHelper.CDV_DUE + " desc ");
+                null, AccountingDbHelper.CDV_DUE + " <> 0",
+                null, AccountingDbHelper.CDV_DUE + " desc ");
     }
 
     @Override
