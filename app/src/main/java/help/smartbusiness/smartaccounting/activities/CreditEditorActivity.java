@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.DateParser;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
@@ -51,7 +52,13 @@ public abstract class CreditEditorActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 super.onDateSet(view, year, month, day);
-                dateTextView.setText(String.format("%d-%d-%d", year, month + 1, day));
+                String date = DateParser.padSqliteDate(
+                        String.format("%d-%d-%d", year, month + 1, day));
+                if (date != null) {
+                    dateTextView.setText(date);
+                } else {
+                    dateTextView.setText(null);
+                }
             }
         };
         newFragment.show(getSupportFragmentManager(), "datePicker");

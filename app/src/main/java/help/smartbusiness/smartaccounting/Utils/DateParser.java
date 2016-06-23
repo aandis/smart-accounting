@@ -9,8 +9,20 @@ import java.util.Date;
  */
 public class DateParser {
 
-    private static final String SQLITE_FORMAT = "yyyy-mm-dd";
-    private static final String NORMAL_FORMAT = "dd-mm-yyyy";
+    private static final String SQLITE_FORMAT = "yyyy-MM-dd";
+    private static final String NORMAL_FORMAT = "dd-MM-yyyy";
+
+    public static String padSqliteDate(String sqliteDatStr) {
+        SimpleDateFormat format = new SimpleDateFormat(SQLITE_FORMAT);
+        String padded;
+        try {
+            padded = format.format(format.parse(sqliteDatStr));
+            return padded;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String fromSqliteDate(String sqliteDateStr) {
         SimpleDateFormat format = new SimpleDateFormat(SQLITE_FORMAT);

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.DateParser;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -112,7 +113,13 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 super.onDateSet(view, year, month, day);
-                purchaseDate.setText(String.format("%d-%d-%d", year, month + 1, day));
+                String date = DateParser.padSqliteDate(
+                        String.format("%d-%d-%d", year, month + 1, day));
+                if (date != null) {
+                    purchaseDate.setText(date);
+                } else {
+                    purchaseDate.setText(null);
+                }
             }
         };
         newFragment.show(getSupportFragmentManager(), "datePicker");
