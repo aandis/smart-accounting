@@ -73,7 +73,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_icon="@drawable/ic_receipt_black_36dp"
             fab:fab_size="mini"
-            fab:fab_title="Create Purchase" />
+            fab:fab_title="@string/purchase.create.label" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/transaction_credit_create_fab"
@@ -83,7 +83,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_icon="@drawable/ic_euro_symbol_black_36dp"
             fab:fab_size="mini"
-            fab:fab_title="Create Credit" />
+            fab:fab_title="@string/credit.create.label" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/transaction_credit_edit_customer"
@@ -93,7 +93,7 @@
             fab:fab_colorPressed="@color/white_pressed"
             fab:fab_icon="@android:drawable/ic_menu_edit"
             fab:fab_size="mini"
-            fab:fab_title="Edit Customer" />
+            fab:fab_title="@string/customer.edit" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
