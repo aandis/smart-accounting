@@ -23,8 +23,8 @@
     <string name="purchase.type.bought">Bought</string>
 
     <string name="credit.create">Create</string>
-    <string name="credit.create.label">Create a credit</string>
-    <string name="credit.create.existing.confirmation">Switch to creating credit for existing customer?</string>
+    <string name="credit.create.label">Create a Transaction</string>
+    <string name="credit.create.existing.confirmation">Switch to creating transaction for existing customer?</string>
     <string name="credit.type.credit">Credit</string>
     <string name="credit.type.debit">Debit</string>
 
