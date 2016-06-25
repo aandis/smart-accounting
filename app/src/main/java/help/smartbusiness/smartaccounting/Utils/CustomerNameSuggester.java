@@ -84,7 +84,9 @@ public class CustomerNameSuggester {
         adapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
-                return cursor.getString(cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_NAME));
+                // Don't change the TextView text when a suggestion is selected.
+                // YesNoDialog takes care of interaction.
+                return mTextView.getText();
             }
         });
         // TODO This currently queries customer due view for getting customer name which is very inefficient. Change to querying only customer table.
