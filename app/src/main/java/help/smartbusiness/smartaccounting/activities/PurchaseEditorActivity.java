@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.DateParser;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -109,19 +107,7 @@ public abstract class PurchaseEditorActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                super.onDateSet(view, year, month, day);
-                String date = DateParser.padSqliteDate(
-                        String.format("%d-%d-%d", year, month + 1, day));
-                if (date != null) {
-                    purchaseDate.setText(date);
-                } else {
-                    purchaseDate.setText(null);
-                }
-            }
-        };
+        DialogFragment newFragment = DatePickerFragment.newInstance(purchaseDate.getId());
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 

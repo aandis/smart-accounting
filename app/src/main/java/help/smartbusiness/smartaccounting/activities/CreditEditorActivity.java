@@ -4,14 +4,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.DateParser;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
@@ -48,19 +46,7 @@ public abstract class CreditEditorActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                super.onDateSet(view, year, month, day);
-                String date = DateParser.padSqliteDate(
-                        String.format("%d-%d-%d", year, month + 1, day));
-                if (date != null) {
-                    dateTextView.setText(date);
-                } else {
-                    dateTextView.setText(null);
-                }
-            }
-        };
+        DialogFragment newFragment = DatePickerFragment.newInstance(dateTextView.getId());
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
