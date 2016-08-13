@@ -42,6 +42,7 @@
     <string name="search.results.empty.message">Nothing found</string>
     <string name="action_export">Backup data</string>
     <string name="action_import">Import data</string>
+    <string name="action_logout">Logout</string>
 
     <string name="notification.backup.backing">Backing up database.</string>
     <string name="notification.backup.done">Backup completed!</string>

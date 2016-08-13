@@ -19,6 +19,7 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
+    public static final String LOGOUT_REQUEST = "logout";
     public static final String ACCOUNTING_PREFERENCES =
             BackupActivity.class.getPackage().getName() + ".preferences";
     public static final String GOOGLE_LOGGED_IN = "logged_in";
@@ -30,15 +31,14 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getPreferences().getBoolean(GOOGLE_LOGGED_IN, false)) {
-            onLoggedIn();
+        if (getIntent().hasExtra(LOGOUT_REQUEST)) {
+            buildDriveClient();
         } else {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_APPFOLDER)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
+            if (getPreferences().getBoolean(GOOGLE_LOGGED_IN, false)) {
+                onLoggedIn();
+            } else {
+                buildDriveClient();
+            }
         }
     }
 
@@ -60,8 +60,15 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        getPreferences().edit().putBoolean(GOOGLE_LOGGED_IN, true).apply();
-        onLoggedIn();
+        SharedPreferences.Editor editor = getPreferences().edit();
+        if (getIntent().getBooleanExtra(LOGOUT_REQUEST, false)) {
+            editor.putBoolean(GOOGLE_LOGGED_IN, false).apply();
+            getIntent().removeExtra(LOGOUT_REQUEST);
+            mGoogleApiClient.clearDefaultAccountAndReconnect();
+        } else {
+            editor.putBoolean(GOOGLE_LOGGED_IN, true).apply();
+            onLoggedIn();
+        }
     }
 
     @Override
@@ -104,5 +111,14 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
     private SharedPreferences getPreferences() {
         return getSharedPreferences(
                 ACCOUNTING_PREFERENCES, MODE_PRIVATE);
+    }
+
+    private void buildDriveClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_APPFOLDER)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
 }

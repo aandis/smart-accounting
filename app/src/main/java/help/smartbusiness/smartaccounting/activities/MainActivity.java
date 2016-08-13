@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
             return true;
         } else if (id == R.id.action_import) {
-            if(AccountingDbHelper.dbEmpty(this)) {
+            if (AccountingDbHelper.dbEmpty(this)) {
                 ImportDbService.startImport(this);
                 Snackbar.make(mListView,
                         R.string.import_start_message,
@@ -127,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         Snackbar.LENGTH_LONG).show();
             }
             return true;
+        } else if (id == R.id.action_logout) {
+            Intent logoutIntent = new Intent(this, BackupActivity.class);
+            logoutIntent.putExtra(BackupActivity.LOGOUT_REQUEST, true);
+            startActivity(logoutIntent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
