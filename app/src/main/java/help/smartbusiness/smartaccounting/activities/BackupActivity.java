@@ -5,7 +5,6 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,7 +14,7 @@ import com.google.android.gms.drive.Drive;
 
 import help.smartbusiness.smartaccounting.R;
 
-public class BackupActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class BackupActivity extends SmartAccountingActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
