@@ -92,6 +92,7 @@ public class BackupActivity extends SmartAccountingActivity implements GoogleApi
         try {
             result.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
         } catch (IntentSender.SendIntentException e) {
+            report(e);
             Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }

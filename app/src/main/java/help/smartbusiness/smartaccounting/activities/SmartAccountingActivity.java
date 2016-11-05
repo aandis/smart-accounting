@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 
 /**
  * Created by gamerboy on 5/11/16.
@@ -20,5 +21,9 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
 
     public void logEvent(String name) {
         mFirebaseAnalytics.logEvent(name, null);
+    }
+
+    public void report(Exception e) {
+        FirebaseCrash.report(e);
     }
 }
