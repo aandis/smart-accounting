@@ -105,6 +105,8 @@ public class BackupActivity extends SmartAccountingActivity implements GoogleApi
                     mGoogleApiClient.connect();
                 } else if (resultCode == RESULT_CANCELED) {
                     finish();
+                } else {
+                    report("Unknown resultcode from signin dialog " + resultCode);
                 }
                 break;
         }

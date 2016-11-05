@@ -26,4 +26,8 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
     public void report(Exception e) {
         FirebaseCrash.report(e);
     }
+
+    public void report(String message) {
+        FirebaseCrash.report(new Exception(message));
+    }
 }
