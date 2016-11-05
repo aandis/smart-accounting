@@ -2,7 +2,6 @@ package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.models.Customer;
 
-public class EditCustomerActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditCustomerActivity extends SmartAccountingActivity implements View.OnClickListener {
 
     private TextView customerId;
     private MaterialEditText customerName, customerAddress;

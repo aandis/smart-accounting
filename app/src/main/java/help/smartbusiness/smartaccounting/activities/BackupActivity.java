@@ -5,7 +5,6 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,7 +14,7 @@ import com.google.android.gms.drive.Drive;
 
 import help.smartbusiness.smartaccounting.R;
 
-public class BackupActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class BackupActivity extends SmartAccountingActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
@@ -93,6 +92,7 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
         try {
             result.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
         } catch (IntentSender.SendIntentException e) {
+            report(e);
             Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }
@@ -103,6 +103,10 @@ public class BackupActivity extends AppCompatActivity implements GoogleApiClient
             case RESOLVE_CONNECTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     mGoogleApiClient.connect();
+                } else if (resultCode == RESULT_CANCELED) {
+                    finish();
+                } else {
+                    report("Unknown resultcode from signin dialog " + resultCode);
                 }
                 break;
         }

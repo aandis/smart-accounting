@@ -1,7 +1,6 @@
 package help.smartbusiness.smartaccounting.activities;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,7 +27,7 @@ import help.smartbusiness.smartaccounting.models.PurchaseItem;
 /**
  * Created by gamerboy on 2/6/16.
  */
-public abstract class PurchaseEditorActivity extends AppCompatActivity {
+public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
 
     public TextView purchaseDate;
     public MaterialEditText purchaseTotal, purchaseRemarks;

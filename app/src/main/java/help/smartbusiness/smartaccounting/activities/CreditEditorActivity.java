@@ -1,7 +1,6 @@
 package help.smartbusiness.smartaccounting.activities;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
@@ -17,7 +16,7 @@ import help.smartbusiness.smartaccounting.models.Credit;
 /**
  * Created by gamerboy on 4/6/16.
  */
-public abstract class CreditEditorActivity extends AppCompatActivity {
+public abstract class CreditEditorActivity extends SmartAccountingActivity {
 
     public TextView dateTextView;
     public MaterialEditText creditAmount, creditRemarks;
