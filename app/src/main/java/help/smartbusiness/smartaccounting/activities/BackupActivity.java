@@ -103,6 +103,8 @@ public class BackupActivity extends SmartAccountingActivity implements GoogleApi
             case RESOLVE_CONNECTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     mGoogleApiClient.connect();
+                } else if (resultCode == RESULT_CANCELED) {
+                    finish();
                 }
                 break;
         }
