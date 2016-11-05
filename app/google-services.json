@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "622358861618",
+    "firebase_url": "https://fast-nexus-133523.firebaseio.com",
+    "project_id": "fast-nexus-133523",
+    "storage_bucket": "fast-nexus-133523.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622358861618:android:d336f2b306f44722",
+        "android_client_info": {
+          "package_name": "help.smartbusiness.smartaccounting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622358861618-phhs5v6s54ll5c6ptiu5hkh2udegjf7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "help.smartbusiness.smartaccounting",
+            "certificate_hash": "9D59D5573B1510CF527730C43400B31BBB5699B8"
+          }
+        },
+        {
+          "client_id": "622358861618-15kjnitthht8cqa12f3dsb14fb12v0h8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "help.smartbusiness.smartaccounting",
+            "certificate_hash": "E4B9A16804F01186E3DB830FA6DCDE5E3E5877A3"
+          }
+        },
+        {
+          "client_id": "622358861618-l6g5sta6a6armtsvt5eqn4a6rk5um4so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhdehLX8gxLwvPRu_9sPoVKReI3p3SWdU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622358861618-l6g5sta6a6armtsvt5eqn4a6rk5um4so.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
