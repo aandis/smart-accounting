@@ -27,7 +27,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
 
     public static final String TAG = AccountingDbHelper.class.getCanonicalName();
     public static final String DATABASE_NAME = "accounting";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public static final String ID = "_id";
 
