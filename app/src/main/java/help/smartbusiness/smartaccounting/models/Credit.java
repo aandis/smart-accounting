@@ -34,9 +34,9 @@ public class Credit extends Transaction {
     private String date;
     private String remarks;
     private CreditType type;
-    private float amount;
+    private long amount;
 
-    public Credit(String date, String remarks, CreditType type, float amount) {
+    public Credit(String date, String remarks, CreditType type, long amount) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;
@@ -50,7 +50,7 @@ public class Credit extends Transaction {
                 cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_REMARKS));
         CreditType type = CreditType.valueOf(cursor.getString(
                 cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_TYPE)).toUpperCase());
-        float amount = cursor.getFloat(cursor.getColumnIndex(
+        long amount = cursor.getLong(cursor.getColumnIndex(
                 AccountingDbHelper.CREDIT_COL_AMOUNT));
         Credit c = new Credit(date, remarks, type, amount);
         c.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
@@ -94,11 +94,11 @@ public class Credit extends Transaction {
         this.remarks = remarks;
     }
 
-    public float getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

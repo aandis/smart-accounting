@@ -41,10 +41,10 @@ public class Purchase extends Transaction {
     private String date;
     private String remarks;
     private PurchaseType type;
-    private float amount;
+    private long amount;
     private List<PurchaseItem> purchaseItems;
 
-    public Purchase(String date, String remarks, PurchaseType type, float amount) {
+    public Purchase(String date, String remarks, PurchaseType type, long amount) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;
@@ -59,7 +59,7 @@ public class Purchase extends Transaction {
                 cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_REMARKS));
         PurchaseType type = PurchaseType.valueOf(cursor.getString(
                 cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)).toUpperCase());
-        float amount = cursor.getFloat(cursor.getColumnIndex(
+        long amount = cursor.getLong(cursor.getColumnIndex(
                 AccountingDbHelper.CPV_AMOUNT));
         Purchase p = new Purchase(date, remarks, type, amount);
         p.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
@@ -90,11 +90,11 @@ public class Purchase extends Transaction {
         this.remarks = remarks;
     }
 
-    public float getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

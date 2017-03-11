@@ -150,7 +150,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
         Purchase purchase = new Purchase(purchaseDate.getText().toString(),
                 purchaseRemarks.getText().toString(),
                 getPurchaseType(),
-                Utils.parseFloat(purchaseTotal.getText().toString()));
+                Utils.parseLong(purchaseTotal.getText().toString()));
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
@@ -158,11 +158,11 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                     .findViewById(R.id.input_purchase_item_id)).getText().toString());
             String name = ((MaterialAutoCompleteTextView) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
-            float quantity = Utils.parseFloat(((MaterialEditText) purchaseItem
+            long quantity = Utils.parseLong(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
-            float rate = Utils.parseFloat(((MaterialEditText) purchaseItem
+            long rate = Utils.parseLong(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_rate)).getText().toString());
-            float amount = Utils.parseFloat(((MaterialEditText) purchaseItem
+            long amount = Utils.parseLong(((MaterialEditText) purchaseItem
                     .findViewById(R.id.input_purchase_item_amount)).getText().toString());
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             item.setId(id);

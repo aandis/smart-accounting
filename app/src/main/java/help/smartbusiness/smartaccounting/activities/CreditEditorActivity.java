@@ -53,7 +53,7 @@ public abstract class CreditEditorActivity extends SmartAccountingActivity {
         return new Credit(dateTextView.getText().toString(),
                 creditRemarks.getText().toString(),
                 getCreditType(),
-                Utils.parseFloat(creditAmount.getText().toString()));
+                Utils.parseLong(creditAmount.getText().toString()));
     }
 
     private Credit.CreditType getCreditType() {
