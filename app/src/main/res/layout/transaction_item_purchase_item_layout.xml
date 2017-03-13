@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <help.smartbusiness.smartaccounting.Utils.DecimalFormatterTextView
                 android:id="@+id/transaction_item_pi_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#FFF" />
 
-            <TextView
+            <help.smartbusiness.smartaccounting.Utils.DecimalFormatterTextView
                 android:id="@+id/transaction_item_pi_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.CurrencyTextView;
+import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -29,6 +30,8 @@ import help.smartbusiness.smartaccounting.models.PurchaseItem;
  * Created by gamerboy on 2/6/16.
  */
 public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
+
+    public static final String TAG = PurchaseEditorActivity.class.getSimpleName();
 
     public TextView purchaseDate;
     public MaterialEditText purchaseTotal, purchaseRemarks;
@@ -113,9 +116,9 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
 
     private void setUpPurchaseItemEditTexts(View parent) {
         setUpPurchaseItemNameAutocompletion(parent);
-        MaterialEditText purchaseItemQuantity = (MaterialEditText)
+        DecimalFormatterEditText purchaseItemQuantity = (DecimalFormatterEditText)
                 parent.findViewById(R.id.input_purchase_item_quantity);
-        MaterialEditText purchaseItemRate = (MaterialEditText)
+        DecimalFormatterEditText purchaseItemRate = (DecimalFormatterEditText)
                 parent.findViewById(R.id.input_purchase_item_rate);
         CurrencyTextView purchaseItemAmount = (CurrencyTextView)
                 parent.findViewById(R.id.input_purchase_item_amount);
@@ -184,11 +187,11 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     }
 
     private class CustomTextWatcher implements TextWatcher {
-        private MaterialEditText mView;
-        private MaterialEditText mOther;
+        private DecimalFormatterEditText mView;
+        private DecimalFormatterEditText mOther;
         private CurrencyTextView mAmount;
 
-        public CustomTextWatcher(MaterialEditText view, MaterialEditText other, CurrencyTextView amount) {
+        public CustomTextWatcher(DecimalFormatterEditText view, DecimalFormatterEditText other, CurrencyTextView amount) {
             mView = view;
             mOther = other;
             mAmount = amount;
@@ -201,21 +204,15 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
         }
 
         public void afterTextChanged(Editable s) {
-            String viewStr = mView.getText().toString();
-            String otherStr = mOther.getText().toString();
-            if (viewStr.length() > 0 && otherStr.length() > 0) {
-                float viewVal = Utils.parseFloat(viewStr);
-                float otherVal = Utils.parseFloat(otherStr);
-                if (viewVal < 0 || otherVal < 0) {
-                    mAmount.setText(null);
-                    return;
-                }
-                float amount = viewVal * otherVal;
-                mAmount.setText(String.valueOf(amount));
-                updateTotal();
-            } else {
-                mAmount.setText("");
+            long viewVal = mView.rawValue();
+            long otherVal = mOther.rawValue();
+            if (viewVal < 0 || otherVal < 0) {
+                mAmount.setText(null);
+                return;
             }
+            long amount = (viewVal * otherVal)/100;
+            mAmount.setText(String.valueOf(amount));
+            updateTotal();
         }
     }
 
