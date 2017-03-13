@@ -12,7 +12,7 @@ import java.util.Locale;
 import help.smartbusiness.smartaccounting.SmartAccounting;
 
 /**
- * Created by abhishekraj on 3/12/17.
+ * Created by gamerboy on 3/12/17.
  * Custom {@link TextView} to display currency stored as long.
  */
 

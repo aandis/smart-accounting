@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 /**
- * Created by abhishekraj on 3/13/17.
+ * Created by gamerboy on 3/13/17.
  */
 
 public class DecimalFormatterEditText extends MaterialEditText {

@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 /**
- * Created by abhishekraj on 3/13/17.
+ * Created by gamerboy on 3/13/17.
  * <p>
  * A custom {@link TextView} to show values stored as long formatted on
  * two decimal places.
