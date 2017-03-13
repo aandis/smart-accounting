@@ -20,6 +20,7 @@ import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
+import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -155,7 +156,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
         Purchase purchase = new Purchase(purchaseDate.getText().toString(),
                 purchaseRemarks.getText().toString(),
                 getPurchaseType(),
-                Utils.parseLong(purchaseTotal.getText().toString()));
+                purchaseTotal.getRawValue());
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
@@ -163,12 +164,12 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                     .findViewById(R.id.input_purchase_item_id)).getText().toString());
             String name = ((MaterialAutoCompleteTextView) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
-            long quantity = Utils.parseLong(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
-            long rate = Utils.parseLong(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_rate)).getText().toString());
-            long amount = Utils.parseLong(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_amount)).getText().toString());
+            long quantity = ((DecimalFormatterEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_quantity)).rawValue();
+            long rate = ((DecimalFormatterEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_rate)).rawValue();
+            long amount = ((IndianCurrencyEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_amount)).getRawValue();
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             item.setId(id);
             purchase.getPurchaseItems().add(item);
