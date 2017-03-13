@@ -3,6 +3,7 @@ package help.smartbusiness.smartaccounting.activities;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -209,7 +210,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
             long viewVal = mView.rawValue();
             long otherVal = mOther.rawValue();
             if (viewVal < 0 || otherVal < 0) {
-                mAmount.setText(null);
+                mAmount.setText("0");
                 return;
             }
             long amount = (viewVal * otherVal) / 100;
