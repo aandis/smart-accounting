@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.CurrencyTextView;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -34,7 +35,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     public Button createPurchaseButton;
     public LinearLayout purchaseItemWrapper, defaultPurchaseItem;
     public RadioGroup purchaseTypeGroup;
-    public Map<Integer, MaterialEditText> totalsEditTexts;
+    public Map<Integer, CurrencyTextView> totalsEditTexts;
 
     public void setUpPurchaseFields() {
         totalsEditTexts = new HashMap<>();
@@ -116,7 +117,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                 parent.findViewById(R.id.input_purchase_item_quantity);
         MaterialEditText purchaseItemRate = (MaterialEditText)
                 parent.findViewById(R.id.input_purchase_item_rate);
-        MaterialEditText purchaseItemAmount = (MaterialEditText)
+        CurrencyTextView purchaseItemAmount = (CurrencyTextView)
                 parent.findViewById(R.id.input_purchase_item_amount);
         totalsEditTexts.put(parent.getId(), purchaseItemAmount);
         purchaseItemQuantity.addTextChangedListener(new CustomTextWatcher(
@@ -135,8 +136,8 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
 
     private void updateTotal() {
         float sum = 0;
-        for (MaterialEditText text : totalsEditTexts.values()) {
-            float total = Utils.parseFloat(text.getText().toString());
+        for (CurrencyTextView text : totalsEditTexts.values()) {
+            float total = Utils.parseLong(text.getText().toString());
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
                 return;
@@ -185,9 +186,9 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     private class CustomTextWatcher implements TextWatcher {
         private MaterialEditText mView;
         private MaterialEditText mOther;
-        private MaterialEditText mAmount;
+        private CurrencyTextView mAmount;
 
-        public CustomTextWatcher(MaterialEditText view, MaterialEditText other, MaterialEditText amount) {
+        public CustomTextWatcher(MaterialEditText view, MaterialEditText other, CurrencyTextView amount) {
             mView = view;
             mOther = other;
             mAmount = amount;
@@ -206,14 +207,14 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                 float viewVal = Utils.parseFloat(viewStr);
                 float otherVal = Utils.parseFloat(otherStr);
                 if (viewVal < 0 || otherVal < 0) {
-                    mAmount.getText().clear();
+                    mAmount.setText(null);
                     return;
                 }
                 float amount = viewVal * otherVal;
                 mAmount.setText(String.valueOf(amount));
                 updateTotal();
             } else {
-                mAmount.getText().clear();
+                mAmount.setText("");
             }
         }
     }

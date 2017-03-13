@@ -45,25 +45,11 @@
             android:layout_alignParentEnd="true"
             android:orientation="vertical">
 
-            <LinearLayout
+            <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+                android:id="@+id/transaction_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:text="@string/Rs"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-                <TextView
-                    android:id="@+id/transaction_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-            </LinearLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <TextView
                 android:id="@+id/transaction_type"

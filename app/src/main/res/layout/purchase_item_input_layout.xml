@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:CurrencyTextBox="http://schemas.android.com/tools"
     android:background="@drawable/border"
     android:orientation="vertical">
 
@@ -64,13 +65,12 @@
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
             android:id="@+id/input_purchase_item_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:enabled="false"
-            android:hint="@string/purchase.item.amount"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#000000" />
     </LinearLayout>
 </LinearLayout>

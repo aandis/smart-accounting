@@ -19,7 +19,7 @@ public class Utils {
         try {
             return Long.parseLong(number);
         } catch (NumberFormatException ex) {
-            return -1l;
+            return -1L;
         }
     }
 
