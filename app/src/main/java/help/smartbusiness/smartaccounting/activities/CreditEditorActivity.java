@@ -28,7 +28,6 @@ public abstract class CreditEditorActivity extends SmartAccountingActivity {
 
     public void setUpCreditFields() {
         creditAmount = (CurrencyEditText) findViewById(R.id.create_credit_amount);
-        creditAmount.setLocale(SmartAccounting.getAppLocale());
         creditRemarks = (MaterialEditText) findViewById(R.id.create_credit_remarks);
         creditTypeGroup = (RadioGroup) findViewById(R.id.create_credit_type_group);
         createCreditButton = (Button) findViewById(R.id.credit_create);

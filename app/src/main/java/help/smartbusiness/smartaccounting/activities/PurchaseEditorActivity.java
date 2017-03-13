@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -18,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.CurrencyTextView;
 import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
@@ -34,15 +34,16 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     public static final String TAG = PurchaseEditorActivity.class.getSimpleName();
 
     public TextView purchaseDate;
-    public MaterialEditText purchaseTotal, purchaseRemarks;
+    public CurrencyEditText purchaseTotal;
+    public MaterialEditText purchaseRemarks;
     public Button createPurchaseButton;
     public LinearLayout purchaseItemWrapper, defaultPurchaseItem;
     public RadioGroup purchaseTypeGroup;
-    public Map<Integer, CurrencyTextView> totalsEditTexts;
+    public Map<Integer, CurrencyEditText> totalsEditTexts;
 
     public void setUpPurchaseFields() {
         totalsEditTexts = new HashMap<>();
-        purchaseTotal = (MaterialEditText) findViewById(R.id.create_purchase_total);
+        purchaseTotal = (CurrencyEditText) findViewById(R.id.create_purchase_total);
         purchaseRemarks = (MaterialEditText) findViewById(R.id.create_purchase_remarks);
         purchaseTypeGroup = (RadioGroup) findViewById(R.id.create_purchase_type_group);
         createPurchaseButton = (Button) findViewById(R.id.purchase_create);
@@ -120,7 +121,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                 parent.findViewById(R.id.input_purchase_item_quantity);
         DecimalFormatterEditText purchaseItemRate = (DecimalFormatterEditText)
                 parent.findViewById(R.id.input_purchase_item_rate);
-        CurrencyTextView purchaseItemAmount = (CurrencyTextView)
+        CurrencyEditText purchaseItemAmount = (CurrencyEditText)
                 parent.findViewById(R.id.input_purchase_item_amount);
         totalsEditTexts.put(parent.getId(), purchaseItemAmount);
         purchaseItemQuantity.addTextChangedListener(new CustomTextWatcher(
@@ -138,9 +139,9 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     }
 
     private void updateTotal() {
-        float sum = 0;
-        for (CurrencyTextView text : totalsEditTexts.values()) {
-            float total = Utils.parseLong(text.getText().toString());
+        long sum = 0;
+        for (CurrencyEditText text : totalsEditTexts.values()) {
+            long total = text.getRawValue();
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
                 return;
@@ -189,9 +190,9 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     private class CustomTextWatcher implements TextWatcher {
         private DecimalFormatterEditText mView;
         private DecimalFormatterEditText mOther;
-        private CurrencyTextView mAmount;
+        private CurrencyEditText mAmount;
 
-        public CustomTextWatcher(DecimalFormatterEditText view, DecimalFormatterEditText other, CurrencyTextView amount) {
+        public CustomTextWatcher(DecimalFormatterEditText view, DecimalFormatterEditText other, CurrencyEditText amount) {
             mView = view;
             mOther = other;
             mAmount = amount;
@@ -210,7 +211,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                 mAmount.setText(null);
                 return;
             }
-            long amount = (viewVal * otherVal)/100;
+            long amount = (viewVal * otherVal) / 100;
             mAmount.setText(String.valueOf(amount));
             updateTotal();
         }

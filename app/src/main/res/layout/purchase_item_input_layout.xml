@@ -65,12 +65,13 @@
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 
-        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+        <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
             android:id="@+id/input_purchase_item_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:enabled="false"
             android:textColor="#000000" />
     </LinearLayout>
 </LinearLayout>

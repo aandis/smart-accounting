@@ -91,12 +91,13 @@
             android:hint="@string/total"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
             android:id="@+id/create_purchase_total"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:enabled="false"
+            android:textColor="#000000"
             android:hint="@string/amount" />
 
     </LinearLayout>
