@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_icon="@drawable/ic_euro_symbol_black_36dp"
+            fab:fab_icon="@drawable/ic_rupee_symbol_black"
             fab:fab_size="mini"
             fab:fab_title="@string/credit.create.label" />
 
