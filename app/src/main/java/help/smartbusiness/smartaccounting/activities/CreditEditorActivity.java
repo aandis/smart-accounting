@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
 
@@ -19,12 +19,13 @@ import help.smartbusiness.smartaccounting.models.Credit;
 public abstract class CreditEditorActivity extends SmartAccountingActivity {
 
     public TextView dateTextView;
-    public MaterialEditText creditAmount, creditRemarks;
+    public IndianCurrencyEditText creditAmount;
+    public MaterialEditText creditRemarks;
     public Button createCreditButton;
     public RadioGroup creditTypeGroup;
 
     public void setUpCreditFields() {
-        creditAmount = (MaterialEditText) findViewById(R.id.create_credit_amount);
+        creditAmount = (IndianCurrencyEditText) findViewById(R.id.create_credit_amount);
         creditRemarks = (MaterialEditText) findViewById(R.id.create_credit_remarks);
         creditTypeGroup = (RadioGroup) findViewById(R.id.create_credit_type_group);
         createCreditButton = (Button) findViewById(R.id.credit_create);
@@ -53,7 +54,7 @@ public abstract class CreditEditorActivity extends SmartAccountingActivity {
         return new Credit(dateTextView.getText().toString(),
                 creditRemarks.getText().toString(),
                 getCreditType(),
-                Utils.parseFloat(creditAmount.getText().toString()));
+                creditAmount.getRawValue());
     }
 
     private Credit.CreditType getCreditType() {

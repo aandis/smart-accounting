@@ -59,13 +59,12 @@
 
     </LinearLayout>
 
-    <com.rengwuxian.materialedittext.MaterialEditText
+    <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
         android:id="@+id/create_credit_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/amount"
-        android:imeOptions="actionNext"
-        android:inputType="numberDecimal" />
+        android:imeOptions="actionNext" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/create_credit_remarks"

@@ -1,16 +1,21 @@
 package help.smartbusiness.smartaccounting.db;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
@@ -22,7 +27,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
 
     public static final String TAG = AccountingDbHelper.class.getCanonicalName();
     public static final String DATABASE_NAME = "accounting";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public static final String ID = "_id";
 
@@ -193,8 +198,11 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
             + ") total_credit "
             + " ON total_dues." + ID + " = " + " total_credit." + ID;
 
+    private Context mContext;
+
     public AccountingDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        this.mContext = context;
     }
 
     @Override
@@ -214,6 +222,8 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_VIEW_TOTAL_CUSTOMER_DEBITS);
 
         sqLiteDatabase.execSQL(CREATE_VIEW_CUSTOMER_DUE);
+
+        onUpgrade(sqLiteDatabase, 1, DATABASE_VERSION);
     }
 
     private void printSql() {
@@ -241,12 +251,20 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP table IF EXISTS " + TABLE_CUSTOMER);
-        sqLiteDatabase.execSQL("DROP table IF EXISTS " + TABLE_PURCHASE);
-        sqLiteDatabase.execSQL("DROP table IF EXISTS " + TABLE_PURCHASE_ITEMS);
-        sqLiteDatabase.execSQL("DROP table IF EXISTS " + TABLE_CREDIT);
-        onCreate(sqLiteDatabase);
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.d(TAG, "Updating table from " + oldVersion + " to " + newVersion);
+        // You will not need to modify this unless you need to do some android specific things.
+        // When upgrading the database, all you need to do is add a file to the assets folder and name it:
+        // from_1_to_2.sql with the version that you are upgrading to as the last version.
+        try {
+            for (int i = oldVersion; i < newVersion; ++i) {
+                String migrationName = String.format("from_%d_to_%d.sql", i, (i + 1));
+                Log.d(TAG, "Looking for migration file: " + migrationName);
+                readAndExecuteSQLScript(sqLiteDatabase, mContext, migrationName);
+            }
+        } catch (Exception exception) {
+            Log.e(TAG, "Exception running upgrade script:", exception);
+        }
     }
 
     /**
@@ -304,4 +322,45 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
         return count == 0;
     }
 
+    private void readAndExecuteSQLScript(SQLiteDatabase db, Context ctx, String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            Log.d(TAG, "SQL script file name is empty");
+            return;
+        }
+
+        Log.d(TAG, "Script found. Executing...");
+        AssetManager assetManager = ctx.getAssets();
+        BufferedReader reader = null;
+
+        try {
+            InputStream is = assetManager.open(fileName);
+            InputStreamReader isr = new InputStreamReader(is);
+            reader = new BufferedReader(isr);
+            executeSQLScript(db, reader);
+        } catch (IOException e) {
+            Log.e(TAG, "IOException:", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "IOException:", e);
+                }
+            }
+        }
+
+    }
+
+    private void executeSQLScript(SQLiteDatabase db, BufferedReader reader) throws IOException {
+        String line;
+        StringBuilder statement = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            statement.append(line);
+            statement.append("\n");
+            if (line.trim().equals(";")) {
+                db.execSQL(statement.toString());
+                statement = new StringBuilder();
+            }
+        }
+    }
 }

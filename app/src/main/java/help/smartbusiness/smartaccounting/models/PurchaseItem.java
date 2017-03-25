@@ -15,11 +15,11 @@ import help.smartbusiness.smartaccounting.db.AccountingProvider;
 public class PurchaseItem {
     private long id;
     private String name;
-    private float quantity;
-    private float rate;
-    private float amount;
+    private long quantity;
+    private long rate;
+    private long amount;
 
-    public PurchaseItem(String name, float quantity, float rate, float amount) {
+    public PurchaseItem(String name, long quantity, long rate, long amount) {
         this.name = name;
         this.quantity = quantity;
         this.rate = rate;
@@ -28,9 +28,9 @@ public class PurchaseItem {
 
     public static PurchaseItem fromCursor(Cursor cursor) {
         String name = cursor.getString(cursor.getColumnIndex(AccountingDbHelper.PI_COL_NAME));
-        float quantity = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_QUANTITY));
-        float rate = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_RATE));
-        float amount = cursor.getFloat(cursor.getColumnIndex(AccountingDbHelper.PI_COL_AMOUNT));
+        long quantity = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.PI_COL_QUANTITY));
+        long rate = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.PI_COL_RATE));
+        long amount = cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.PI_COL_AMOUNT));
         PurchaseItem pi = new PurchaseItem(name, quantity, rate, amount);
         pi.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
         return pi;
@@ -44,27 +44,27 @@ public class PurchaseItem {
         this.name = name;
     }
 
-    public float getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 
-    public float getRate() {
+    public long getRate() {
         return rate;
     }
 
-    public void setRate(float rate) {
+    public void setRate(long rate) {
         this.rate = rate;
     }
 
-    public float getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

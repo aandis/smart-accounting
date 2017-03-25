@@ -16,7 +16,7 @@ public class Customer {
     private long id;
     private String name;
     private String address;
-    private float due;
+    private long due;
 
     public Customer(long id, String name, String address) {
         this.id = id;
@@ -31,7 +31,7 @@ public class Customer {
                 cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_NAME));
         String address = cursor.getString(
                 cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_ADDRESS));
-        float due = cursor.getFloat(
+        long due = cursor.getLong(
                 cursor.getColumnIndex(AccountingDbHelper.CDV_DUE));
         Customer customer = new Customer(id, name, address);
         customer.setDue(due);
@@ -99,11 +99,11 @@ public class Customer {
         return id > 0;
     }
 
-    public float getDue() {
+    public long getDue() {
         return due;
     }
 
-    public void setDue(float due) {
+    public void setDue(long due) {
         this.due = due;
     }
 

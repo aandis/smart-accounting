@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
+import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
@@ -29,16 +31,19 @@ import help.smartbusiness.smartaccounting.models.PurchaseItem;
  */
 public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
 
+    public static final String TAG = PurchaseEditorActivity.class.getSimpleName();
+
     public TextView purchaseDate;
-    public MaterialEditText purchaseTotal, purchaseRemarks;
+    public IndianCurrencyEditText purchaseTotal;
+    public MaterialEditText purchaseRemarks;
     public Button createPurchaseButton;
     public LinearLayout purchaseItemWrapper, defaultPurchaseItem;
     public RadioGroup purchaseTypeGroup;
-    public Map<Integer, MaterialEditText> totalsEditTexts;
+    public Map<Integer, IndianCurrencyEditText> totalsEditTexts;
 
     public void setUpPurchaseFields() {
         totalsEditTexts = new HashMap<>();
-        purchaseTotal = (MaterialEditText) findViewById(R.id.create_purchase_total);
+        purchaseTotal = (IndianCurrencyEditText) findViewById(R.id.create_purchase_total);
         purchaseRemarks = (MaterialEditText) findViewById(R.id.create_purchase_remarks);
         purchaseTypeGroup = (RadioGroup) findViewById(R.id.create_purchase_type_group);
         createPurchaseButton = (Button) findViewById(R.id.purchase_create);
@@ -112,11 +117,11 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
 
     private void setUpPurchaseItemEditTexts(View parent) {
         setUpPurchaseItemNameAutocompletion(parent);
-        MaterialEditText purchaseItemQuantity = (MaterialEditText)
+        DecimalFormatterEditText purchaseItemQuantity = (DecimalFormatterEditText)
                 parent.findViewById(R.id.input_purchase_item_quantity);
-        MaterialEditText purchaseItemRate = (MaterialEditText)
+        DecimalFormatterEditText purchaseItemRate = (DecimalFormatterEditText)
                 parent.findViewById(R.id.input_purchase_item_rate);
-        MaterialEditText purchaseItemAmount = (MaterialEditText)
+        IndianCurrencyEditText purchaseItemAmount = (IndianCurrencyEditText)
                 parent.findViewById(R.id.input_purchase_item_amount);
         totalsEditTexts.put(parent.getId(), purchaseItemAmount);
         purchaseItemQuantity.addTextChangedListener(new CustomTextWatcher(
@@ -134,9 +139,9 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     }
 
     private void updateTotal() {
-        float sum = 0;
-        for (MaterialEditText text : totalsEditTexts.values()) {
-            float total = Utils.parseFloat(text.getText().toString());
+        long sum = 0;
+        for (IndianCurrencyEditText text : totalsEditTexts.values()) {
+            long total = text.getRawValue();
             if (total < 0) {
                 // One of the edit text has an invalid number which shouldn't happen.
                 return;
@@ -150,7 +155,7 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
         Purchase purchase = new Purchase(purchaseDate.getText().toString(),
                 purchaseRemarks.getText().toString(),
                 getPurchaseType(),
-                Utils.parseFloat(purchaseTotal.getText().toString()));
+                purchaseTotal.getRawValue());
 
         for (int i = 0; i < purchaseItemWrapper.getChildCount(); i++) {
             LinearLayout purchaseItem = (LinearLayout) purchaseItemWrapper.getChildAt(i);
@@ -158,12 +163,12 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
                     .findViewById(R.id.input_purchase_item_id)).getText().toString());
             String name = ((MaterialAutoCompleteTextView) purchaseItem
                     .findViewById(R.id.input_purchase_item_name)).getText().toString();
-            float quantity = Utils.parseFloat(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_quantity)).getText().toString());
-            float rate = Utils.parseFloat(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_rate)).getText().toString());
-            float amount = Utils.parseFloat(((MaterialEditText) purchaseItem
-                    .findViewById(R.id.input_purchase_item_amount)).getText().toString());
+            long quantity = ((DecimalFormatterEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_quantity)).rawValue();
+            long rate = ((DecimalFormatterEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_rate)).rawValue();
+            long amount = ((IndianCurrencyEditText) purchaseItem
+                    .findViewById(R.id.input_purchase_item_amount)).getRawValue();
             PurchaseItem item = new PurchaseItem(name, quantity, rate, amount);
             item.setId(id);
             purchase.getPurchaseItems().add(item);
@@ -183,11 +188,11 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
     }
 
     private class CustomTextWatcher implements TextWatcher {
-        private MaterialEditText mView;
-        private MaterialEditText mOther;
-        private MaterialEditText mAmount;
+        private DecimalFormatterEditText mView;
+        private DecimalFormatterEditText mOther;
+        private IndianCurrencyEditText mAmount;
 
-        public CustomTextWatcher(MaterialEditText view, MaterialEditText other, MaterialEditText amount) {
+        public CustomTextWatcher(DecimalFormatterEditText view, DecimalFormatterEditText other, IndianCurrencyEditText amount) {
             mView = view;
             mOther = other;
             mAmount = amount;
@@ -200,21 +205,15 @@ public abstract class PurchaseEditorActivity extends SmartAccountingActivity {
         }
 
         public void afterTextChanged(Editable s) {
-            String viewStr = mView.getText().toString();
-            String otherStr = mOther.getText().toString();
-            if (viewStr.length() > 0 && otherStr.length() > 0) {
-                float viewVal = Utils.parseFloat(viewStr);
-                float otherVal = Utils.parseFloat(otherStr);
-                if (viewVal < 0 || otherVal < 0) {
-                    mAmount.getText().clear();
-                    return;
-                }
-                float amount = viewVal * otherVal;
-                mAmount.setText(String.valueOf(amount));
-                updateTotal();
-            } else {
-                mAmount.getText().clear();
+            long viewVal = mView.rawValue();
+            long otherVal = mOther.rawValue();
+            if (viewVal < 0 || otherVal < 0) {
+                mAmount.setText("0");
+                return;
             }
+            long amount = (viewVal * otherVal) / 100;
+            mAmount.setText(String.valueOf(amount));
+            updateTotal();
         }
     }
 

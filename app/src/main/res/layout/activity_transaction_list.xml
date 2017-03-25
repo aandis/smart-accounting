@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,26 +19,12 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="help.smartbusiness.smartaccounting.activities.TransactionListActivity">
 
-        <LinearLayout
+        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+            android:id="@+id/total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/Rs"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <TextView
-                android:id="@+id/total_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        </LinearLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <ExpandableListView
             android:id="@+id/transactions_list"
@@ -81,7 +67,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
             fab:fab_colorPressed="@color/white_pressed"
-            fab:fab_icon="@drawable/ic_euro_symbol_black_36dp"
+            fab:fab_icon="@drawable/ic_rupee_symbol_black"
             fab:fab_size="mini"
             fab:fab_title="@string/credit.create.label" />
 
