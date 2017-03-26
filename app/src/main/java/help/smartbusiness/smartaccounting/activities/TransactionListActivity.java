@@ -163,6 +163,7 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
         intent.putExtra(CustomerNameSuggester.CUSTOMER_ID, customer.getId());
         intent.putExtra(CustomerNameSuggester.CUSTOMER_NAME, customer.getName());
         intent.putExtra(CustomerNameSuggester.CUSTOMER_ADDRESS, customer.getAddress());
+        intent.putExtra(CustomerNameSuggester.CUSTOMER_DUE, customer.getDue());
 
         final FloatingActionsMenu menu = (FloatingActionsMenu)
                 findViewById(R.id.transaction_create_fab_menu);

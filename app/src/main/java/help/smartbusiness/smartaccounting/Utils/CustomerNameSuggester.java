@@ -16,6 +16,7 @@ import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;
+import help.smartbusiness.smartaccounting.models.Customer;
 
 /**
  * Created by gamerboy on 31/5/16.
@@ -37,6 +38,7 @@ public class CustomerNameSuggester {
     public static final String CUSTOMER_ID = "_id";
     public static final String CUSTOMER_NAME = "customer_name";
     public static final String CUSTOMER_ADDRESS = "customer_address";
+    public static final String CUSTOMER_DUE = "customer_due";
 
     public void initSuggestions(final String alertMessage, final Class<?> launchClass) {
         final AppCompatActivity activity = (AppCompatActivity) mContext;
@@ -52,16 +54,12 @@ public class CustomerNameSuggester {
                     @Override
                     public void onYesClick() {
                         Cursor cursor = (Cursor) adapter.getItem(i);
-                        long existingCustomerId = cursor.getLong(
-                                cursor.getColumnIndex(AccountingDbHelper.ID));
-                        String existingCustomerName = cursor.getString(
-                                cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_NAME));
-                        String existingCustomerAddress = cursor.getString(
-                                cursor.getColumnIndex(AccountingDbHelper.CUSTOMERS_COL_ADDRESS));
+                        Customer existingCustomer = Customer.fromCursor(cursor);
                         Intent intent = new Intent(view.getContext(), launchClass);
-                        intent.putExtra(CUSTOMER_ID, existingCustomerId);
-                        intent.putExtra(CUSTOMER_NAME, existingCustomerName);
-                        intent.putExtra(CUSTOMER_ADDRESS, existingCustomerAddress);
+                        intent.putExtra(CUSTOMER_ID, existingCustomer.getId());
+                        intent.putExtra(CUSTOMER_NAME, existingCustomer.getName());
+                        intent.putExtra(CUSTOMER_ADDRESS, existingCustomer.getAddress());
+                        intent.putExtra(CUSTOMER_DUE, existingCustomer.getDue());
                         activity.startActivity(intent);
                         activity.finish();
                     }

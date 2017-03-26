@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartAccounting.iml" filepath="$PROJECT_DIR$/SmartAccounting.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smart-accounting.iml" filepath="$PROJECT_DIR$/smart-accounting.iml" />
     </modules>
   </component>
 </project>
