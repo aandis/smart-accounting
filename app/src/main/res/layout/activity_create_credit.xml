@@ -37,6 +37,14 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             app:met_floatingLabel="highlight" />
+
+        <help.smartbusiness.smartaccounting.Utils.MaterialIndianCurrencyEditText
+            android:id="@+id/create_credit_customer_total_due"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/customer.total.due"
+            android:enabled="false"
+            app:met_floatingLabel="highlight" />
     </LinearLayout>
 
     <include layout="@layout/credit_editor_layout" />

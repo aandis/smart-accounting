@@ -11,6 +11,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
+import help.smartbusiness.smartaccounting.Utils.MaterialIndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.Utils.Utils;
 import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
@@ -22,6 +23,7 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
     private TextView customerId;
     private MaterialAutoCompleteTextView customerName;
     private MaterialEditText customerAddress;
+    private MaterialIndianCurrencyEditText customerTotalDue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,17 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
         customerId = (TextView) findViewById(R.id.create_purchase_customer_id);
         customerName = (MaterialAutoCompleteTextView) findViewById(R.id.create_purchase_customer_name);
         customerAddress = (MaterialEditText) findViewById(R.id.create_purchase_customer_address);
+        customerTotalDue = (MaterialIndianCurrencyEditText) findViewById(R.id.create_purchase_customer_total_due);
         Intent intent = getIntent();
         if (intent.hasExtra(CustomerNameSuggester.CUSTOMER_ID)) {
+            // Creating for existing customer.
             fillCustomerFields(intent);
         } else {
+            // Creating for a new customer.
             CustomerNameSuggester suggester = new CustomerNameSuggester(this, customerName);
             suggester.initSuggestions(getString(R.string.purchase_create_existing_confirmation),
                     CreatePurchase.class);
+            customerTotalDue.setVisibility(View.GONE);
         }
     }
 
@@ -51,6 +57,7 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
         customerName.setEnabled(false);
         customerAddress.setText(intent.getStringExtra(CustomerNameSuggester.CUSTOMER_ADDRESS));
         customerAddress.setEnabled(false);
+        customerTotalDue.setText(String.valueOf(intent.getLongExtra(CustomerNameSuggester.CUSTOMER_DUE, -1L)));
     }
 
     @Override

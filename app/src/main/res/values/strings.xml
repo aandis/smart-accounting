@@ -8,6 +8,7 @@
 
     <string name="customer.name">Customer name</string>
     <string name="customer.address">Customer address</string>
+    <string name="customer.total.due">Total Due</string>
 
     <string name="date">Date</string>
     <string name="date.image.description">Calendar</string>
