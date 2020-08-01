@@ -3,9 +3,9 @@ package help.smartbusiness.smartaccounting.activities;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import androidx.core.app.LoaderManager;
+import androidx.core.content.CursorLoader;
+import androidx.core.content.Loader;
 import android.view.View;
 import android.widget.Button;
 

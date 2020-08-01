@@ -1,6 +1,6 @@
 package help.smartbusiness.smartaccounting.activities;
 
-import android.support.v4.app.DialogFragment;
+import androidx.core.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
