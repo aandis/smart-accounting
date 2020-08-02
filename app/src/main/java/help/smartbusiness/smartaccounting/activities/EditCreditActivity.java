@@ -3,11 +3,12 @@ package help.smartbusiness.smartaccounting.activities;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.core.app.LoaderManager;
-import androidx.core.content.CursorLoader;
-import androidx.core.content.Loader;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.Utils;

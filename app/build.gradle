@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "help.smartbusiness.smartaccounting"
@@ -24,21 +24,22 @@ repositories{
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'androidx.appcompat:appcompat:1.0.0'
-    compile 'com.google.android.material:material:1.0.0'
-    compile 'com.google.android.gms:play-services-drive:9.8.0'
-    compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'androidx.cardview:cardview:1.0.0'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.gms:play-services-drive:17.0.0'
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 
     // Notifications
-    compile 'com.github.halysongoncalves:pugnotification:1.8.1'
-    compile 'com.google.firebase:firebase-crash:9.8.0'
-    compile 'com.google.firebase:firebase-core:9.8.0'
+    implementation 'com.github.halysongoncalves:pugnotification:1.8.1'
+    implementation 'com.google.firebase:firebase-crash:16.2.1'
+    implementation 'com.google.firebase:firebase-core:17.4.4'
 
-    compile 'com.github.BlacKCaT27:CurrencyEditText:v1.4.4'
+    implementation 'com.github.BlacKCaT27:CurrencyEditText:v1.4.4'
 }
 
 apply plugin: 'com.google.gms.google-services'

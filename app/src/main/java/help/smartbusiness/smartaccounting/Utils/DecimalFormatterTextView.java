@@ -2,16 +2,17 @@ package help.smartbusiness.smartaccounting.Utils;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * Created by gamerboy on 3/13/17.
  * <p>
- * A custom {@link TextView} to show values stored as long formatted on
+ * A custom {@link AppCompatTextView} to show values stored as long formatted on
  * two decimal places.
  */
 
-public class DecimalFormatterTextView extends TextView {
+public class DecimalFormatterTextView extends AppCompatTextView {
 
     public DecimalFormatterTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
