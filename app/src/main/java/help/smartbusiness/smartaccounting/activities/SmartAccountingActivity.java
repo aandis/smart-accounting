@@ -24,6 +24,12 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
         mFirebaseAnalytics.logEvent(name, null);
     }
 
+    public void logEvent(String name, String key, String value) {
+        Bundle data = new Bundle();
+        data.putString(key, value);
+        mFirebaseAnalytics.logEvent(name, data);
+    }
+
     public void report(Exception e) {
         FirebaseCrash.report(e);
     }

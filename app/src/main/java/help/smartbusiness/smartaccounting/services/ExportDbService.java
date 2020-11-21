@@ -1,23 +1,33 @@
 package help.smartbusiness.smartaccounting.services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.Task;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Objects;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import help.smartbusiness.smartaccounting.R;
+import help.smartbusiness.smartaccounting.Utils.DriverServicesHelper;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
-import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
-import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
 /**
@@ -65,65 +75,93 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
     }
 
     private void exportDbToDrive() {
-        SynchronousDrive drive = new SynchronousDrive(this, this);
+        DriverServicesHelper drive = getDriveHelper();
         File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
         String mime = DbOperation.MIME_TYPE;
         String driveId;
-        try {
-            driveId = drive.uploadFile(file, mime);
-            if (driveId != null) {
-                Log.d(TAG, "Uploaded file with id " + driveId);
-                notificateSuccess();
-            } else {
-                notificateFailed();
-            }
-        } finally {
-            drive.disconnect();
+        driveId = drive.uploadFile(file, mime);
+        if (driveId != null) {
+            Log.d(TAG, "Uploaded file with id " + driveId);
+            notificateSuccess();
+        } else {
+            Log.d(TAG, "is null");
+            notificateFailed();
         }
     }
 
-    private void updateNotificationProgress(int progress) {
-        PugNotification.with(this)
-                .load()
-                .identifier(R.id.export_notify_id)
-                .ongoing(true)
-                .title(R.string.notification_backup_backing)
-                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
-                .progress()
-                .value(progress, 2, false)
+    private GoogleSignInOptions getGoogleSignInOptions() {
+        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
                 .build();
+    }
+
+    private DriverServicesHelper getDriveHelper() {
+        DriverServicesHelper helper = null;
+
+        GoogleSignInClient client = GoogleSignIn.getClient(this, getGoogleSignInOptions());
+        GoogleSignInAccount signInAccountTask = GoogleSignIn.getLastSignedInAccount(this);
+        if (signInAccountTask != null) {
+            Log.d(TAG, signInAccountTask.getEmail());
+            GoogleAccountCredential credential =
+                    GoogleAccountCredential.usingOAuth2(
+                            this, Collections.singleton(DriveScopes.DRIVE_APPDATA)
+                    );
+            credential.setSelectedAccount(Objects.requireNonNull(signInAccountTask).getAccount());
+            Drive googleDriveService = new Drive.Builder(
+                AndroidHttp.newCompatibleTransport(),
+                new GsonFactory(),
+                credential
+            )
+            .setApplicationName(getResources().getString(R.string.app_name))
+            .build();
+            helper = new DriverServicesHelper(googleDriveService);
+        }
+        return helper;
+    }
+
+    private void updateNotificationProgress(int progress) {
+//        PugNotification.with(this)
+//                .load()
+//                .identifier(R.id.export_notify_id)
+//                .ongoing(true)
+//                .title(R.string.notification_backup_backing)
+//                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
+//                .progress()
+//                .value(progress, 2, false)
+//                .build();
     }
 
     private void notificateSuccess() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .title(R.string.notification_backup_done)
-                .autoCancel(true)
-                .message(R.string.notification_backup_done_assure)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+//        PugNotification.with(this)
+//                .load()
+//                .title(R.string.notification_backup_done)
+//                .autoCancel(true)
+//                .message(R.string.notification_backup_done_assure)
+//                .smallIcon(R.drawable.pugnotification_ic_launcher)
+//                .flags(Notification.DEFAULT_ALL)
+//                .simple()
+//                .build();
     }
 
     private void notificateFailed() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .click(BackupActivity.class, null)
-                .title(R.string.notification_backup_failed)
-                .message(R.string.notification_backup_failed_detail)
-                .bigTextStyle(R.string.notification_backup_failed_detail_full)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+//        PugNotification.with(this)
+//                .load()
+//                .click(BackupActivity.class, null)
+//                .title(R.string.notification_backup_failed)
+//                .message(R.string.notification_backup_failed_detail)
+//                .bigTextStyle(R.string.notification_backup_failed_detail_full)
+//                .smallIcon(R.drawable.pugnotification_ic_launcher)
+//                .flags(Notification.DEFAULT_ALL)
+//                .simple()
+//                .build();
     }
 
     private void cancelProgress() {
-        PugNotification.with(this)
-                .cancel(R.id.export_notify_id);
+//        PugNotification.with(this)
+//                .cancel(R.id.export_notify_id);
     }
 
     @Override

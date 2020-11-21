@@ -1,37 +1,32 @@
 package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.api.services.drive.DriveScopes;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-
-import help.smartbusiness.smartaccounting.R;
-
-public class BackupActivity extends SmartAccountingActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class BackupActivity extends SmartAccountingActivity {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
+
     public static final String LOGOUT_REQUEST = "logout";
+    public static final String GOOGLE_LOGGED_IN = "logged_in";
     public static final String ACCOUNTING_PREFERENCES =
             BackupActivity.class.getPackage().getName() + ".preferences";
-    public static final String GOOGLE_LOGGED_IN = "logged_in";
 
-    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 10;
-
-    private GoogleApiClient mGoogleApiClient;
+    private static final int REQUEST_CODE_SIGN_IN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent().hasExtra(LOGOUT_REQUEST)) {
+            logoutUser();
             buildDriveClient();
         } else {
             if (getPreferences().getBoolean(GOOGLE_LOGGED_IN, false)) {
@@ -42,69 +37,36 @@ public class BackupActivity extends SmartAccountingActivity implements GoogleApi
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        if (getIntent().getBooleanExtra(LOGOUT_REQUEST, false)) {
-            editor.putBoolean(GOOGLE_LOGGED_IN, false).apply();
-            getIntent().removeExtra(LOGOUT_REQUEST);
-            mGoogleApiClient.clearDefaultAccountAndReconnect();
-        } else {
-            editor.putBoolean(GOOGLE_LOGGED_IN, true).apply();
-            onLoggedIn();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
     private void onLoggedIn() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult result) {
-        setContentView(R.layout.activity_backup);
-        if (!result.hasResolution()) {
-            // show the localized error dialog.
-            GoogleApiAvailability.getInstance().getErrorDialog(this,
-                    result.getErrorCode(),
-                    0).show();
-            return;
-        }
-        try {
-            result.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
-        } catch (IntentSender.SendIntentException e) {
-            report(e);
-            Log.e(TAG, "Exception while starting resolution activity", e);
-        }
-    }
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult result) {
+//        setContentView(R.layout.activity_backup);
+//        if (!result.hasResolution()) {
+//            // show the localized error dialog.
+//            GoogleApiAvailability.getInstance().getErrorDialog(this,
+//                    result.getErrorCode(),
+//                    0).show();
+//            return;
+//        }
+//        try {
+//            result.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
+//        } catch (IntentSender.SendIntentException e) {
+//            report(e);
+//            Log.e(TAG, "Exception while starting resolution activity", e);
+//        }
+//    }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
         switch (requestCode) {
-            case RESOLVE_CONNECTION_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    mGoogleApiClient.connect();
+            case REQUEST_CODE_SIGN_IN:
+                if (resultCode == RESULT_OK && resultData != null) {
+                    handleSignInResult(resultData);
                 } else if (resultCode == RESULT_CANCELED) {
                     finish();
                 } else {
@@ -114,17 +76,41 @@ public class BackupActivity extends SmartAccountingActivity implements GoogleApi
         }
     }
 
+    private void handleSignInResult(Intent result) {
+        GoogleSignIn.getSignedInAccountFromIntent(result)
+            .addOnSuccessListener(googleAccount -> {
+                Log.d(TAG, "Signed in as " + googleAccount.getEmail());
+                logEvent("app_login", "email", googleAccount.getEmail());
+
+                SharedPreferences.Editor editor = getPreferences().edit();
+                editor.putBoolean(GOOGLE_LOGGED_IN, true).apply();
+                onLoggedIn();
+            })
+//        .addOnFailureListener() TODO
+        ;
+    }
+
     private SharedPreferences getPreferences() {
-        return getSharedPreferences(
-                ACCOUNTING_PREFERENCES, MODE_PRIVATE);
+        return getSharedPreferences(ACCOUNTING_PREFERENCES, MODE_PRIVATE);
+    }
+
+    private void logoutUser() {
+        GoogleSignInClient client = GoogleSignIn.getClient(this, getGoogleSignInOptions());
+        client.signOut();
+
+        getPreferences().edit().putBoolean(GOOGLE_LOGGED_IN, false).apply();
+        getIntent().removeExtra(LOGOUT_REQUEST);
     }
 
     private void buildDriveClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_APPFOLDER)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        GoogleSignInClient client = GoogleSignIn.getClient(this, getGoogleSignInOptions());
+        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    }
+
+    private GoogleSignInOptions getGoogleSignInOptions() {
+        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
+                        .build();
     }
 }
