@@ -1,24 +1,19 @@
 package help.smartbusiness.smartaccounting.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
-import com.google.api.services.drive.DriveScopes;
+
+import help.smartbusiness.smartaccounting.Utils.AuthHelper;
+import help.smartbusiness.smartaccounting.Utils.GoogleHelper;
 
 public class BackupActivity extends SmartAccountingActivity {
 
     public static final String TAG = BackupActivity.class.getSimpleName();
 
     public static final String LOGOUT_REQUEST = "logout";
-    public static final String GOOGLE_LOGGED_IN = "logged_in";
-    public static final String ACCOUNTING_PREFERENCES =
-            BackupActivity.class.getPackage().getName() + ".preferences";
 
     private static final int REQUEST_CODE_SIGN_IN = 1;
 
@@ -27,12 +22,12 @@ public class BackupActivity extends SmartAccountingActivity {
         super.onCreate(savedInstanceState);
         if (getIntent().hasExtra(LOGOUT_REQUEST)) {
             logoutUser();
-            buildDriveClient();
+            requestSignIn();
         } else {
-            if (getPreferences().getBoolean(GOOGLE_LOGGED_IN, false)) {
+            if (AuthHelper.isSignedIn(this)) {
                 onLoggedIn();
             } else {
-                buildDriveClient();
+                requestSignIn();
             }
         }
     }
@@ -79,38 +74,21 @@ public class BackupActivity extends SmartAccountingActivity {
     private void handleSignInResult(Intent result) {
         GoogleSignIn.getSignedInAccountFromIntent(result)
             .addOnSuccessListener(googleAccount -> {
-                Log.d(TAG, "Signed in as " + googleAccount.getEmail());
                 logEvent("app_login", "email", googleAccount.getEmail());
-
-                SharedPreferences.Editor editor = getPreferences().edit();
-                editor.putBoolean(GOOGLE_LOGGED_IN, true).apply();
+                AuthHelper.signInUser(this);
                 onLoggedIn();
             })
 //        .addOnFailureListener() TODO
         ;
     }
 
-    private SharedPreferences getPreferences() {
-        return getSharedPreferences(ACCOUNTING_PREFERENCES, MODE_PRIVATE);
-    }
-
     private void logoutUser() {
-        GoogleSignInClient client = GoogleSignIn.getClient(this, getGoogleSignInOptions());
-        client.signOut();
-
-        getPreferences().edit().putBoolean(GOOGLE_LOGGED_IN, false).apply();
+        AuthHelper.signOutUser(this);
         getIntent().removeExtra(LOGOUT_REQUEST);
     }
 
-    private void buildDriveClient() {
-        GoogleSignInClient client = GoogleSignIn.getClient(this, getGoogleSignInOptions());
+    private void requestSignIn() {
+        GoogleSignInClient client = GoogleHelper.getSignInClient(this);
         startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
-
-    private GoogleSignInOptions getGoogleSignInOptions() {
-        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
-                        .build();
     }
 }

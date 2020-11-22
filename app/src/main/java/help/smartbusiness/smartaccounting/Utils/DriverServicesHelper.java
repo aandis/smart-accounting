@@ -1,7 +1,5 @@
 package help.smartbusiness.smartaccounting.Utils;
 
-import android.util.Log;
-
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -18,7 +16,7 @@ import java.util.List;
  * file picker UI via Storage Access Framework.
  */
 public class DriverServicesHelper {
-    public static final String TAG = DriverServicesHelper.class.getCanonicalName();
+    public static final String TAG = DriverServicesHelper.class.getSimpleName();
     private final Drive mDriveService;
 
     public DriverServicesHelper(Drive driveService) {
@@ -39,29 +37,12 @@ public class DriverServicesHelper {
             File googleFile = mDriveService.files().create(metadata, fileContent).execute();
             return googleFile.getId();
         } catch (IOException ignored) {
-            Log.d(TAG, ignored.toString());
         }
         return null;
     }
 
     public String searchLatest(String title, String mime) {
-        FileList files1 = null;
-        try {
-            files1 = mDriveService.files().list()
-                    .setSpaces("appDataFolder")
-                    .setFields("nextPageToken, files(id, name, modifiedTime)")
-                    .setPageSize(10)
-                    .execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (File file : files1.getFiles()) {
-            System.out.printf("Found file: %s (%s) %s\n",
-                    file.getName(), file.getId(), file.getModifiedTime());
-        }
-
         String query = String.format("name = '%s' and mimeType = '%s'", title, mime);
-        Log.d(TAG, query);
         try {
             FileList result = mDriveService.files().list()
                     .setSpaces("appDataFolder")
@@ -78,7 +59,7 @@ public class DriverServicesHelper {
         return null;
     }
 
-    public boolean downloadFile(String driveId, String mime, java.io.File inFile) {
+    public boolean downloadFile(String driveId, java.io.File inFile) {
         try {
             OutputStream outputStream = new FileOutputStream(inFile);
             mDriveService.files().get(driveId).executeMediaAndDownloadTo(outputStream);
@@ -86,7 +67,7 @@ public class DriverServicesHelper {
             outputStream.close();
             return true;
         } catch (IOException ignored) {
-            throw new RuntimeException(ignored);
         }
+        return false;
     }
 }
