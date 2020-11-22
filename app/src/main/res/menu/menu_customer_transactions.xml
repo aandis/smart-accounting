@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.TransactionListActivity">
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/outline_filter_alt_white_48"
+        android:title="@string/action_filter"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+</menu>

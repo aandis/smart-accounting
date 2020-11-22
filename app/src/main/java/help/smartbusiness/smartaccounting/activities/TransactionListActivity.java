@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -57,6 +58,12 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
             mListView.setOnItemLongClickListener(this);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_customer_transactions, menu);
+        return true;
     }
 
     private SimpleCursorTreeAdapter getListViewAdapter() {
