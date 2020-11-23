@@ -7,10 +7,13 @@ import android.util.Log;
 
 import java.io.File;
 
+import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.AuthHelper;
 import help.smartbusiness.smartaccounting.Utils.DriverServicesHelper;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
 import help.smartbusiness.smartaccounting.Utils.GoogleHelper;
+import help.smartbusiness.smartaccounting.Utils.NotificationHelper;
+import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
 /**
@@ -51,13 +54,18 @@ public class ExportDbService extends IntentService {
         boolean exportedToLocal = operation.exportDbToLocal(this);
         if (exportedToLocal) {
             updateNotificationProgress(1); // 1/2
-            exportDbToDrive();
+            boolean exportedToDrive = exportDbToDrive();
+            if (exportedToDrive) {
+                notificateSuccess();
+            } else {
+                notificateFailed();
+            }
         } else {
             notificateFailed();
         }
     }
 
-    private void exportDbToDrive() {
+    private boolean exportDbToDrive() {
         DriverServicesHelper drive = GoogleHelper.getDriveHelper(this);
         if (drive != null) {
             File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
@@ -65,15 +73,15 @@ public class ExportDbService extends IntentService {
             String driveId = drive.uploadFile(file, mime);
             if (driveId != null) {
                 Log.d(TAG, "Uploaded file with id " + driveId);
-                notificateSuccess();
+                return true;
             } else {
                 Log.d(TAG, "Couldn't backup!");
-                notificateFailed();
+                return false;
             }
         } else {
             Log.d(TAG, "Driver helper null, signing out user.");
             AuthHelper.signOutUser(this);
-            // TODO Add signin notification.
+            return false;
         }
     }
 
@@ -91,29 +99,22 @@ public class ExportDbService extends IntentService {
 
     private void notificateSuccess() {
         cancelProgress();
-//        PugNotification.with(this)
-//                .load()
-//                .title(R.string.notification_backup_done)
-//                .autoCancel(true)
-//                .message(R.string.notification_backup_done_assure)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher)
-//                .flags(Notification.DEFAULT_ALL)
-//                .simple()
-//                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_backup_done,
+            R.string.notification_backup_done_assure
+        );
     }
 
     private void notificateFailed() {
         cancelProgress();
-//        PugNotification.with(this)
-//                .load()
-//                .click(BackupActivity.class, null)
-//                .title(R.string.notification_backup_failed)
-//                .message(R.string.notification_backup_failed_detail)
-//                .bigTextStyle(R.string.notification_backup_failed_detail_full)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher)
-//                .flags(Notification.DEFAULT_ALL)
-//                .simple()
-//                .build();
+        NotificationHelper.actionNotification(
+                this,
+                R.string.notification_backup_failed,
+                R.string.notification_backup_failed_detail,
+                R.string.notification_backup_failed_detail_full,
+                new Intent(this, BackupActivity.class)
+        );
     }
 
     private void cancelProgress() {

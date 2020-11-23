@@ -7,10 +7,13 @@ import android.util.Log;
 
 import java.io.File;
 
+import help.smartbusiness.smartaccounting.R;
 import help.smartbusiness.smartaccounting.Utils.AuthHelper;
 import help.smartbusiness.smartaccounting.Utils.DriverServicesHelper;
 import help.smartbusiness.smartaccounting.Utils.FileUtils;
 import help.smartbusiness.smartaccounting.Utils.GoogleHelper;
+import help.smartbusiness.smartaccounting.Utils.NotificationHelper;
+import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.activities.MainActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
@@ -64,14 +67,15 @@ public class ImportDbService extends IntentService {
                 Log.d(TAG, String.format("Backup found - %s", backUpId));
                 File localBackupFile = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
                 return drive.downloadFile(backUpId, localBackupFile);
+            } else {
+                notificateNoBackup();
+                return false;
             }
-            notificateNoBackup();
+        } else {
+            Log.d(TAG, "Driver helper null, signing out user.");
+            AuthHelper.signOutUser(this);
             return false;
         }
-        Log.d(TAG, "Driver helper null, signing out user.");
-        AuthHelper.signOutUser(this);
-        // TODO Add signin notification.
-        return false;
     }
 
     private boolean importBackupToDb() {
@@ -93,45 +97,34 @@ public class ImportDbService extends IntentService {
 
     private void notificateSuccess() {
         cancelProgress();
-//        PugNotification.with(this)
-//                .load()
-//                .title(R.string.notification_import_done)
-//                .autoCancel(true)
-//                .message(R.string.notification_import_assure)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher)
-//                .flags(Notification.DEFAULT_ALL)
-//                .simple()
-//                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_import_done,
+            R.string.notification_import_assure
+        );
         startActivity(new Intent(this, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     private void notificateNoBackup() {
         cancelProgress();
-//        PugNotification.with(this)
-//                .load()
-//                .title(R.string.notification_import_nobackup)
-//                .autoCancel(true)
-//                .message(R.string.notification_import_nobackup_detail)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher)
-//                .flags(Notification.DEFAULT_ALL)
-//                .simple()
-//                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_import_nobackup,
+            R.string.notification_import_nobackup_detail
+        );
     }
 
 
     private void notificateFailed() {
         cancelProgress();
-//        PugNotification.with(this)
-//                .load()
-//                .click(BackupActivity.class, null)
-//                .title(R.string.notification_import_failed)
-//                .message(R.string.notification_import_failed_detail)
-//                .bigTextStyle(R.string.notification_import_failed_detail_full)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher)
-//                .flags(Notification.DEFAULT_ALL)
-//                .simple()
-//                .build();
+        NotificationHelper.actionNotification(
+            this,
+            R.string.notification_import_failed,
+            R.string.notification_import_failed_detail,
+            R.string.notification_import_failed_detail_full,
+            new Intent(this, BackupActivity.class)
+        );
     }
 
     private void cancelProgress() {
