@@ -86,15 +86,12 @@ public class ExportDbService extends IntentService {
     }
 
     private void updateNotificationProgress(int progress) {
-//        PugNotification.with(this)
-//                .load()
-//                .identifier(R.id.export_notify_id)
-//                .ongoing(true)
-//                .title(R.string.notification_backup_backing)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
-//                .progress()
-//                .value(progress, 2, false)
-//                .build();
+        NotificationHelper.stickyNotification(
+            this,
+            R.string.notification_backup_backing,
+            R.string.notification_backup_backing_detail,
+            R.id.export_notify_id
+        );
     }
 
     private void notificateSuccess() {
@@ -109,16 +106,15 @@ public class ExportDbService extends IntentService {
     private void notificateFailed() {
         cancelProgress();
         NotificationHelper.actionNotification(
-                this,
-                R.string.notification_backup_failed,
-                R.string.notification_backup_failed_detail,
-                R.string.notification_backup_failed_detail_full,
-                new Intent(this, BackupActivity.class)
+            this,
+            R.string.notification_backup_failed,
+            R.string.notification_backup_failed_detail,
+            R.string.notification_backup_failed_detail_full,
+            new Intent(this, BackupActivity.class)
         );
     }
 
     private void cancelProgress() {
-//        PugNotification.with(this)
-//                .cancel(R.id.export_notify_id);
+        NotificationHelper.cancelNotification(R.id.export_notify_id);
     }
 }

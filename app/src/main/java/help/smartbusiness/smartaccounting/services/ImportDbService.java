@@ -84,15 +84,12 @@ public class ImportDbService extends IntentService {
     }
 
     private void updateNotificationProgress(int progress) {
-//        PugNotification.with(this)
-//                .load()
-//                .identifier(R.id.import_notify_id)
-//                .ongoing(true)
-//                .title(R.string.notification_import_importing)
-//                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
-//                .progress()
-//                .value(progress, 1, false)
-//                .build();
+        NotificationHelper.stickyNotification(
+            this,
+            R.string.notification_import_importing,
+            R.string.notification_import_importing_detail,
+            R.id.import_notify_id
+        );
     }
 
     private void notificateSuccess() {
@@ -128,8 +125,7 @@ public class ImportDbService extends IntentService {
     }
 
     private void cancelProgress() {
-//        PugNotification.with(this)
-//                .cancel(R.id.import_notify_id);
+        NotificationHelper.cancelNotification(R.id.import_notify_id);
     }
 
 }
