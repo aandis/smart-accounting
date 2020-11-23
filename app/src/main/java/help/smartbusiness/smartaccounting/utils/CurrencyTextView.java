@@ -1,10 +1,11 @@
-package help.smartbusiness.smartaccounting.Utils;
+package help.smartbusiness.smartaccounting.utils;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.blackcat.currencyedittext.CurrencyTextFormatter;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Currency;
 import java.util.Locale;
@@ -12,16 +13,15 @@ import java.util.Locale;
 import help.smartbusiness.smartaccounting.SmartAccounting;
 
 /**
- * Created by gamerboy on 26/3/17.
- * A {@link MaterialEditText} which supports showing currency
- * values supported by {@link com.blackcat.currencyedittext.CurrencyEditText}.
- *
- * Note: The implementation does not support getting raw values yet.
+ * Created by gamerboy on 3/12/17.
+ * Custom {@link AppCompatTextView} to display currency stored as long.
  */
-public class MaterialIndianCurrencyEditText extends MaterialEditText {
-    public static final String TAG = MaterialIndianCurrencyEditText.class.getSimpleName();
 
-    public MaterialIndianCurrencyEditText(Context context, AttributeSet attributeSet) {
+public class CurrencyTextView extends AppCompatTextView {
+
+    public static final String TAG = CurrencyTextView.class.getSimpleName();
+
+    public CurrencyTextView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }
 
@@ -34,4 +34,5 @@ public class MaterialIndianCurrencyEditText extends MaterialEditText {
         }
         super.setText(text, type);
     }
+
 }

@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
+import help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
 

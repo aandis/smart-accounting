@@ -19,10 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
-import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
-import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.utils.DecimalFormatterEditText;
+import help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText;
+import help.smartbusiness.smartaccounting.utils.PurchaseItemNameSuggester;
+import help.smartbusiness.smartaccounting.utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;

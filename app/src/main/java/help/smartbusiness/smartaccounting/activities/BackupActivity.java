@@ -11,8 +11,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import help.smartbusiness.smartaccounting.Utils.AuthHelper;
-import help.smartbusiness.smartaccounting.Utils.GoogleHelper;
+import help.smartbusiness.smartaccounting.utils.AuthHelper;
+import help.smartbusiness.smartaccounting.utils.GoogleHelper;
 
 public class BackupActivity extends SmartAccountingActivity {
 

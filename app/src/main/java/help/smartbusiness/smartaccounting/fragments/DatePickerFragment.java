@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 import java.util.Date;
 
-import help.smartbusiness.smartaccounting.Utils.DateParser;
+import help.smartbusiness.smartaccounting.utils.DateParser;
 
 /**
  * Created by gamerboy on 25/5/16.

@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting.Utils;
+package help.smartbusiness.smartaccounting.utils;
 
 import android.content.Context;
 import android.text.InputFilter;

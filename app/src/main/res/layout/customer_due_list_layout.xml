@@ -34,7 +34,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
         </LinearLayout>
 
-        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+        <help.smartbusiness.smartaccounting.utils.CurrencyTextView
             android:id="@+id/customer_due_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

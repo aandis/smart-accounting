@@ -22,7 +22,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
+import help.smartbusiness.smartaccounting.utils.CustomerNameSuggester;
 import help.smartbusiness.smartaccounting.db.AccountingDbHelper;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.fragments.YesNoDialog;

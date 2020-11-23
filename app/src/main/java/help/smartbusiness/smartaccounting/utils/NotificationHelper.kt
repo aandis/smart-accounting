@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting.Utils
+package help.smartbusiness.smartaccounting.utils
 
 import android.app.PendingIntent
 import android.content.Context

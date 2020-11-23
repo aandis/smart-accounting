@@ -45,7 +45,7 @@
             android:layout_alignParentEnd="true"
             android:orientation="vertical">
 
-            <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+            <help.smartbusiness.smartaccounting.utils.CurrencyTextView
                 android:id="@+id/transaction_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

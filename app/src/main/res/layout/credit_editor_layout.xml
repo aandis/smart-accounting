@@ -59,7 +59,7 @@
 
     </LinearLayout>
 
-    <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
+    <help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText
         android:id="@+id/create_credit_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

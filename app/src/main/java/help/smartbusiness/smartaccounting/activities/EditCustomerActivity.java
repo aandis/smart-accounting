@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.CustomerNameSuggester;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.utils.CustomerNameSuggester;
+import help.smartbusiness.smartaccounting.utils.Utils;
 import help.smartbusiness.smartaccounting.models.Customer;
 
 public class EditCustomerActivity extends SmartAccountingActivity implements View.OnClickListener {

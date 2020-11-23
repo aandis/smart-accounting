@@ -19,7 +19,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="help.smartbusiness.smartaccounting.activities.TransactionListActivity">
 
-        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+        <help.smartbusiness.smartaccounting.utils.CurrencyTextView
             android:id="@+id/total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:layout_behavior="help.smartbusiness.smartaccounting.Utils.FloatingActionButtonBehavior"
+        app:layout_behavior="help.smartbusiness.smartaccounting.utils.FloatingActionButtonBehavior"
         fab:fab_addButtonColorNormal="@color/white"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/half_black"

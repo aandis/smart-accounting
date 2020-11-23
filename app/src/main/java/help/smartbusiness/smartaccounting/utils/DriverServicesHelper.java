@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting.Utils;
+package help.smartbusiness.smartaccounting.utils;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;

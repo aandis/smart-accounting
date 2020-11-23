@@ -16,7 +16,7 @@ import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.utils.Utils;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;

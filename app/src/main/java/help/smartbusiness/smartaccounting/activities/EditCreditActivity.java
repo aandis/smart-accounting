@@ -11,7 +11,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.utils.Utils;
 import help.smartbusiness.smartaccounting.db.AccountingProvider;
 import help.smartbusiness.smartaccounting.models.Credit;
 

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="help.smartbusiness.smartaccounting.Utils.FloatingActionButtonBehavior"
+        app:layout_behavior="help.smartbusiness.smartaccounting.utils.FloatingActionButtonBehavior"
         fab:fab_addButtonColorNormal="@color/white"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/half_black"
