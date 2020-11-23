@@ -1,4 +1,4 @@
-package help.smartbusiness.smartaccounting.Utils;
+package help.smartbusiness.smartaccounting.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

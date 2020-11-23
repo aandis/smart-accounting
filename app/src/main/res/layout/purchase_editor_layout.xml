@@ -91,7 +91,7 @@
             android:hint="@string/total"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-        <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
+        <help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText
             android:id="@+id/create_purchase_total"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

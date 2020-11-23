@@ -1,15 +1,16 @@
 package help.smartbusiness.smartaccounting.activities;
 
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.DialogFragment;
+
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
+import help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Credit;
 

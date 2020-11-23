@@ -1,20 +1,18 @@
 package help.smartbusiness.smartaccounting.services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import android.util.Log;
 
 import java.io.File;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.FileUtils;
-import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
+import help.smartbusiness.smartaccounting.utils.AuthHelper;
+import help.smartbusiness.smartaccounting.utils.DriverServicesHelper;
+import help.smartbusiness.smartaccounting.utils.FileUtils;
+import help.smartbusiness.smartaccounting.utils.GoogleHelper;
+import help.smartbusiness.smartaccounting.utils.NotificationHelper;
 import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.activities.MainActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
@@ -22,13 +20,9 @@ import help.smartbusiness.smartaccounting.backup.DbOperation;
 /**
  * Created by gamerboy on 8/6/16.
  */
-public class ImportDbService extends IntentService implements GoogleApiClient.OnConnectionFailedListener {
+public class ImportDbService extends IntentService {
 
     public static final String TAG = ImportDbService.class.getSimpleName();
-
-    public ImportDbService(String name) {
-        super(name);
-    }
 
     public ImportDbService() {
         super("ImportDbService");
@@ -64,20 +58,23 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
     }
 
     private boolean searchAndDownloadBackup() {
-        SynchronousDrive drive = new SynchronousDrive(this, this);
-        String backUpId = null;
-        backUpId = drive.searchLatest(DbOperation.BACKUP_NAME, DbOperation.MIME_TYPE);
-        try {
+        DriverServicesHelper drive = GoogleHelper.getDriveHelper(this);
+        if (drive != null) {
+            String backUpId;
+            backUpId = drive.searchLatest(DbOperation.BACKUP_NAME, DbOperation.MIME_TYPE);
             if (backUpId != null) {
+                Log.d(TAG, String.format("Backup found - %s", backUpId));
                 File localBackupFile = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
                 return drive.downloadFile(backUpId, localBackupFile);
             } else {
                 notificateNoBackup();
+                return false;
             }
-        } finally {
-            drive.disconnect();
+        } else {
+            Log.d(TAG, "Driver helper null, signing out user.");
+            AuthHelper.signOutUser(this);
+            return false;
         }
-        return false;
     }
 
     private boolean importBackupToDb() {
@@ -85,69 +82,49 @@ public class ImportDbService extends IntentService implements GoogleApiClient.On
         return operation.importDbFromLocal(this);
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
     private void updateNotificationProgress(int progress) {
-        PugNotification.with(this)
-                .load()
-                .identifier(R.id.import_notify_id)
-                .ongoing(true)
-                .title(R.string.notification_import_importing)
-                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
-                .progress()
-                .value(progress, 1, false)
-                .build();
+        NotificationHelper.stickyNotification(
+            this,
+            R.string.notification_import_importing,
+            R.string.notification_import_importing_detail,
+            R.id.import_notify_id
+        );
     }
 
     private void notificateSuccess() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .title(R.string.notification_import_done)
-                .autoCancel(true)
-                .message(R.string.notification_import_assure)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_import_done,
+            R.string.notification_import_assure
+        );
         startActivity(new Intent(this, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     private void notificateNoBackup() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .title(R.string.notification_import_nobackup)
-                .autoCancel(true)
-                .message(R.string.notification_import_nobackup_detail)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_import_nobackup,
+            R.string.notification_import_nobackup_detail
+        );
     }
 
 
     private void notificateFailed() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .click(BackupActivity.class, null)
-                .title(R.string.notification_import_failed)
-                .message(R.string.notification_import_failed_detail)
-                .bigTextStyle(R.string.notification_import_failed_detail_full)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+        NotificationHelper.actionNotification(
+            this,
+            R.string.notification_import_failed,
+            R.string.notification_import_failed_detail,
+            R.string.notification_import_failed_detail_full,
+            new Intent(this, BackupActivity.class)
+        );
     }
 
     private void cancelProgress() {
-        PugNotification.with(this)
-                .cancel(R.id.import_notify_id);
+        NotificationHelper.cancelNotification(R.id.import_notify_id);
     }
 
 }

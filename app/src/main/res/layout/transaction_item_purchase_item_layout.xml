@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <help.smartbusiness.smartaccounting.Utils.DecimalFormatterTextView
+            <help.smartbusiness.smartaccounting.utils.DecimalFormatterTextView
                 android:id="@+id/transaction_item_pi_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#FFF" />
 
-            <help.smartbusiness.smartaccounting.Utils.DecimalFormatterTextView
+            <help.smartbusiness.smartaccounting.utils.DecimalFormatterTextView
                 android:id="@+id/transaction_item_pi_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#FFF" />
 
-            <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+            <help.smartbusiness.smartaccounting.utils.CurrencyTextView
                 android:id="@+id/transaction_item_pi_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,4 +49,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

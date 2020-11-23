@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import help.smartbusiness.smartaccounting.Utils.FileUtils;
+import help.smartbusiness.smartaccounting.utils.FileUtils;
 
 /**
  * Created by gamerboy on 19/5/16.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"><!--FTW-->
@@ -34,7 +34,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
         </LinearLayout>
 
-        <help.smartbusiness.smartaccounting.Utils.CurrencyTextView
+        <help.smartbusiness.smartaccounting.utils.CurrencyTextView
             android:id="@+id/customer_due_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,4 +42,4 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

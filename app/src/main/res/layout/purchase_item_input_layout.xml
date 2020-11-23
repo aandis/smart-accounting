@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText
+        <help.smartbusiness.smartaccounting.utils.DecimalFormatterEditText
             android:id="@+id/input_purchase_item_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 
-        <help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText
+        <help.smartbusiness.smartaccounting.utils.DecimalFormatterEditText
             android:id="@+id/input_purchase_item_rate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:inputType="numberDecimal"
             app:met_floatingLabel="highlight" />
 
-        <help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText
+        <help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText
             android:id="@+id/input_purchase_item_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

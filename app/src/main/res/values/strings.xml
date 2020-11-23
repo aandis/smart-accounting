@@ -46,6 +46,7 @@
     <string name="action_logout">Logout</string>
 
     <string name="notification.backup.backing">Backing up database.</string>
+    <string name="notification.backup.backing.detail">Your data is being backed up to your Google Drive.</string>
     <string name="notification.backup.done">Backup completed!</string>
     <string name="notification.backup.done.assure">Your data is now safely backed up.</string>
     <string name="notification.backup.failed">Backup failed.</string>
@@ -53,6 +54,7 @@
     <string name="notification.backup.failed.detail.full">There was an error while backing up your data. Please make sure you are connected to the internet and have sufficient storage space in your phone.</string>
 
     <string name="notification.import.importing">Downloading latest backup.</string>
+    <string name="notification.import.importing.detail">Downloading the latest backup from your Google Drive.</string>
     <string name="notification.import.done">Download completed</string>
     <string name="notification.import.assure">Your app is now up to date with your latest backup.</string>
     <string name="notification.import.nobackup">No Backup found.</string>

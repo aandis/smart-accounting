@@ -15,19 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "622358861618-phhs5v6s54ll5c6ptiu5hkh2udegjf7f.apps.googleusercontent.com",
+          "client_id": "622358861618-8ol8tj2d3av05cbtoo5s34h3phutf2l3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "help.smartbusiness.smartaccounting",
-            "certificate_hash": "9D59D5573B1510CF527730C43400B31BBB5699B8"
-          }
-        },
-        {
-          "client_id": "622358861618-15kjnitthht8cqa12f3dsb14fb12v0h8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "help.smartbusiness.smartaccounting",
-            "certificate_hash": "E4B9A16804F01186E3DB830FA6DCDE5E3E5877A3"
+            "certificate_hash": "b7a86b87835a898cdfdfc269bc4ce10fa8240fd2"
           }
         },
         {
@@ -41,20 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "622358861618-l6g5sta6a6armtsvt5eqn4a6rk5um4so.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

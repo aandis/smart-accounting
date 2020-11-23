@@ -1,14 +1,15 @@
-package help.smartbusiness.smartaccounting.Utils;
+package help.smartbusiness.smartaccounting.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 

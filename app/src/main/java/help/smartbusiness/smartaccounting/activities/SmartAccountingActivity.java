@@ -1,10 +1,11 @@
 package help.smartbusiness.smartaccounting.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 /**
  * Created by gamerboy on 5/11/16.
@@ -23,11 +24,17 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
         mFirebaseAnalytics.logEvent(name, null);
     }
 
+    public void logEvent(String name, String key, String value) {
+        Bundle data = new Bundle();
+        data.putString(key, value);
+        mFirebaseAnalytics.logEvent(name, data);
+    }
+
     public void report(Exception e) {
-        FirebaseCrash.report(e);
+        FirebaseCrashlytics.getInstance().recordException(e);
     }
 
     public void report(String message) {
-        FirebaseCrash.report(new Exception(message));
+        report(new Exception(message));
     }
 }

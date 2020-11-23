@@ -1,6 +1,5 @@
 package help.smartbusiness.smartaccounting.activities;
 
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -11,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.DialogFragment;
+
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -18,10 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.DecimalFormatterEditText;
-import help.smartbusiness.smartaccounting.Utils.IndianCurrencyEditText;
-import help.smartbusiness.smartaccounting.Utils.PurchaseItemNameSuggester;
-import help.smartbusiness.smartaccounting.Utils.Utils;
+import help.smartbusiness.smartaccounting.utils.DecimalFormatterEditText;
+import help.smartbusiness.smartaccounting.utils.IndianCurrencyEditText;
+import help.smartbusiness.smartaccounting.utils.PurchaseItemNameSuggester;
+import help.smartbusiness.smartaccounting.utils.Utils;
 import help.smartbusiness.smartaccounting.fragments.DatePickerFragment;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.PurchaseItem;

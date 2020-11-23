@@ -45,7 +45,7 @@
                 android:inputType="text"
                 app:met_floatingLabel="highlight" />
 
-            <help.smartbusiness.smartaccounting.Utils.MaterialIndianCurrencyEditText
+            <help.smartbusiness.smartaccounting.utils.MaterialIndianCurrencyEditText
                 android:id="@+id/create_purchase_customer_total_due"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,21 +1,18 @@
 package help.smartbusiness.smartaccounting.services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.util.Log;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import help.smartbusiness.smartaccounting.R;
-import help.smartbusiness.smartaccounting.Utils.FileUtils;
-import help.smartbusiness.smartaccounting.Utils.SynchronousDrive;
+import help.smartbusiness.smartaccounting.utils.AuthHelper;
+import help.smartbusiness.smartaccounting.utils.DriverServicesHelper;
+import help.smartbusiness.smartaccounting.utils.FileUtils;
+import help.smartbusiness.smartaccounting.utils.GoogleHelper;
+import help.smartbusiness.smartaccounting.utils.NotificationHelper;
 import help.smartbusiness.smartaccounting.activities.BackupActivity;
 import help.smartbusiness.smartaccounting.backup.DbOperation;
 
@@ -25,7 +22,7 @@ import help.smartbusiness.smartaccounting.backup.DbOperation;
  * <p/>
  * helper methods.
  */
-public class ExportDbService extends IntentService implements GoogleApiClient.OnConnectionFailedListener {
+public class ExportDbService extends IntentService {
 
     public static final String TAG = ExportDbService.class.getSimpleName();
 
@@ -57,76 +54,67 @@ public class ExportDbService extends IntentService implements GoogleApiClient.On
         boolean exportedToLocal = operation.exportDbToLocal(this);
         if (exportedToLocal) {
             updateNotificationProgress(1); // 1/2
-            exportDbToDrive();
+            boolean exportedToDrive = exportDbToDrive();
+            if (exportedToDrive) {
+                notificateSuccess();
+            } else {
+                notificateFailed();
+            }
         } else {
             notificateFailed();
         }
     }
 
-    private void exportDbToDrive() {
-        SynchronousDrive drive = new SynchronousDrive(this, this);
-        File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
-        String mime = DbOperation.MIME_TYPE;
-        String driveId;
-        try {
-            driveId = drive.uploadFile(file, mime);
+    private boolean exportDbToDrive() {
+        DriverServicesHelper drive = GoogleHelper.getDriveHelper(this);
+        if (drive != null) {
+            File file = new File(FileUtils.getFullPath(this, DbOperation.BACKUP_NAME));
+            String mime = DbOperation.MIME_TYPE;
+            String driveId = drive.uploadFile(file, mime);
             if (driveId != null) {
                 Log.d(TAG, "Uploaded file with id " + driveId);
-                notificateSuccess();
+                return true;
             } else {
-                notificateFailed();
+                Log.d(TAG, "Couldn't backup!");
+                return false;
             }
-        } finally {
-            drive.disconnect();
+        } else {
+            Log.d(TAG, "Driver helper null, signing out user.");
+            AuthHelper.signOutUser(this);
+            return false;
         }
     }
 
     private void updateNotificationProgress(int progress) {
-        PugNotification.with(this)
-                .load()
-                .identifier(R.id.export_notify_id)
-                .ongoing(true)
-                .title(R.string.notification_backup_backing)
-                .smallIcon(R.drawable.pugnotification_ic_launcher) // TODO
-                .progress()
-                .value(progress, 2, false)
-                .build();
+        NotificationHelper.stickyNotification(
+            this,
+            R.string.notification_backup_backing,
+            R.string.notification_backup_backing_detail,
+            R.id.export_notify_id
+        );
     }
 
     private void notificateSuccess() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .title(R.string.notification_backup_done)
-                .autoCancel(true)
-                .message(R.string.notification_backup_done_assure)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+        NotificationHelper.simpleNotification(
+            this,
+            R.string.notification_backup_done,
+            R.string.notification_backup_done_assure
+        );
     }
 
     private void notificateFailed() {
         cancelProgress();
-        PugNotification.with(this)
-                .load()
-                .click(BackupActivity.class, null)
-                .title(R.string.notification_backup_failed)
-                .message(R.string.notification_backup_failed_detail)
-                .bigTextStyle(R.string.notification_backup_failed_detail_full)
-                .smallIcon(R.drawable.pugnotification_ic_launcher)
-                .flags(Notification.DEFAULT_ALL)
-                .simple()
-                .build();
+        NotificationHelper.actionNotification(
+            this,
+            R.string.notification_backup_failed,
+            R.string.notification_backup_failed_detail,
+            R.string.notification_backup_failed_detail_full,
+            new Intent(this, BackupActivity.class)
+        );
     }
 
     private void cancelProgress() {
-        PugNotification.with(this)
-                .cancel(R.id.export_notify_id);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG, "failed");
+        NotificationHelper.cancelNotification(R.id.export_notify_id);
     }
 }
