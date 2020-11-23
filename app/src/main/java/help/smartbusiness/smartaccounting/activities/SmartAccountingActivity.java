@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 /**
  * Created by gamerboy on 5/11/16.
@@ -31,10 +31,10 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
     }
 
     public void report(Exception e) {
-        FirebaseCrash.report(e);
+        FirebaseCrashlytics.getInstance().recordException(e);
     }
 
     public void report(String message) {
-        FirebaseCrash.report(new Exception(message));
+        report(new Exception(message));
     }
 }
