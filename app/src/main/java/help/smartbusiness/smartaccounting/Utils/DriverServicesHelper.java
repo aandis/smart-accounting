@@ -12,8 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A utility for performing read/write operations on Drive files via the REST API and opening a
- * file picker UI via Storage Access Framework.
+ * A utility for performing read/write operations on Drive files via the REST API.
  */
 public class DriverServicesHelper {
     public static final String TAG = DriverServicesHelper.class.getSimpleName();
@@ -24,7 +23,7 @@ public class DriverServicesHelper {
     }
 
     /**
-     * Creates a text file in the user's My Drive folder and returns its file ID.
+     * Creates a text file in the appData folder and returns its file ID.
      */
     public String uploadFile(java.io.File file, String mimeType) {
         FileContent fileContent = new FileContent("multipart/form-data", file);
