@@ -44,7 +44,6 @@ public class ImportDbService extends IntentService {
         if (intent != null) {
             updateNotificationProgress(0); // 0/1
             boolean downloaded = searchAndDownloadBackup();
-            Log.d(TAG, downloaded + "");
             if (downloaded) {
                 boolean imported = importBackupToDb();
                 if (imported) {
