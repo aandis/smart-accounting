@@ -27,7 +27,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
 
     public static final String TAG = AccountingDbHelper.class.getCanonicalName();
     public static final String DATABASE_NAME = "accounting";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
 
     public static final String ID = "_id";
 
@@ -47,6 +47,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String PURCHASE_COL_DATE = "date";
     public static final String PURCHASE_COL_REMARKS = "remarks";
     public static final String PURCHASE_COL_TYPE = "type";
+    public static final String PURCHASE_COL_CREATED_AT = "created_at";
     public static final String PURCHASE_TYPE_SELL = "sell";
     public static final String PURCHASE_TYPE_BUY = "buy";
     public static final String CREATE_TABLE_PURCHASE = "create table " + TABLE_PURCHASE
@@ -95,6 +96,7 @@ public class AccountingDbHelper extends SQLiteOpenHelper {
     public static final String CREDIT_COL_DATE = "date";
     public static final String CREDIT_COL_REMARKS = "remarks";
     public static final String CREDIT_COL_TYPE = "type";
+    public static final String CREDIT_COL_CREATED_AT = "created_at";
     public static final String CREDIT_TYPE_CREDIT = "credit";
     public static final String CREDIT_TYPE_DEBIT = "debit";
     public static final String CREATE_TABLE_CREDIT = "create table " + TABLE_CREDIT
