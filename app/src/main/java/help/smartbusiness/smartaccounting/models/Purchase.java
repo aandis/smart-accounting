@@ -42,14 +42,20 @@ public class Purchase extends Transaction {
     private String remarks;
     private PurchaseType type;
     private long amount;
+    private String createdAt;
     private List<PurchaseItem> purchaseItems;
 
-    public Purchase(String date, String remarks, PurchaseType type, long amount) {
+    public Purchase(String date, String remarks, PurchaseType type, long amount, String createdAt) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;
         this.amount = amount;
+        this.createdAt = createdAt;
         purchaseItems = new ArrayList<>();
+    }
+
+    public Purchase(String date, String remarks, PurchaseType type, long amount) {
+        this(date, remarks, type, amount, null);
     }
 
     public static Purchase fromCursor(Cursor cursor) {
@@ -61,7 +67,9 @@ public class Purchase extends Transaction {
                 cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_TYPE)).toUpperCase());
         long amount = cursor.getLong(cursor.getColumnIndex(
                 AccountingDbHelper.CPV_AMOUNT));
-        Purchase p = new Purchase(date, remarks, type, amount);
+        String createdAt = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.PURCHASE_COL_CREATED_AT));
+        Purchase p = new Purchase(date, remarks, type, amount, createdAt);
         p.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
         return p;
     }
@@ -96,6 +104,14 @@ public class Purchase extends Transaction {
 
     public void setAmount(long amount) {
         this.amount = amount;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<PurchaseItem> getPurchaseItems() {
