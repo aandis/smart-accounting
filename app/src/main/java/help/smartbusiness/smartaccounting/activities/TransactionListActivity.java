@@ -110,7 +110,8 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
                 AccountingProvider.CUSTOMER_CONTENT_URI
                         + "/" + mCustomerId
                         + "/" + AccountingProvider.TRANSACTION_BASE_PATH),
-                null, null, null, AccountingDbHelper.PURCHASE_COL_DATE + " DESC ");
+                null, null, null,
+                AccountingDbHelper.PURCHASE_COL_DATE + " DESC, " + AccountingDbHelper.PURCHASE_COL_CREATED_AT + " DESC ");
     }
 
     @Override

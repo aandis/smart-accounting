@@ -148,14 +148,16 @@ public class AccountingProvider extends ContentProvider {
                                 + AccountingDbHelper.PURCHASE_COL_DATE + ","
                                 + AccountingDbHelper.PURCHASE_COL_REMARKS + ","
                                 + AccountingDbHelper.PURCHASE_COL_CUSTOMER_ID + ","
-                                + AccountingDbHelper.PURCHASE_COL_TYPE
+                                + AccountingDbHelper.PURCHASE_COL_TYPE + ","
+                                + AccountingDbHelper.PURCHASE_COL_CREATED_AT
                                 + " FROM " + AccountingDbHelper.CALCULATED_PURCHASE_VIEW,
                         "SELECT " + AccountingDbHelper.ID + ","
                                 + AccountingDbHelper.CREDIT_COL_AMOUNT + ","
                                 + AccountingDbHelper.CREDIT_COL_DATE + ","
                                 + AccountingDbHelper.CREDIT_COL_REMARKS + ","
                                 + AccountingDbHelper.CREDIT_COL_CUSTOMER_ID + ","
-                                + AccountingDbHelper.CREDIT_COL_TYPE
+                                + AccountingDbHelper.CREDIT_COL_TYPE + ","
+                                + AccountingDbHelper.CREDIT_COL_CREATED_AT
                                 + " FROM " + AccountingDbHelper.TABLE_CREDIT
                 }, AccountingDbHelper.CREDIT_COL_DATE, null);
                 builder.setTables("(" + union + ")");

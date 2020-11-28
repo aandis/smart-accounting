@@ -35,12 +35,18 @@ public class Credit extends Transaction {
     private String remarks;
     private CreditType type;
     private long amount;
+    private String createdAt;
 
-    public Credit(String date, String remarks, CreditType type, long amount) {
+    public Credit(String date, String remarks, CreditType type, long amount, String createdAt) {
         this.date = date;
         this.remarks = remarks;
         this.type = type;
         this.amount = amount;
+        this.createdAt = createdAt;
+    }
+
+    public Credit(String date, String remarks, CreditType type, long amount) {
+        this(date, remarks, type, amount, null);
     }
 
     public static Credit fromCursor(Cursor cursor) {
@@ -52,7 +58,9 @@ public class Credit extends Transaction {
                 cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_TYPE)).toUpperCase());
         long amount = cursor.getLong(cursor.getColumnIndex(
                 AccountingDbHelper.CREDIT_COL_AMOUNT));
-        Credit c = new Credit(date, remarks, type, amount);
+        String createdAt = cursor.getString(
+                cursor.getColumnIndex(AccountingDbHelper.CREDIT_COL_CREATED_AT));
+        Credit c = new Credit(date, remarks, type, amount, createdAt);
         c.setId(cursor.getLong(cursor.getColumnIndex(AccountingDbHelper.ID)));
         return c;
     }
@@ -108,6 +116,14 @@ public class Credit extends Transaction {
 
     public void setType(CreditType type) {
         this.type = type;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isValid(boolean validateCustomer) {
