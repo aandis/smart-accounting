@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="smart-accounting/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/smart-accounting.iml" filepath="$PROJECT_DIR$/.idea/modules/smart-accounting.iml" group="smart-accounting" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/smart-accounting.iml" filepath="$PROJECT_DIR$/.idea/modules/smart-accounting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/smart-accounting.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/smart-accounting.app.iml" />
     </modules>
   </component>
 </project>
