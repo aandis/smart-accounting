@@ -17,7 +17,6 @@ class FilterTransaction {
                 filterIntent.putExtra(TransactionListActivity.FILTER_FROM_DATE, fromDate)
                 filterIntent.putExtra(TransactionListActivity.FILTER_TO_DATE, toDate)
                 context.startActivity(filterIntent)
-                datePickerFragment.dismiss()
             }
             datePickerFragment.show((context as FragmentActivity).supportFragmentManager, "filterDatePicker")
         }

@@ -41,5 +41,6 @@ class MultiDatePickerFragment : DialogFragment() {
             val toDate = if (dateRange.size > 1) dateRange.last().date.format(dateFormat) else fromDate
             onDateSetCallback.invoke(fromDate, toDate)
         }
+        dismiss()
     }
 }
