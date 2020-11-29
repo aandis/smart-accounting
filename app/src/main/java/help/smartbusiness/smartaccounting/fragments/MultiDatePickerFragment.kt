@@ -19,7 +19,7 @@ class MultiDatePickerFragment : DialogFragment() {
 
     private var dateFormat: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
-    lateinit var filterCallback: ((fromDate: String, toDate: String) -> Unit)
+    lateinit var onDateSetCallback: ((fromDate: String, toDate: String) -> Unit)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -39,7 +39,7 @@ class MultiDatePickerFragment : DialogFragment() {
         } else {
             val fromDate = dateRange[0].date.format(dateFormat)
             val toDate = dateRange[1].date.format(dateFormat)
-            filterCallback.invoke(fromDate, toDate)
+            onDateSetCallback.invoke(fromDate, toDate)
         }
     }
 }

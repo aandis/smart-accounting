@@ -11,7 +11,7 @@ class FilterTransaction {
         @JvmStatic
         fun showDialog(context: Context, customerId: Long) {
             val datePickerFragment = MultiDatePickerFragment()
-            datePickerFragment.filterCallback = { fromDate: String, toDate: String ->
+            datePickerFragment.onDateSetCallback = { fromDate: String, toDate: String ->
                 val filterIntent = Intent(context, TransactionListActivity::class.java)
                 filterIntent.putExtra(TransactionListActivity.CUSTOMER_ID, customerId)
                 filterIntent.putExtra(TransactionListActivity.FILTER_FROM_DATE, fromDate)
