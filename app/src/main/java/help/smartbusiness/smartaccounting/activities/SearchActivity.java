@@ -62,7 +62,7 @@ public class SearchActivity extends SmartAccountingActivity implements LoaderMan
     private void search(String query) {
         Bundle bundle = new Bundle();
         bundle.putString(SEARCH_QUERY, query);
-        getSupportLoaderManager().initLoader(R.id.search_loader, bundle, this);
+        LoaderManager.getInstance(this).initLoader(R.id.search_loader, bundle, this);
     }
 
     @Override

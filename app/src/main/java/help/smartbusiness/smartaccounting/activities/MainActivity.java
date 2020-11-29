@@ -47,7 +47,7 @@ public class MainActivity extends SmartAccountingActivity implements LoaderManag
         mAdapter = getListViewAdapter();
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
-        getSupportLoaderManager().initLoader(R.id.customer_loader, null, this);
+        LoaderManager.getInstance(this).initLoader(R.id.customer_loader, null, this);
     }
 
     private void setUpFabs() {

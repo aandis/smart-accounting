@@ -7,12 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -30,22 +33,28 @@ import help.smartbusiness.smartaccounting.models.Credit;
 import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.Transaction;
+import help.smartbusiness.smartaccounting.activities.helpers.FilterTransaction;
 
 public class TransactionListActivity extends SmartAccountingActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemLongClickListener {
 
     public static final String TAG = TransactionListActivity.class.getCanonicalName();
     public static final String CUSTOMER_ID = "id";
+    public static final String FILTER_FROM_DATE = "filter_from_date";
+    public static final String FILTER_TO_DATE = "filter_to_date";
 
     private TextView mTotalAmount;
     private ExpandableListView mListView;
     private SimpleCursorTreeAdapter mAdapter;
     private long mCustomerId;
+    private String filterFromDate, filterToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_list);
         mCustomerId = getIntent().getLongExtra(CUSTOMER_ID, -1);
+        filterFromDate = getIntent().getStringExtra(FILTER_FROM_DATE);
+        filterToDate = getIntent().getStringExtra(FILTER_TO_DATE);
         if (mCustomerId == -1) {
             finish();
         } else {
@@ -53,10 +62,29 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             mListView = (ExpandableListView) findViewById(R.id.transactions_list);
             mAdapter = getListViewAdapter();
             mListView.setAdapter(mAdapter);
-            getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
-            getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
             mListView.setOnItemLongClickListener(this);
+            LoaderManager.getInstance(this).initLoader(R.id.transaction_loader, null, this);
+            LoaderManager.getInstance(this).initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!isFiltered()) {
+            getMenuInflater().inflate(R.menu.menu_customer_transactions, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_filter:
+                FilterTransaction.showDialog(this, mCustomerId);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private SimpleCursorTreeAdapter getListViewAdapter() {
@@ -110,7 +138,9 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
                 AccountingProvider.CUSTOMER_CONTENT_URI
                         + "/" + mCustomerId
                         + "/" + AccountingProvider.TRANSACTION_BASE_PATH),
-                null, null, null,
+                null,
+                FilterTransaction.getFilterQuery(filterFromDate, filterToDate),
+                FilterTransaction.getFilterArgs(filterFromDate, filterToDate),
                 AccountingDbHelper.PURCHASE_COL_DATE + " DESC, " + AccountingDbHelper.PURCHASE_COL_CREATED_AT + " DESC ");
     }
 
@@ -145,11 +175,15 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             if (data != null && data.moveToNext()) {
                 Customer customer = Customer.fromCursor(data);
                 setTitle(customer.getFirstName() + "'s account");
-                mTotalAmount.setText(String.valueOf(customer.getDue()));
-                setUpFabs(customer);
-                if (customer.getDue() == 0.0) {
-                    ClearTransaction clear = new ClearTransaction(customer);
-                    clear.init();
+                if (isFiltered()) {
+                    mTotalAmount.setVisibility(View.GONE);
+                } else {
+                    mTotalAmount.setText(String.valueOf(customer.getDue()));
+                    setUpFabs(customer);
+                    if (customer.getDue() == 0.0) {
+                        ClearTransaction clear = new ClearTransaction(customer);
+                        clear.init();
+                    }
                 }
             }
         }
@@ -159,6 +193,10 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
 
         }
     };
+
+    private boolean isFiltered() {
+        return filterFromDate != null;
+    }
 
     private void setUpFabs(final Customer customer) {
         final Intent intent = new Intent();

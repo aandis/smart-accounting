@@ -32,7 +32,7 @@ public class EditCreditActivity extends CreditEditorActivity implements LoaderMa
         }
         setContentView(R.layout.activity_edit_credit);
         setUpCreditFields();
-        getSupportLoaderManager().initLoader(R.id.credit_loader, null, this);
+        LoaderManager.getInstance(this).initLoader(R.id.credit_loader, null, this);
     }
 
     @Override
