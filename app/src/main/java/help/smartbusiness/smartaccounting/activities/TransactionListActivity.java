@@ -64,12 +64,7 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             mListView.setAdapter(mAdapter);
             mListView.setOnItemLongClickListener(this);
             LoaderManager.getInstance(this).initLoader(R.id.transaction_loader, null, this);
-
-            if (isFiltered()) {
-                mTotalAmount.setVisibility(View.GONE);
-            } else {
-                LoaderManager.getInstance(this).initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
-            }
+            LoaderManager.getInstance(this).initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
         }
     }
 
@@ -180,11 +175,15 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             if (data != null && data.moveToNext()) {
                 Customer customer = Customer.fromCursor(data);
                 setTitle(customer.getFirstName() + "'s account");
-                mTotalAmount.setText(String.valueOf(customer.getDue()));
-                setUpFabs(customer);
-                if (customer.getDue() == 0.0) {
-                    ClearTransaction clear = new ClearTransaction(customer);
-                    clear.init();
+                if (isFiltered()) {
+                    mTotalAmount.setVisibility(View.GONE);
+                } else {
+                    mTotalAmount.setText(String.valueOf(customer.getDue()));
+                    setUpFabs(customer);
+                    if (customer.getDue() == 0.0) {
+                        ClearTransaction clear = new ClearTransaction(customer);
+                        clear.init();
+                    }
                 }
             }
         }
