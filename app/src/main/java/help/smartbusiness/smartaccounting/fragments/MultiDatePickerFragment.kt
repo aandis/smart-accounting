@@ -37,8 +37,8 @@ class MultiDatePickerFragment : DialogFragment() {
         if (dateRange.size == 0) {
             Toast.makeText(context, R.string.filter_date_range_bad, Toast.LENGTH_SHORT).show()
         } else {
-            val fromDate = dateRange[0].date.format(dateFormat)
-            val toDate = if (dateRange.size > 1) dateRange[1].date.format(dateFormat) else fromDate
+            val fromDate = dateRange.first().date.format(dateFormat)
+            val toDate = if (dateRange.size > 1) dateRange.last().date.format(dateFormat) else fromDate
             onDateSetCallback.invoke(fromDate, toDate)
         }
     }
