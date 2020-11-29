@@ -4,6 +4,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class DriverServicesHelper {
             File googleFile = mDriveService.files().create(metadata, fileContent).execute();
             return googleFile.getId();
         } catch (IOException ignored) {
+            FirebaseCrashlytics.getInstance().recordException(ignored);
         }
         return null;
     }
@@ -54,6 +56,7 @@ public class DriverServicesHelper {
                 return files.get(0).getId();
             }
         } catch (IOException ignored) {
+            FirebaseCrashlytics.getInstance().recordException(ignored);
         }
         return null;
     }
@@ -66,6 +69,7 @@ public class DriverServicesHelper {
             outputStream.close();
             return true;
         } catch (IOException ignored) {
+            FirebaseCrashlytics.getInstance().recordException(ignored);
         }
         return false;
     }
