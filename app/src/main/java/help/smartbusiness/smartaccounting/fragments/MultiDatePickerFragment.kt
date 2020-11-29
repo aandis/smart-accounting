@@ -34,11 +34,11 @@ class MultiDatePickerFragment : DialogFragment() {
 
     private val filterClickListener: View.OnClickListener = View.OnClickListener {
         val dateRange = date_range_calendar.selectedDates
-        if (dateRange.size < 2) {
+        if (dateRange.size == 0) {
             Toast.makeText(context, R.string.filter_date_range_bad, Toast.LENGTH_SHORT).show()
         } else {
             val fromDate = dateRange[0].date.format(dateFormat)
-            val toDate = dateRange[1].date.format(dateFormat)
+            val toDate = if (dateRange.size > 1) dateRange[1].date.format(dateFormat) else fromDate
             onDateSetCallback.invoke(fromDate, toDate)
         }
     }
