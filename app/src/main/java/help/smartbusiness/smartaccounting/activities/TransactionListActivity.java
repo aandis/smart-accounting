@@ -63,14 +63,21 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             mAdapter = getListViewAdapter();
             mListView.setAdapter(mAdapter);
             getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
-            getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
             mListView.setOnItemLongClickListener(this);
+
+            if (isFiltered()) {
+                mTotalAmount.setVisibility(View.GONE);
+            } else {
+                getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_customer_transactions, menu);
+        if (!isFiltered()) {
+            getMenuInflater().inflate(R.menu.menu_customer_transactions, menu);
+        }
         return true;
     }
 
@@ -187,6 +194,10 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
 
         }
     };
+
+    private boolean isFiltered() {
+        return filterFromDate != null;
+    }
 
     private void setUpFabs(final Customer customer) {
         final Intent intent = new Intent();
