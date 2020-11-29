@@ -18,6 +18,9 @@
     <string name="amount">Amount</string>
     <string name="type">Type</string>
 
+    <string name="filter.apply">Filter</string>
+    <string name="filter.date.range.bad">Please select from and to date.</string>
+
     <string name="purchase.create">Create</string>
     <string name="purchase.create.label">Create a purchase</string>
     <string name="purchase.edit.label">Edit purchase</string>

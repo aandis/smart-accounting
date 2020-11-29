@@ -33,22 +33,28 @@ import help.smartbusiness.smartaccounting.models.Credit;
 import help.smartbusiness.smartaccounting.models.Customer;
 import help.smartbusiness.smartaccounting.models.Purchase;
 import help.smartbusiness.smartaccounting.models.Transaction;
+import help.smartbusiness.smartaccounting.activities.helpers.FilterTransaction;
 
 public class TransactionListActivity extends SmartAccountingActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemLongClickListener {
 
     public static final String TAG = TransactionListActivity.class.getCanonicalName();
     public static final String CUSTOMER_ID = "id";
+    public static final String FILTER_FROM_DATE = "filter_from_date";
+    public static final String FILTER_TO_DATE = "filter_to_date";
 
     private TextView mTotalAmount;
     private ExpandableListView mListView;
     private SimpleCursorTreeAdapter mAdapter;
     private long mCustomerId;
+    private String filterFromDate, filterToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_list);
         mCustomerId = getIntent().getLongExtra(CUSTOMER_ID, -1);
+        filterFromDate = getIntent().getStringExtra(FILTER_FROM_DATE);
+        filterToDate = getIntent().getStringExtra(FILTER_TO_DATE);
         if (mCustomerId == -1) {
             finish();
         } else {
@@ -73,7 +79,7 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
         int id = item.getItemId();
         switch (id) {
             case R.id.action_filter:
-                // TODO
+                FilterTransaction.showDialog(this, mCustomerId);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -130,7 +136,9 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
                 AccountingProvider.CUSTOMER_CONTENT_URI
                         + "/" + mCustomerId
                         + "/" + AccountingProvider.TRANSACTION_BASE_PATH),
-                null, null, null,
+                null,
+                FilterTransaction.getFilterQuery(filterFromDate, filterToDate),
+                FilterTransaction.getFilterArgs(filterFromDate, filterToDate),
                 AccountingDbHelper.PURCHASE_COL_DATE + " DESC, " + AccountingDbHelper.PURCHASE_COL_CREATED_AT + " DESC ");
     }
 
