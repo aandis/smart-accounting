@@ -38,7 +38,7 @@ public class EditPurchaseActivity extends PurchaseEditorActivity implements Load
         if (mPurchaseId == -1) {
             finish();
         }
-        getSupportLoaderManager().initLoader(R.id.purchases_purchase_item_loader, null, this);
+        LoaderManager.getInstance(this).initLoader(R.id.purchases_purchase_item_loader, null, this);
     }
 
     @Override

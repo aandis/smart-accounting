@@ -62,13 +62,13 @@ public class TransactionListActivity extends SmartAccountingActivity implements 
             mListView = (ExpandableListView) findViewById(R.id.transactions_list);
             mAdapter = getListViewAdapter();
             mListView.setAdapter(mAdapter);
-            getSupportLoaderManager().initLoader(R.id.transaction_loader, null, this);
             mListView.setOnItemLongClickListener(this);
+            LoaderManager.getInstance(this).initLoader(R.id.transaction_loader, null, this);
 
             if (isFiltered()) {
                 mTotalAmount.setVisibility(View.GONE);
             } else {
-                getSupportLoaderManager().initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
+                LoaderManager.getInstance(this).initLoader(R.id.total_amount_loader, null, mAmountLoaderCallback);
             }
         }
     }
