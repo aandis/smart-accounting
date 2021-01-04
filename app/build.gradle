@@ -14,8 +14,8 @@ android {
         applicationId "help.smartbusiness.smartaccounting"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.1.1"
+        versionCode 6
+        versionName "1.2"
         multiDexEnabled true
     }
     compileOptions {
@@ -38,6 +38,12 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
+    }
+}
+
+configurations {
+    all {
+        exclude module: 'httpclient'
     }
 }
 
