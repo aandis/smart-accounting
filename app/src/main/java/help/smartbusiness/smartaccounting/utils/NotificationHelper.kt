@@ -49,7 +49,12 @@ object NotificationHelper {
                 bigText = context.getString(detail)
             }
             .meta {
-                clickIntent = PendingIntent.getActivity(context, 0, intent, 0)
+                clickIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_IMMUTABLE
+                )
                 cancelOnClick = true
             }
             .show()
