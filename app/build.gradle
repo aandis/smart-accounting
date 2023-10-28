@@ -6,17 +6,34 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+Properties secureProps = new Properties()
+secureProps.load(new FileInputStream(rootProject.file("env.properties")))
+
 android {
-    compileSdkVersion 30
-    buildToolsVersion "23.0.3"
+    signingConfigs {
+        debug {
+            storeFile file('/Users/test/Downloads/apkkey.jks')
+            storePassword secureProps['debug.store.password']
+            keyAlias secureProps['debug.store.key.alias']
+            keyPassword secureProps['debug.store.key.password']
+        }
+        prod {
+            storeFile file('/Users/test/Downloads/smart-accounting.jks')
+            storePassword secureProps['prod.store.password']
+            keyAlias secureProps['prod.store.key.alias']
+            keyPassword secureProps['prod.store.key.password']
+        }
+    }
 
     defaultConfig {
         applicationId "help.smartbusiness.smartaccounting"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 33
+        compileSdk 33
         versionCode 6
         versionName "1.2"
         multiDexEnabled true
+        signingConfig signingConfigs.prod
     }
     compileOptions {
         // Sets Java compatibility to Java 8
@@ -85,5 +102,3 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
 }
-
-
