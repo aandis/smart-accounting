@@ -49,6 +49,9 @@
     <string name="action_import">Import data</string>
     <string name="action_logout">Logout</string>
 
+    <string name="notification.backup.import.channel.name">Smart Accounting backup/import notifications</string>
+    <string name="notification.backup.import.channel.description">Notifications about your data backup/import to/from Google Drive.</string>
+
     <string name="notification.backup.backing">Backing up database.</string>
     <string name="notification.backup.backing.detail">Your data is being backed up to your Google Drive.</string>
     <string name="notification.backup.done">Backup completed!</string>

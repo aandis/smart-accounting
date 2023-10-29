@@ -42,6 +42,7 @@ public class ImportDbService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            setupNotificationChannel();
             updateNotificationProgress(0); // 0/1
             boolean downloaded = searchAndDownloadBackup();
             if (downloaded) {
@@ -124,7 +125,14 @@ public class ImportDbService extends IntentService {
     }
 
     private void cancelProgress() {
-        NotificationHelper.cancelNotification(R.id.import_notify_id);
+        NotificationHelper.cancelNotification(this, R.id.import_notify_id);
     }
 
+    private void setupNotificationChannel() {
+        NotificationHelper.createNotificationChannel(
+            this,
+            getString(R.string.notification_backup_import_channel_name),
+            getString(R.string.notification_backup_import_channel_description)
+        );
+    }
 }
