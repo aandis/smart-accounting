@@ -18,14 +18,12 @@ public class NotificationHelper {
     private static final String CHANNEL_ID = "help.smartbusiness.smartaccounting.notifications";
 
     public static void createNotificationChannel(Context context, String channelName, String description) {
-        Log.d(TAG, "creating channel");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-            Log.d(TAG, "channel created");
         }
     }
 
