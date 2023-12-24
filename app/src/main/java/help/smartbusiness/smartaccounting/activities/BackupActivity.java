@@ -1,8 +1,12 @@
 package help.smartbusiness.smartaccounting.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -20,7 +24,19 @@ public class BackupActivity extends SmartAccountingActivity {
 
     public static final String LOGOUT_REQUEST = "logout";
 
-    private static final int REQUEST_CODE_SIGN_IN = 1;
+    private final ActivityResultLauncher<Intent> signInLauncher =
+        registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    handleSignInResult(result.getData());
+                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    finish();
+                } else {
+                    report("Unknown resultcode from signin dialog " + result.getResultCode());
+                }
+            }
+        );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,22 +56,6 @@ public class BackupActivity extends SmartAccountingActivity {
     private void onLoggedIn() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        super.onActivityResult(requestCode, resultCode, resultData);
-        switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN:
-                if (resultCode == RESULT_OK && resultData != null) {
-                    handleSignInResult(resultData);
-                } else if (resultCode == RESULT_CANCELED) {
-                    finish();
-                } else {
-                    report("Unknown resultcode from signin dialog " + resultCode);
-                }
-                break;
-        }
     }
 
     private void handleSignInResult(Intent result) {
@@ -84,6 +84,6 @@ public class BackupActivity extends SmartAccountingActivity {
 
     private void requestSignIn() {
         GoogleSignInClient client = GoogleHelper.getSignInClient(this);
-        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+        signInLauncher.launch(client.getSignInIntent());
     }
 }

@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import help.smartbusiness.smartaccounting.R
-import kotlinx.android.synthetic.main.fragment_multi_date_picker.*
+import help.smartbusiness.smartaccounting.databinding.FragmentMultiDatePickerBinding
 import org.threeten.bp.format.DateTimeFormatter
 
 /**
@@ -16,6 +16,8 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 class MultiDatePickerFragment : DialogFragment() {
     private val TAG: String? = MultiDatePickerFragment::class.simpleName
+    private var _binding: FragmentMultiDatePickerBinding? = null
+    private val binding get() = _binding!!
 
     private var dateFormat: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
@@ -24,16 +26,23 @@ class MultiDatePickerFragment : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_multi_date_picker, container, false)
+        _binding = FragmentMultiDatePickerBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        date_range_filter_button.setOnClickListener(filterClickListener)
+        binding.dateRangeFilterButton.setOnClickListener(filterClickListener)
     }
 
     private val filterClickListener: View.OnClickListener = View.OnClickListener {
-        val dateRange = date_range_calendar.selectedDates
+        val dateRange = binding.dateRangeCalendar.selectedDates
         if (dateRange.size == 0) {
             Toast.makeText(context, R.string.filter_date_range_bad, Toast.LENGTH_SHORT).show()
         } else {

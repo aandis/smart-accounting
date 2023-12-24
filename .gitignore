@@ -1,5 +1,6 @@
 .gradle
 local.properties
+env.properties
 .DS_Store
 build/
 captures

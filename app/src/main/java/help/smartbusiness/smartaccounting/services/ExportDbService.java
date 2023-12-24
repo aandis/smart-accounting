@@ -44,6 +44,7 @@ public class ExportDbService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
+            setupNotificationChannel();
             updateNotificationProgress(0); // 0/2
             exportDb();
         }
@@ -115,6 +116,14 @@ public class ExportDbService extends IntentService {
     }
 
     private void cancelProgress() {
-        NotificationHelper.cancelNotification(R.id.export_notify_id);
+        NotificationHelper.cancelNotification(this, R.id.export_notify_id);
+    }
+
+    private void setupNotificationChannel() {
+        NotificationHelper.createNotificationChannel(
+            this,
+            getString(R.string.notification_backup_import_channel_name),
+            getString(R.string.notification_backup_import_channel_description)
+        );
     }
 }
