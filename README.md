@@ -1,6 +1,6 @@
 # Smart Accounting
 
-Source code for [Smart Accounting](https://play.google.com/store/apps/details?id=help.smartbusiness.smartaccounting) android app.
+Source code for [Smart Accounting](https://play.google.com/store/apps/details?id=help.smartbusiness.smartaccounting) android app open sourced for educational purposes.
 
 ## Development Setup
 
