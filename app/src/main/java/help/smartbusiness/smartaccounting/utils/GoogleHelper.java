@@ -25,7 +25,7 @@ public class GoogleHelper {
     public static GoogleSignInOptions getSignInOptions() {
         return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
+//                .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
                 .build();
     }
 

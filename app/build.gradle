@@ -9,15 +9,17 @@ Properties secureProps = new Properties()
 secureProps.load(new FileInputStream(rootProject.file("env.properties")))
 
 android {
+    compileSdk = 36
+
     signingConfigs {
         debug {
-            storeFile file('/Users/test/Downloads/apkkey.jks')
+            storeFile file('/Users/gameboy/Downloads/apkkey.jks')
             storePassword secureProps['debug.store.password']
             keyAlias secureProps['debug.store.key.alias']
             keyPassword secureProps['debug.store.key.password']
         }
         prod {
-            storeFile file('/Users/test/Downloads/smart-accounting.jks')
+            storeFile file('/Users/gameboy/Downloads/smart-accounting.jks')
             storePassword secureProps['prod.store.password']
             keyAlias secureProps['prod.store.key.alias']
             keyPassword secureProps['prod.store.key.password']
@@ -26,25 +28,27 @@ android {
 
     defaultConfig {
         applicationId "help.smartbusiness.smartaccounting"
-        minSdkVersion 19
-        targetSdkVersion 34
-        compileSdk 34
+        minSdk = 23
+        targetSdk = 36
         versionCode 7
         versionName "1.3"
-        multiDexEnabled true
-        signingConfig signingConfigs.prod
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
+            signingConfig signingConfigs.prod
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     buildFeatures {
@@ -71,8 +75,8 @@ repositories{
 
 dependencies {
     // Core
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.gms:play-services-auth:21.4.0'
     implementation 'com.google.http-client:google-http-client-gson:1.26.0'
     implementation('com.google.api-client:google-api-client-android:1.26.0') {
         exclude group: 'org.apache.httpcomponents'
@@ -80,13 +84,12 @@ dependencies {
     implementation('com.google.apis:google-api-services-drive:v3-rev136-1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation 'com.android.support:multidex:1.0.3'
-    implementation "androidx.core:core-ktx:1.12.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:1.15.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
 
     // UI
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.3.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
@@ -99,13 +102,17 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 
     // Notifications
     implementation "io.karn:notify:1.3.0"
 
     // Monitoring
-    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation platform('com.google.firebase:firebase-bom:34.2.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+
+    androidTestImplementation 'androidx.test:core:1.7.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.7.0'
 }
