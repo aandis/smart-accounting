@@ -21,17 +21,23 @@ public abstract class SmartAccountingActivity extends AppCompatActivity {
     }
 
     public void logEvent(String name) {
-        mFirebaseAnalytics.logEvent(name, null);
+        if (mFirebaseAnalytics != null) {
+            mFirebaseAnalytics.logEvent(name, null);
+        }
     }
 
     public void logEvent(String name, String key, String value) {
-        Bundle data = new Bundle();
-        data.putString(key, value);
-        mFirebaseAnalytics.logEvent(name, data);
+        if (mFirebaseAnalytics != null) {
+            Bundle data = new Bundle();
+            data.putString(key, value);
+            mFirebaseAnalytics.logEvent(name, data);
+        }
     }
 
     public void report(Exception e) {
-        FirebaseCrashlytics.getInstance().recordException(e);
+        if (e != null) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
     }
 
     public void report(String message) {

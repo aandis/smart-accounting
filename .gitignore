@@ -12,9 +12,12 @@ out/
 proguard/
 
 *.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/dictionaries
-.idea/libraries
-.idea/misc.xml
+.idea/
+
+# JVM heap dumps
+*.hprof
+
+# Android build outputs
+*.aab
+*.apk
+app/release/

@@ -3,7 +3,7 @@
     "project_number": "622358861618",
     "firebase_url": "https://fast-nexus-133523.firebaseio.com",
     "project_id": "fast-nexus-133523",
-    "storage_bucket": "fast-nexus-133523.appspot.com"
+    "storage_bucket": "fast-nexus-133523.firebasestorage.app"
   },
   "client": [
     {
@@ -20,6 +20,14 @@
           "android_info": {
             "package_name": "help.smartbusiness.smartaccounting",
             "certificate_hash": "b7a86b87835a898cdfdfc269bc4ce10fa8240fd2"
+          }
+        },
+        {
+          "client_id": "622358861618-ui9cbmjecrucshur6a1duk6ktd768pr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "help.smartbusiness.smartaccounting",
+            "certificate_hash": "fa3d04ac186f0dd3a5a107f0144aced11cfbb669"
           }
         },
         {

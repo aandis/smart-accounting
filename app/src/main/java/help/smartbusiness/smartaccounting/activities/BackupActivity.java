@@ -25,18 +25,18 @@ public class BackupActivity extends SmartAccountingActivity {
     public static final String LOGOUT_REQUEST = "logout";
 
     private final ActivityResultLauncher<Intent> signInLauncher =
-        registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    handleSignInResult(result.getData());
-                } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                    finish();
-                } else {
-                    report("Unknown resultcode from signin dialog " + result.getResultCode());
-                }
-            }
-        );
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                            handleSignInResult(result.getData());
+                        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                            finish();
+                        } else {
+                            report("Unknown resultcode from signin dialog " + result.getResultCode());
+                        }
+                    }
+            );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,8 @@ public class BackupActivity extends SmartAccountingActivity {
         } catch (ApiException e) {
             int code = e.getStatusCode();
             String errorDescription = GoogleSignInStatusCodes.getStatusCodeString(code);
-            report("signInResult:failed code=" + e.getStatusCode() + " error=" + errorDescription);
-            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode() + " error=" + errorDescription);
+            Log.e(TAG, "signInResult:failed code=" + code + " error=" + errorDescription);
+            report("signInResult:failed code=" + code + " error=" + errorDescription);
 
             // Let's retry.
             startActivity(new Intent(this, BackupActivity.class)
