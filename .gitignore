@@ -16,3 +16,8 @@ proguard/
 
 # JVM heap dumps
 *.hprof
+
+# Android build outputs
+*.aab
+*.apk
+app/release/
