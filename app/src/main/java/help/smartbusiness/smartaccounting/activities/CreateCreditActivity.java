@@ -73,15 +73,21 @@ public class CreateCreditActivity extends CreditEditorActivity implements View.O
      */
     @Override
     public void onClick(View view) {
-        Credit credit = getCreditObject();
-        if (credit.isValid(true)) {
-            if (!credit.insert(this)) {
-                Utils.notifyError(this, "An error occurred.");
+        try {
+            Credit credit = getCreditObject();
+            if (credit.isValid(true)) {
+                if (!credit.insert(this)) {
+                    Utils.notifyError(this, "An error occurred.");
+                } else {
+                    finish();
+                }
             } else {
-                finish();
+                Utils.notifyError(this, "Invalid data");
             }
-        } else {
-            Utils.notifyError(this, "Invalid data");
+        }
+        } catch (Exception e) {
+            report("Error creating credit: " + e.toString());
+            Utils.notifyError(this, "An error occurred.");
         }
     }
 

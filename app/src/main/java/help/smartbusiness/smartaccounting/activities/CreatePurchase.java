@@ -72,15 +72,21 @@ public class CreatePurchase extends PurchaseEditorActivity implements View.OnCli
      */
     @Override
     public void onClick(View view) {
-        Purchase purchase = getPurchaseObject();
-        if (purchase.isValid(true, true)) {
-            if (!purchase.insert(this)) {
-                Utils.notifyError(this, "An error occurred.");
+        try {
+            Purchase purchase = getPurchaseObject();
+            if (purchase.isValid(true, true)) {
+                if (!purchase.insert(this)) {
+                    Utils.notifyError(this, "An error occurred.");
+                } else {
+                    finish();
+                }
             } else {
-                finish();
+                Utils.notifyError(this, "Invalid data");
             }
-        } else {
-            Utils.notifyError(this, "Invalid data");
+        }
+        } catch (Exception e) {
+            report("Error creating purchase: " + e.toString());
+            Utils.notifyError(this, "An error occurred.");
         }
     }
 
